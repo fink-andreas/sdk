@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>random</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>random</h1>
+
+    <h2> class IRandom</h2>
+    <dl>
+        <dt>static void Init(dword seed)</dt>
+        <dd>
+            Initializes the random number generator.
+            Should be called once for each application that uses random numbers.
+            For example the system time can be used as a seed.
+        </dd>
+        <dt>static dword GetRandom()</dt>
+        <dd>
+            Returns a 32-bit random number.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+dword value = IRandom::GetRandom();
+    </pre>
+
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.container</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.Container.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.container</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+// a relative 50x50 container with a 2px border
+var cont = new innovaphone.ui.Container(null, null, 50, 50);
+cont.setBorder(2);
+out.appendChild(cont.container);
+// a relative 100x200 container with a 4px border and text
+var cont2 = new innovaphone.ui.Container(null, null, 100, 200, null, "Hello World");
+cont2.setBorder(4);
+out.appendChild(cont2.container);
+// an absolute 100x100 container with a 3px border and text and onClick function
+var cont3 = new innovaphone.ui.Container(300, 200, 100, 100, out, "Hello World2");
+cont3.setBorder(4);
+cont3.setOnClick(function() { alert("clicked"); });
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2>function Container(left, top, width, height, parent, content)</h2>
+    <p>
+        Creates an empty container (div) element.
+    </p>
+    <dl>
+        <dt>[left], [top]</dt>
+        <dd>
+            If one of these arguments are provided, the div is created with absolute position on these coordinates. If these argumends are undefined, the element position is relative.
+        </dd>
+        <dt>[width], [height]</dt>
+        <dd>
+            If provided the div size is set accordingly. A value of -1 sets the width/height to 100%.
+        </dd>
+        <dt>[parent]</dt>
+        <dd>If parent is set, the container element is automatically appended to the child nodes of the parent.</dd>
+        <dt>[content]</dt>
+        <dd>If content is given, it is automatically appended to the child nodes of the container.</dd>
+    </dl>
+    <h2>Members</h2>
+    <dl>
+        <dt>container</dt>
+        <dd>The container element of the container class.</dd>
+    </dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>setContent (content)</dt>
+        <dd>
+            Empties the current container nodes and appends the content to the container node.
+        </dd>
+        <dt>show ()</dt>
+        <dd>
+            Shows the content again, if the function hide was called.
+        </dd>
+        <dt>hide ()</dt>
+        <dd>
+            Hides the content.
+        </dd>
+        <dt>setBorder (borderWidth)</dt>
+        <dd>
+            Sets a border of the container, default border width is 1px.
+        </dd>
+        <dt>setBorderWidth (left, top, right, buttom)</dt>
+        <dd>
+            Sets the four widths of the border.
+        </dd>
+        <dt>addElement (element)</dt>
+        <dd>
+            Adds an element to the container.
+        </dd>
+        <dt>setOnClick (onclick, obj)</dt>
+        <dd>
+            Sets the onclick handler. The onclick handler is a function with the argument obj.
+        </dd>
+        <dt>setOnMouseEnter (funcOnMouseEnter, obj)</dt>
+        <dd>funcOnMouseEnter is called with obj on the onmouseenter event on the container node.</dd>
+        <dt>setOnMouseLeave (funcOnMouseLeave, obj)</dt>
+        <dd>funcOnMouseLeave is called with obj on the onmouseleave event on the container node.</dd>
+    </dl>
+</body>
+</html>

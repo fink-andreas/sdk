@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include="sdksample.mak" />
+    <None Include="sdksample\sdksample.mak" />
+    <None Include="sdksample\apps\apps.mak" />
+    <None Include="sdksample\apps\sdksample.helloworld.js" />
+    <None Include="sdksample\apps\helloworld.htm" />
+    <None Include="sdksample\apps\sdksample.pbx.presence.js" />
+    <None Include="sdksample\apps\pbx-presence.htm" />
+    <None Include="sdksample\apps\lang\helloworldlang.de.js" />
+    <None Include="sdksample\apps\lang\helloworldlang.en.js" />
+    <None Include="sdksample\apps\lang\pbx-presencelang.de.js" />
+    <None Include="sdksample\apps\lang\pbx-presencelang.en.js" />
+    <None Include="sdksample\apps\styles\sdksample.css" />
+    <None Include="sdksample\apps\styles\styles.mak" />
+    <None Include="sdksample\apps\lang\lang.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sdksample-main.cpp" />
+    <ClCompile Include="sdksample\sdksample.cpp" />
+    <ClCompile Include="sdksample\pbxsession.cpp" />
+    <ClCompile Include="sdksample\helloworldsession.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sdksample\sdksample.h" />
+    <ClInclude Include="sdksample\pbxsession.h" />
+    <ClInclude Include="sdksample\helloworldsession.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="sdksample\apps\helloworld.png" />
+    <Image Include="sdksample\apps\pbx-presence.png" />
+  </ItemGroup>
+</Project>

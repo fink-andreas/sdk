@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>users</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>users</h1>
+
+    <h2> class IUsers</h2>
+    <dl>
+        <dt>static users_password_change_error_t ChangePassword(const char * user, const char * oldPassword, const char * newPassword)</dt>
+        <dd>
+            Changes the password of a system user. The user name, the old and new password must be given.
+            Returns USERS_PASSWORD_CHANGE_SUCCESS on success.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+users_password_change_error_t error = IUsers::ChangePassword("root", "iplinux", "superSecret");
+    </pre>
+</body>
+</html>

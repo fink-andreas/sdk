@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>task</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>task</h1>
+    <p>
+        An interface that encapsulates asynchronous tasks, that can be started,
+        then take some time and finally suceed or fail.
+        Applications can use this interface as a base class for their task.
+    </p>
+    <h2>class ITask</h2>
+    <dl>
+        <dt>void Start(class UTask * user)</dt>
+        <dd>
+            Called, in order to start an asynchronous Task.
+        </dd>
+    </dl>
+    <h2>class UTask</h2>
+    <dl>
+        <dt>void TaskComplete(class ITask * const task)</dt>
+        <dd>
+            Callback that is called if the task is completed successfully.
+            If the implementation needs to return data as a result of the task,
+            this is outside the scope of the ITask interface.
+            Instead implementations should provid getter functions for result data.
+        </dd>
+        <dt>void TaskFailed(class ITask * const task)</dt>
+        <dd>
+            Callback that is called if the task failed.
+        </dd>
+        <dt>void TaskProgress(class ITask * const task, dword progress)</dt>
+        <dd>
+            Callback that is called if there was some progress to the task.
+            The nummeric value 'progress' can be used to indicate additional information
+            about the type of the progress.
+        </dd>
+    </dl>
+</body>
+</html>

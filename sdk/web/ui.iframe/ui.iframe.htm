@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.iframe</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.IFrame.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.iframe</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var iFrame = new innovaphone.ui.IFrame(out, "https://www.innovaphone.com", "Test");
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2>innovaphone.ui.IFrame(container, src, name)</h2>
+    <p>
+        adds an iframe element which opens '''src'''
+    </p>
+    <p>
+        The iframe has width/height set to '''100%'''.
+    </p>
+    <dl>
+        <dt>container</dt>
+        <dd>
+        </dd>
+        <dt>src</dt>
+        <dd>
+            the URL to the webpage, which is displayed inside the iframe
+        </dd>
+        <dt>name</dt>
+        <dd>
+            sets the attribute name of the iframe
+        </dd>
+    </dl>
+    <h2>Members</h2>
+    <dl>
+        <dt>container</dt>
+    </dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>open(src)</dt>
+        <dd>
+            opens a window in the iframe
+        </dd>
+    </dl>
+
+</body>
+</html>

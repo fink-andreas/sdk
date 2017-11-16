@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ans1</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>asn1</h1>
+    <p>
+        This is part of the ASN1 encoder/decoder library. The class defined in this file
+        are allocated statically to create the definition of the ASN1 data structures.
+    </p>
+    <p>
+        The asn1_per or asn1_ber are used together with these definitions to do the actual
+        Basic Encoding Rule (asn1_ber) or Packet Encoding Rules (asn1_per) encoding and
+        decoding.
+    </p>
+    <h2>asn1_out</h2>
+    <p>
+        Definition of virtual class to write encoded data. Used by the encoder.
+    </p>
+    <hr/>
+    <h2>asn1_in</h2>
+    <p>
+        Definition of virtual class to read encoded data. Used by the decoder.
+    </p>
+    <hr/>
+    <h2>asn1_context, asn1_tag</h2>
+    <p>
+        class to holding the actual decoded data or holding the data to be encoded
+    </p>
+    <hr/>
+    <h2>Supported data types</h2>
+    <p>
+        For each supported datatype a class is available for the definition, which
+        uses the class asn1 as base class.
+    </p>
+    <h3>class asn1_null</h3>
+    <h3>class asn1_boolean</h3>
+    <h3>class asn1_int</h3>
+    <h3>class asn1_ints</h3>
+    <h3>class asn1_inte</h3>
+    <h3>class asn1_int8</h3>
+    <h3>class asn1_int16</h3>
+    <h3>class asn1_bitstring</h3>
+    <h3>class asn1_enumerated</h3>
+    <h3>class asn1_octet_array</h3>
+    <h3>class asn1_ia5_string</h3>
+    <h3>class asn1_octet_string</h3>
+    <h3>class asn1_word_string</h3>
+    <h3>class asn1_object_identifier</h3>
+    <h3>class asn1_sequence</h3>
+    <h3>class asn1_choice</h3>
+    <h3>class asn1_sequence_of</h3>
+    <h3>class asn1_set_of</h3>
+    <h3>class asn1_numeric_string</h3>
+    <h3>class asn1_any</h3>
+</body>
+</html>

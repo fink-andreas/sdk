@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>btree</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>btree</h1>
+    <p>
+        btree is a library of a self balanced binary search tree. The class btree is used
+        as a base class on the objects in the tree.
+    </p>
+    <h2>virtual int btree_compare(void * key), virtual int btree_compare(class btree * b)</h2>
+    <p>
+        Compare functions, which need to implemented for the sorting. The value addressed by the
+        argument is compared to the value of the object. If the argument is smaller the the value of
+        the object, the function should return a negative value, if the argument is bigger a positive
+        value, if the value is identical 0. This way the elements are sorted left to right from small
+        to big.
+    </p>
+    <p>
+        Sample:
+    </p>
+    <pre>
+int myObject::btree_compare(void * key) {
+    return strcmp(name,(char * key));
+}
+int myObject::btree_compare(btree * b) {
+    return strcmp(name,()(myObject *)b)->name);
+}
+    </pre>
+    <h2>class btree * btree_put(class btree * in)</h2>
+    <p>
+        Function called to insert an object into the tree. The argument in is the pointer
+        to the new object. The return value is the new root. This function is called as member
+        function on the root of the tree, which is a null pointer for an empty tree.
+    </p>
+    <p>
+        Sample:
+    </p>
+    <pre>myTree = myTree->btree_put(newObject)</pre>
+    <h2>class btree * btree_put(class btree * in, bool & before, class btree * & p)</h2>
+    <p>
+        A btree_put, which returns the parent node of the new node and wether the new node
+        is a left (before==true) or right (before==false) child.
+    </p>
+    <h2>class btree * btree_get(class btree * out)</h2>
+    <p>
+        Removes the object out from the tree. If the object does not exists the call will assert.
+    </p>
+    <h2>class btree * btree_find(const void * key)</h2>
+    <p>
+        Find an object in the tree. The argument 'key' is a pointer to the value used for
+        comparing the objects
+    </p>
+    <h2>class btree * btree::btree_find_first_left(const void * key)</h2>
+    <p>
+        Find the first element from the left matching key or being bigger then key.
+    </p>
+    <h2>class btree * btree::btree_find_next_left(const void * key)</h2>
+    <p>
+        Find the first element from the left being bigger then key.
+    </p>
+    <h2>class btree * btree::btree_find_first_right(const void * key)</h2>
+    <p>
+        Find the first element from the right matching key or being smaller then key.
+    </p>
+    <h2>class btree * btree::btree_find_next_right(const void * key)</h2>
+    <p>
+        Find the first element from the right being smaller then key.
+    </p>
+    <h2>class btree * btree_find_left()</h2>
+    <p>
+        Returns the left most element
+    </p>
+    <h2>class btree * btree_find_right()</h2>
+    <p>
+        Returns the right most element
+    </p>
+</body>
+</html>

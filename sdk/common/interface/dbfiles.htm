@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>dbfiles</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>dbfiles</h1>
+    <p>
+        dbfiles is a library, which provides the service to store files in the database.
+        It uses two database tables, files and files_data. The table files is used to store all
+        the information about the files except the content of the files.
+        The files_data table stores the content of the files as variable length bytea.
+        There are two operation modes, dbfiles can do management of folders or management
+        of folders can be done by the App. This interface makes use of tasks.h.
+        This means all requests start tasks and the UTask callbacks are used to indicate completion.
+        The interface is defined in interface/dbfiles.h The implementation is in common/service/dbfiles
+    </p>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>Initialization</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        In the App main the dbfiles provider is created, using the function call
+    </p>
+
+    <pre>IDbFilesProvider * dbfilesProvider = CreateDbFilesProvider();</pre>
+
+    <p>This way for Unit Tests a test dbfiles implemebntation can be used.</p>
+
+    <p>In the App instance constructor</p>
+
+    <pre>this->dbfiles = dbfilesProvider->CreateDbFiles(class IInstanceLog * const log);</pre>
+
+    <p>
+        is used to create an dbfiles object, which provides the interface functions.
+        log is used to log dependent of the log flag LOG_DB_FILES.
+    </p>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>Interface Functions</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>virtual class IDbFilesStart * Start(class UTask * user, class IDatabase * database, const char * folder)</h3>
+    
+    <p>
+        Starts the database initialization for dbfiles. Must be called when the other
+        database initialization is complete
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for the callbacks for task completion.</dd>
+        <dt>database</dt><dd>The database</dd>
+        <dt>folder</dt>
+        <dd>
+            A foreign key definition if the App handles folder management itself
+            (e.g. "BIGINT REFERENCES messages(id) ON DELETE CASCADE"). A value of null indicates that dbfiles
+            should do folder management.<br />
+            It is important to use the <b>ON DELETE CASCADE</b> functionality of the foreign key, otherwise
+            the files/folders can't be deleted correctly!
+        </dd>
+        <dd>
+            If dbfiles does the folder management, the root folder alway uses the id 1 (DBFILES_ROOT).
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>virtual class IDbFilesPut * Put(class UTask * user, const char * name, ulong64 folder, bool is_folder = false)</h3>
+    
+    <p>
+        Puts a new file into the database
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for callbacks for task completion</dd>
+        <dt>name</dt><dd>Name of the file. If dbfiles does folder management the name, folder combination must be unique, otherwise there are no constraints for the file name</dd>
+        <dt>folder</dt><dd>Reference in which folder this file is to be put</dd>
+        <dt>is_folder</dt><dd>Only for folder management. If true a folder is put, not a file.</dd>
+    </dl>
+
+    <p>
+        After the TaskComplete or TaskProgress callbacks, the function call ulong64 IDbFilesPut::Get()
+        can be used to read the id of the new file
+    </p>
+
+    <p>
+        After TaskProgress the function void IDbFilesPut::Write(const byte * data, unsigned length, bool last)
+        can be called to write data to the file. This creates a new line in the files_data table. With last the App indicates that the last data was written. dbfiles acknowledges this with TaskComplete.
+    </p>
+    <p>
+        IDbFilesPut::Stop() triggers an async TaskComplete no matter if the file has been already completely 
+        written or not.
+    </p>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class IDbFilesGet * Get(class UTask * user, ulong64 id, unsigned length, unsigned offset = 0, bool progres = false)</h3>
+    
+    <p>
+        Gets a file from the database
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for callbacks for task completion</dd>
+        <dt>id</dt><dd>id of the file to get</dd>
+        <dt>length</dt><dd>Length of the initial block to read</dd>
+        <dt>offset</dt><dd>Offset inside the file at which to start reading</dd>
+        <dt>progress</dt>
+        <dd>
+            is used to indicate that TaskProgress
+            shall be called in any case when the data is available, even if this is the last block
+            of data. In this case TaskComplete is called after the next Read() call, when the file
+            is closed.
+        </dd>
+    </dl>
+
+    <p>
+        After TaskProgress (or TaskFinished)void IDbFilesGet::Get(const byte * & data, unsigned & length)
+        can be called to get the read data. With IDbFilesGet::Read() the next data can be requested,
+        which will be indicated with TaskProgress again. If no more data is available
+        TaskComplete is called.
+        <dl>
+            <dt>IDbFilesGet::Get(const byte * & data, unsigned & length)</dt>
+            <dd>
+                Get the read data. The data pointer is set to a pointer allocated by dbfiles and
+                length is set to the length of the data.
+            </dd>
+            <dt>IDbFilesGet::Read(unsigned length, bool last=false)</dt>
+            <dd>
+                Initiate next read. last is used to indicate that this is the last data to be read
+                even if there is more data available.
+            </dd>
+            <dt>IDbFilesGet::Stop()</dt>
+            <dd>
+                Stop() triggers an async TaskComplete no matter if the file has been already read to
+                the end or not.
+            </dd>
+        </dl>
+    </p>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class IDbFilesDel * Del(class UTask * user, ulong64 id)</h3>
+    
+    <p>
+        Deletes a file from the database
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for callbacks for task completion</dd>
+        <dt>id</dt><dd>id of the file to delete</dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class IDbFilesMove * Move(class UTask * user, ulong64 id, const char * name, ulong64 folder)</h3>
+    
+    <p>
+        Moves a file or folder to a different folder or just rename it.
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for callbacks for task completion</dd>
+        <dt>id</dt><dd>id of the file or folder to move</dd>
+        <dt>name</dt><dd>new name of the file or folder</dd>
+        <dt>folder</dt><dd>new folder</dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class IDbFilesList * List(class UTask * user, ulong64 folder, ulong64 limit)</h3>
+    
+    <p>
+        Gets the list of files assigned to a given folder
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for callbacks for task completion</dd>
+        <dt>folder</dt><dd>The folder</dd>
+        <dt>limit</dt><dd>Number of entries to get. If a limit is set (limit!=0), all the files of the folder are read into memory.</dd>
+    </dl>
+
+    <p>
+        If a limit is set, TaskComplete indicates that the list is availabe. The entries
+        in the list can be read with multiple calls to
+    </p>
+    <pre>bool IDbFilesList::Get(...)</pre>
+    <p>
+        until true is returned.
+    </p>
+
+    <p>
+        If no limit is set the entries are read one by one. TaskProgress indicates
+        that an entry is available, which can be read with
+        bool IDbFilesList::Get(...).
+        With IDbFilesList:Next() the next entry can be requested.
+        If there are no more entries available TaskComplete is called.
+    </p>
+    <h4>bool IDbFilesList::Get(ulong64 & id, const char * & name, unsigned & length, bool & is_folder, ulong64 * created = 0, ulong64 * modified = 0)</h4>
+    <dl>
+        <dt>id</dt><dd>The id of the file</dd>
+        <dt>name</dt><dd>The name of the file</dd>
+        <dt>length</dt><dd>The size of the file</dd>
+        <dt>is_folder</dt><dd>true if this is a folder</dd>
+        <dt>created</dt><dd>created timestamp, returned if a pointer is provided</dd>
+        <dt>modified</dt><dd>modified timestamp, returned if a pointer is provided</dd>
+    </dl>
+    <h4>IDbFilesList::Stop()</h4>
+    <p>Triggers an async TaskComplete no matter if the listing has been already completely
+        processed or not.
+    </p>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class IDbFilesPathInfo * PathInfo(class UTask * user, const char * path)</h3>
+    <p>
+        Gets the id of the given path and returns if this is a folder or a file
+    </p>
+    <dl>
+        <dt>user</dt><dd>User for callbacks for task completion</dd>
+        <dt>path</dt><dd>file path to be tested. Should not start with '/'</dd>
+    </dl>
+    <h4>void IDbFilesPathInfo::Get(ulong64 & id, const char * & name, unsigned & length, bool & is_folder, ulong64 * created = 0, ulong64 * modified = 0)</h4>
+    <p>
+        Function which can be called from TaskComplete, to get the result
+    </p>
+    <dl>
+        <dt>id</dt><dd>The id of the last part of the path</dd>
+        <dt>name</dt><dd>The name of the file without path</dd>
+        <dt>length</dt><dd>The length of the file</dd>
+        <dt>is_folder</dt><dd>true if the last part of the path is a folder</dd>
+        <dt>created</dt><dd>Creation date</dd>
+        <dt>modified</dt><dd>Modification date</dd>
+    </dl>
+    <h4>void IDbFilesPathInfo::GetFailed(ulong64 & folder, bool & is_folder, const char * & path)</h4>
+    <p>
+        Function which can be called from TaskComplete, to get the result
+    </p>
+    <dl>
+        <dt>folder</dt><dd>The id of the last part of the path, which was found</dd>
+        <dt>is_folder</dt><dd>true if the last part of the path, which was found, is a folder</dd>
+        <dt>path</dt><dd>The path as it was found</dd>
+    </dl>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>command</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>command</h1>
+    <p>
+        Interface for asyncronously operating on new commands.
+    </p>
+    <p>
+        Note: currently the implementation is done in a separate thread for each new command, <br />
+        as there is no possibility to read or write asynchronously from file descriptors.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>class ICommandProvider * CreateCommandProvider(class IIoMux * iomux)</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Function to allocate the CommandProvider resource, to be called from the app-main, so that the real
+        CommandProvider can be replaced by a unit-test implementation.
+    </p>
+    <h2>class ICommand * CreateCommand(class IInstanceLog * const log, class UTask * user, const char * command, int expectedExitCode, size_t initialReadLength = 0)</h2>
+    <p>
+        Creates a new instance of ICommand. ICommand is derived from ITask, so the ITask/UTask mechanisms are used for progress and completion.<br />
+        The ITask::Start function is called inside CreateCommand, so it is not needed to call this function on your own.
+        <dl>
+            <dt>class IInstanceLog * const log</dt>
+            <dd>The related log interface.</dd>
+            <dt>class UTask * user</dt>
+            <dd>The UTask user which shall receive the UTask callbacks.</dd>
+            <dt>const char * command</dt>
+            <dd>The command which will be executed, e.g. <i>ls -l /var/</i>.</dd>
+            <dt>int expectedExitCode</dt>
+            <dd>If expectedExitCode is < 0, the exit code is not checked, otherwise TaskFailed is triggered if the exit code does not match.</dd>
+            <dt>size_t initialReadLength</dt>
+            <dd>If initialReadLength is > 0, the read function is called with length at once.</dd>
+        </dl>
+    </p>
+    <hr /><h2>ICommand</h2>
+    <p>
+        ICommand class for read/write operation on an executed command. The buffer of the read data is maintained within this class.<br/>
+        STDERR is automatically redirected and can be fetched afterwards with Error(). Note that max 8192 bytes are fetched from STDERR, the remaining data is discarded.
+        <h3>General handling</h3>
+        The TaskProgress progress parameter is used differently, depending on a previous Read or Write. Valid values are:
+        <ul>
+            <li>COMMAND_PROGRESS_READ</li>
+            <li>COMMAND_PROGRESS_WRITE</li>
+        </ul>
+        <ul>
+            <li>The <i>TaskComplete</i> callback is triggered when the process has terminated and all data has been read or after ICommand::Close() has been called.<br /></li>
+            <li>The <i>TaskFailed</i> callback is triggered when something failed. In this case the command has already terminated.</li>
+            <li>The <i>TaskProgress(this, COMMAND_PROGRESS_READ)</i> callback is triggered after a previous Read(...) call when the data is available. You can retrieve the data with Get() afterwards.</li>
+            <li>The <i>TaskProgress(this, COMMAND_PROGRESS_WRITE)</i> callback is triggered after a previous Write(...) call when the data has been written.</li>
+        </ul>
+        <h3>Functions</h3>
+        <dl>
+            <dt>void Read(size_t length)</dt>
+            <dd>
+                Initiates reading of the next block. May be called after TaskProgress for the
+                previous block.<br />
+                You mustn't call several reads without waiting for the TaskProgress callback which indicates that the data has been read.
+            </dd>
+            <dt>void Get(const byte * & data, size_t & length)</dt>
+            <dd>
+                Gets a pointer to the read block of data. May be called after the TaskProgress
+                for the read operation. The pointer is valid until the next call to Read. A length
+                of 0 indicates the end of file.
+            </dd>
+            <dt>void Write(byte * data, size_t length, bool last = false)</dt>
+            <dd>
+                Initiates writing of <i>data</i> with the given <i>length</i>. May be called after TaskProgress for the previous block.<br />
+                You mustn't call several writes without waiting for the TaskProgress callback which indicates that the data has been written.<br />
+                <i>last</i> indicates that this is the last block.<br />
+                On last=true, the writing file descriptor will be closed. Depending on the used command, this maybe the first point where<br />
+                a Read can be issued after a previous Write.
+            </dd>
+            <dt>void Close()</dt>
+            <dd>
+                Terminates the process if it is still running. You do not need to call Close() if you do not want to kill the process before it ends on its own.
+            </dd>
+            <dt>const char * Error()</dt>
+            <dd>
+                Returns the output of STDERR or NULL if nothing has been written to STDERR.
+            </dd>
+        </dl>
+    </p>
+</body>
+</html>

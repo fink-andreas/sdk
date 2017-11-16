@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>dbfiles</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>hash</h1>
+    <p>
+        The hash library can be used to compute hash values and HMACs. Currently the following algorithms are supported:
+        <ul>
+            <li>MD4</li>
+            <li>MD5</li>
+            <li>SHA1</li>
+            <li>SHA224</li>
+            <li>SHA256</li>
+            <li>SHA384</li>
+            <li>SHA512</li>
+        </ul>
+    </p>
+    <p>
+        Also the library supports Hashed Message Authentication Codes (HMAC). This is a common algorithm 
+        that is used calculate a keyed hash. It is typically used to sign and protect a message using a 
+        symmetric key that is known to both the sender and the recipient.
+    </p>
+    <h2> class hash </h2>
+    <p>
+        The class hash can be used to calculate hash values.
+    </p>
+    <p>
+        <dl>
+            <dt>void init(hash_t type)</dt>
+            <dd>Initializes the class and sets the hash algorithm to be used.</dd>
+
+            <dt>void update(const void * in, size_t len)</dt>
+            <dd>Processes a chunk of input data. This function can be called mupltiple times.</dd>
+
+            <dt>void final(void * out)</dt>
+            <dd>Calculates the hash and copies the value to the given out buffer.</dd>
+
+            <dt>void copy(class hash * from)</dt>
+            <dd>Copies the internal state from the given other hash.</dd>
+
+            <dt>size_t size()</dt>
+            <dd>Returns the size of the hash value for the current algorithm. This is the number of bytes that is written by function final to the out buffer.</dd>
+        </dl>
+    </p>
+    <p>
+        Example:
+        <pre>
+hash h;
+byte out[32];
+h.init(HASH_SHA256);
+h.update(data1, 16);
+h.update(data2, 5);
+h.final(out);
+        </pre>
+    </p>
+
+    <h2> class hmac </h2>
+    <p>
+        The class hmac can calulate HMACs using any of the supported hash algorithms.
+    </p>
+
+    <p>
+        <dl>
+            <dt>void init(hash_t type, const void * key, size_t len);</dt>
+            <dd>Initializes the class, sets the hash algorithm and the key to be used.</dd>
+
+            <dt>void update(const void * in, size_t len)</dt>
+            <dd>Processes a chunk of input data. This function can be called mupltiple times.</dd>
+
+            <dt>void final(void * out)</dt>
+            <dd>Calculates the HMAC and copies the value to the given out buffer.</dd>
+
+            <dt>void copy(class hmac * from)</dt>
+            <dd>Copies the internal state from the given other hmac.</dd>
+
+            <dt>size_t size()</dt>
+            <dd>Returns the size of the HMAC value for the current algorithm. This is the number of bytes that is written by function final to the out buffer.</dd>
+        </dl>
+    </p>
+    <p>
+        Example:
+        <pre>
+hmac h;
+byte out[32];
+h.init(HASH_SHA256, key, key_len);
+h.update(data1, 16);
+h.update(data2, 5);
+h.final(out);
+        </pre>
+    </p>
+    <h2> Acknowledgements </h2>
+    <p>
+        This library uses open source implementations of the hash algorithms under the following license:
+        <pre>
+    /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
+    * All rights reserved.
+    *
+    * This package is an SSL implementation written
+    * by Eric Young (eay@cryptsoft.com).
+    * The implementation was written so as to conform with Netscapes SSL.
+    *
+    * This library is free for commercial and non-commercial use as long as
+    * the following conditions are aheared to.  The following conditions
+    * apply to all code found in this distribution, be it the RC4, RSA,
+    * lhash, DES, etc., code; not just the SSL code.  The SSL documentation
+    * included with this distribution is covered by the same copyright terms
+    * except that the holder is Tim Hudson (tjh@cryptsoft.com).
+    *
+    * Copyright remains Eric Young's, and as such any Copyright notices in
+    * the code are not to be removed.
+    * If this package is used in a product, Eric Young should be given attribution
+    * as the author of the parts of the library used.
+    * This can be in the form of a textual message at program startup or
+    * in documentation (online or textual) provided with the package.
+    *
+    * Redistribution and use in source and binary forms, with or without
+    * modification, are permitted provided that the following conditions
+    * are met:
+    * 1. Redistributions of source code must retain the copyright
+    *    notice, this list of conditions and the following disclaimer.
+    * 2. Redistributions in binary form must reproduce the above copyright
+    *    notice, this list of conditions and the following disclaimer in the
+    *    documentation and/or other materials provided with the distribution.
+    * 3. All advertising materials mentioning features or use of this software
+    *    must display the following acknowledgement:
+    *    "This product includes cryptographic software written by
+    *     Eric Young (eay@cryptsoft.com)"
+    *    The word 'cryptographic' can be left out if the rouines from the library
+    *    being used are not cryptographic related :-).
+    * 4. If you include any Windows specific code (or a derivative thereof) from
+    *    the apps directory (application code) you must include an acknowledgement:
+    *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"
+    *
+    * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND
+    * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+    * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+    * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+    * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+    * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    * SUCH DAMAGE.
+    *
+    * The licence and distribution terms for any publically available version or
+    * derivative of this code cannot be changed.  i.e. this code cannot simply be
+    * copied and put under another distribution licence
+    * [including the GNU Public Licence.]
+    */
+    /*
+    * The code has been adapted by innovaphone
+    */
+        </pre>
+    </p>
+</body>
+</html>

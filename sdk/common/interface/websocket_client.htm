@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>websocket_client</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>websocket_client</h1>
+    <h2> class IWebsocketClient </h2>
+
+    <dl>
+        <dt>static IWebsocketClient * Create(class IIoMux * const iomux, class UWebsocketClient * const user, class ISocketProvider * const tcpSocketProvider, class ISocketProvider * const tlsSocketProvider, class IDns * const dns, class IInstanceLog * const log)</dt>
+        <dd>
+            Will create an IWebsocketClient instance. iomux has to be the IIoMux instance to use
+            for the ISocket, the websocket client will use.
+            user has to be an instance of an UWebsocketClient class.
+            tcpSockerProvider and tlsSocketProvider are instances of socket providers
+            so that the websocket client can create an tcp / tls socket.
+            dns has to be an IDns instance the websocket client will use for DNS lookups.
+            The returned instance need to be release by the application if no longer used.
+            log is used to log AppInstance related logs depedent of the log flag LOG_WEBSOCKET_CLIENT.
+        </dd>
+
+        <dt>void Connect(const char * uri)</dt>
+        <dd>
+            Establishes a connection to the given server. uri has to been the address
+            starting with "ws://" (or "wss://" for an TLS connection).
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Will close the websocket connection. The websocket client object can be reuse
+            by calling Connect() again.
+        </dd>
+
+        <dt>void Send(const void * buf, size_t len, bool text = true)</dt>
+        <dd>
+            Will send the given buffer with the given length.
+            If buf points to a buffer with binary data, text should set to false.
+            Unlike an ISocket, the websocket is not able to send or buffer data
+            before the connection has been established.
+            So an call to Send() before the client has been connected will lead to an assert.
+        </dd>
+
+        <dt>void Recv(void * buf = NULL, size_t len = 0)</dt>
+        <dd>
+            Tells the websocket client to receive data.
+            The received data will be written to the given buffer that has the size of len.
+            Note that if len is less then the size of the data received,
+            the websocket client will be closed with the error WSCR_BUFFER_OVERFLOW.
+            If you don't know how much data you will receive, use a buffer that has at least
+            WEBSOCKET_MAX_PAYLOAD_SIZE bytes.
+            (WEBSOCKET_MAX_PAYLOAD_SIZE is defined in websocket_client.h). If Recv() will be called
+			with a NULL buffer, the WebsocketClient will call WebsocketRecvBuffer() of the user to
+			get a buffer for the received data.
+        </dd>
+    </dl>
+
+    <h2> class UWebsocketClient </h2>
+
+    <dl>
+        <dt>void WebsocketConnectComplete(IWebsocketClient * const websocket)</dt>
+        <dd>
+            Will be called if the connection had been established.
+            From now on the websocket client can be used to send and receive data.
+            websocket is the calling object.
+        </dd>
+
+        <dt>void WebsocketCloseComplete(IWebsocketClient * const websocket, closereason_t reason)</dt>
+        <dd>
+            Will be called when the connection of the client had been closed.
+            websocket is the calling object. reason will be one of the following values:
+            <ul>
+                <li>WSCR_NORMAL_CLOSE: The application closes the connection by calling Close().</li>
+                <li>WSCR_CONNECTION_FAILED: An error occured while connection to a server. See log for details.</li>
+                <li>WSCR_URI_INVALID: The URI given to Connect() invalid.</li>
+                <li>WSCR_BUFFER_OVERFLOW: The data received is greater then the given buffer or greater than the maximum the client can handle (defined per WEBSOCKET_MAX_PAYLOAD_SIZE). See log for details.</li>
+                <li>WSCR_PROTOCOL_ERROR: An error occured within the websocket protocol. See log for details.</li>
+                <li>WSCR_SOCKET_LOST: The websocket client had lost the socket connection. See log for details.</li>
+                <li>WSCR_SERVER_CLOSED: The server closes the connection.</li>
+            </ul>
+            <b>Note:</b> After a close the websocket client object can be reused by calling Connect() again.
+        </dd>
+
+        <dt>void WebsocketSendResult(IWebsocketClient * const websocket)</dt>
+        <dd>
+            Will be called after the data given to Send() had been send.
+            websocket is the calling websocket instance.
+        </dd>
+
+        <dt>void WebsocketRecvResult(IWebsocketClient * const websocket, void * buf, size_t len, bool text)</dt>
+        <dd>
+            Will be called after a call to Recv() and after the websocekt client received data.
+            websocket the calling instance, buf the pointer to the buffer given to Recv().
+            Len holds the number of received bytes. If the received data has text format,
+            text will be true. The data in buf is the plain data for the application.
+            All websocket related protocol information had already been removed.
+            You only can call Recv() again after receiving a WebsocketRecvResult().
+        </dd>
+		
+        <dt>void * WebsocketRecvBuffer(size_t len)</dt>
+        <dd>
+            If IWebsocketClient::Recv() had been called with a NULL pointer, the WebsocketClient will
+			call WebsocketRecvBuffer() to get a buffer for the data to receive. len is the size the buffer
+			must have at least. There is no way cancel the process. Returning NULL will lead to an assertion,
+			returning a buffer smaller then len will finally lead to a buffer overflow that may be lead to
+			an undefined behaviour or a segmentation fault.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <p>
+        This receives a message, sends it back and closes the connection after that.
+    </p>
+
+    <pre>
+app::app(class IIoMux * iomux,
+         ISocketProvider * tcpSocketProvider,
+         ISocketProvider * tlsSocketProvider,
+         IDns * dns)
+    : iomux(iomux)
+{
+    this->websocketClient = IWebsocketClient::Create(iomux, this, tcpSocketProvider, tlsSocketProvider, dns);
+    this->websocketClient->Connect("wss://myserver.com/websocket");
+}
+
+void app::WebsocketConnectComplete(IWebsocketClient * const websocket)
+{
+    printf("Websocket connected\n");
+	this->websocketClient->Recv();
+}
+
+void app::WebsocketCloseComplete(IWebsocketClient * const websocket, closereason_t reason)
+{
+    printf("Websocket connection closed\n");
+    delete this->websocketClient;
+    this->websocketClient = NULL;
+    iomux->Terminate();
+}
+
+void app::WebsocketSendResult(IWebsocketClient * const websocket)
+{
+    this->websocketClient->Close();
+}
+
+void * app::WebsocketRecvBuffer(size_t len)
+{
+    return malloc(len);
+}
+
+void app::WebsocketRecvResult(IWebsocketClient * const websocket, void * buf, size_t len, bool text)
+{
+    printf("Websocket client received data (text = %s)\n", (test ? "true" : "false"));
+    debug->HexDump(buf, len);
+    this->websocketClient->Send(buf, len);
+	free(buf);
+}
+</pre>
+</body>
+</html>

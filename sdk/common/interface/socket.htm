@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>socket</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>socket</h1>
+    <p>
+        The socket interface is used to create a client or server socket to establish a
+        communication using TCP, TLS over TCP or, for inter process communication, a local
+        socket that internally uses Unix Domain Sockets.
+        All those sockets will be used through the ISocket interface and created with an
+        ISocketProvider. Like known from the firmware, the sockets will work asynchronous.
+    </p>
+
+    <h2> class ISocketProvider </h2>
+    <dl>
+        <dt>ISocketContext * CreateSocketContext(class IInstanceLog * const log)</dt>
+        <dd>
+            Creates a new ISocketContext instance, which can be then handed to CreateSocket calls.
+        </dd>
+        <dt>ISocket * CreateSocket(class IIoMux * const iomux, USocket * const user, class IInstanceLog * const log, bool useIPv6, class ISocketContext * socketContext = NULL)</dt>
+        <dd>
+            Creates a new ISocket object. The IIoMux instance to use for the socket
+            need to be given in iomux. user has to be the class (that inherits from USocket)
+            that will receive the callback functions of the socket. useIPv6 creates an TCP
+            or TLS socket, that uses IPv6 for it's connections (<b>Note:</b>: for local sockets,
+            the value of useIPv6 will be ignored). The object returned needs to be
+            deleted whe no longer needed.<br />
+            log is used to log dependent of the log flags LOG_TCP, LOG_UDS, LOG_TLS.<br />
+            The ISocketContext socketContext determines which certificates etc. are used and controlled by the given ISocketContext instance.
+        </dd>        
+    </dl>
+
+    <h2> Create functions for ISocketProvider </h2>
+    <p>
+        To get an ISocketProvider instance, one of the Create*SocketProvider functions
+        have to be called. Note that the returned object need to be deleted manually.
+    </p>
+
+    <dl>
+        <dt>ISocketProvider * CreateTCPSocketProvider()</dt>
+        <dd>
+            Creates an ISocketProvider that can be used to create a TCP ISocket instance.
+        </dd>
+        <dt>ISocketProvider * CreateTLSSocketProvider()</dt>
+        <dd>
+            Creates an ISocketProvider that can be used to create a TLS ISocket instanc
+             that internally uses an TCP socket for communication.
+        </dd>
+        <dt>ISocketProvider * CreateLocalSocketProvider()</dt>
+        <dd>
+            Creates an ISocketProvider that can be used to create a Local Socket ISocket
+            instance for inter process communication.
+        </dd>
+    </dl>
+
+    <h2>class ISocketContext</h2>
+    <p>
+        An ISocketContext can be used to handle certificates and other socket related configuration.<br/>
+        The ISocketContext is handed inside CreateSocket calls and thus shouldn't be deleted before<br />
+        every ISocket with this ISocketContext has been deleted!<br />
+        <br />
+        An ISocketContext instance can be shared between multiple ISockets!
+    </p>
+
+    <dl>
+        <dt>void SetServerCertificate(const byte * cert, size_t certLen, const char * hostName = NULL)</dt>
+        <dd>
+            Sets a new server certificate for this ISocketContext instance.<br />
+            Currently, the hostName functionality is not implemented, so you just override the default server certificate.<br />
+            <i>If you set a new server certificate, all currently established conntections will still use the old certificate<br />
+            just new connections will make use of the new certificate.</i>
+        </dd>
+    </dl>
+
+    <h2> class ISocket </h2>
+    <p>
+        An ISocket instance can be used for both, server and client socket.
+        Note that the usage of client functions with an ISocket that was initialized as a
+        server socket will lead to an assert and vice versa. An ISocket will be initialized as
+        an server socket by calling Bind(), and as a client socket by calling Connect().
+    </p>
+
+    <dl>
+        <dt>void Shutdown()</dt>
+        <dd>
+            Will shutdown the socket. If there is any data cached to send, that data will
+            be send before the socket will be closed.
+        </dd>
+    </dl>
+
+    <h3> Client Functions </h3>
+    <dl>
+        <dt>void Connect(const char * address)</dt>
+        <dd>
+            Will establish an connection to the given address. This call will set the
+            internal states to use the socket as a client socket. The address must be an IP address. 
+            When the socket was created with useIPv6 = true, the IP address also needs to be IPv6. 
+            A port can be given by separating it with a colon.
+            <b>Note:</b> for local sockets, address has to be the path to the local socket to connect.
+        </dd>
+
+        <dt>void Send(const void * buf, size_t len)</dt>
+        <dd>
+            Sends the given buffer with the given length. If the data could not be send
+            immediatelly (e. g. because the socket still is in connection state),
+            the data of the buffer will be cached to be send later. With this,
+            calling Send() directly after Connect() and before receiving an
+            SocketConnectComplete() callback is possible.
+        </dd>
+
+        <dt>void Recv(void * buf, size_t len, bool recvPartial = false)</dt>
+        <dd>
+            Will tell the socket to receive len bytes and store them inside the given buffer.
+            If recvPartial is true, the socket will not wait until the given len received.
+            Doing this the socket can be used to receive any amount of bytes <= len.
+            Because the socket is asynchronous, Recv() can be called directly after an Connect()
+            call and before receiving a ShocketConnectComplete() callback. If Recv() is called,
+            its only allowed to call it again after receving a SocketRecvResult() callback.
+        </dd>
+    </dl>
+
+    <h3> Server Functions </h3>
+
+    <dl>
+        <dt>void Bind(const char * localAddr = NULL, word localPort = 0)</dt>
+        <dd>
+            Will bind the socket to the given address and the given port. With this,
+            the socket will be set to server mode. localAddr can be an IP address
+            (IPv4 or IPv6, depending how the socket was created) or NULL. If NULL,
+            the socket will listen to all incoming connections over all available
+            adapters of the system. If port is 0, the system will choose a free port.
+            That choosen port will be given to the SocketResultResult function of the user.
+            <b>Note:</b> for local sockets, localAddr has to be a filename (with path)
+            the local socket is listening to. The developer should be sure that the given
+            file is the file for that socket. If that file exists and an other socket is
+            listening to it, the socket Bind() call will cancel all other listening operations.
+        </dd>
+
+        <dt>void Listen()</dt>
+        <dd>
+            Starts to listen to incomming connections.
+        </dd>
+
+        <dt>void Accept(class USocket * remoteUser)</dt>
+        <dd>
+            must be called with a given user for the incommin connection.
+            If remoteUser is NULL, the incomming request will be denied.
+            This function must be called from the SocketListenResult() callback of the user.
+        </dd>
+    </dl>
+
+    <h2> class USocket </h2>
+    <p>
+        A class needs to be a child of USocket to receive ISocket callback functions. 
+    </p>
+    <dl>
+        <dt> void SocketShutdown(ISocket * const socket, shutdownreason_t reason)</dt>
+        <dd>
+            Will be called when the socket had been closed. socket is the calling socket,
+            reason will tell why the socket had been closed:
+            <ul>
+                <li>SOCKET_SHUTDOWN_NORMAL: A normal, by the application initiated shutdown.</li>
+                <li>SOCKET_SHUTDOWN_BY_PEER: The other side of the connection had been closed.</li>
+                <li>SOCKET_LOST: The connection of the other side is lost because of an error (e. G. lost of internet connection).</li>
+                <li>SOCKET_ADDRESS_INVALID: The given address for Connect() or Bind() is invalid.</li>
+                <li>SOCKET_OPEN_FAILED: Opening the socket failed because of an error. See log for details.</li>
+                <li>SOCKET_CONNECT_FAILED: The connect() call had been failed because of an error. See log for details.</li>
+                <li>SOCKET_CONNECT_REJECTED: The other side rejected the connection request.</li>
+                <li>SOCKET_BIND_FAILED: A call to bind() had been failed because of an error. See log for details.</li>
+                <li>SOCKET_LISTEN_FAILED: A call to listen() had been failed because of an error. See log for details.</li>
+                <li>SOCKET_ACCEPT_FAILED: A call to Accept() had been failed because of an error. See log for details.</li>
+                <li>SOCKET_TLS_HANDSHAKE_FAILED: '''(Only for TLS sockets)''' The TLS handsshake failed.</li>
+            </ul>
+            <b>Note:</b> This function could be called before SocketAcceptComplete or
+            SocketConnectComplete will be called when an error occures during
+            an accept or connect process.
+            In that case, the given socket need to be deleted to prevent memory leaks.
+        </dd>
+
+        <dt>void SocketConnectComplete(ISocket * const socket)</dt>
+        <dd>
+            Will be called after a connection initiated by a call to Connect() has been
+            sucessfully The connection had been established.
+            socket is the calling socket object. From now on, the socket can be used
+            to send and receive data.
+        </dd>
+
+        <dt>void SocketBindResult(ISocket * const socket, const char * localAddr, word localPort)</dt>
+        <dd>
+            Will be called to inform the user that a that the Bind() call was successfully.
+            socket will be the calling socket object.
+            localAddress the address, the socket is listening too (will be the same as
+            the given to bind or "0.0.0.0" if NULL had been given).
+            localPort is the port the socket is listening to (will be the same as given
+            to Bind() or the one the system chooses, if 0 had been given).
+            <b>Note:</b> For local sockets, localAddr will be the file the socket listens to.
+            localPort will always be 0.
+            That function will be a good place to call Listen() to let the socket listen
+            to incomming requests.
+        </dd>
+
+        <dt>void SocketListenResult(ISocket * const socket, const char * remoteAddr, word remotePort)</dt>
+        <dd>
+            When the socket is listening to incomming connections (after a call to Listen()),
+            SocketListenResult() will be called each time after the socket receives
+            an connection request.
+            socket is the calling socket object.
+            The IP address of the client that tries to connect is given in remoteAddr,
+            the port that will be used for communication in remotePort.
+            To accept the connection, just call Accept() of the socket with an instance
+            of USocket for the new ISocket object that will be created for the new connection.
+        </dd>
+
+        <dt>void SocketAcceptComplete(ISocket * const socket)</dt>
+        <dd>
+            If an incomming connection request had been accepted, this function of the
+            USocket instance given to ISocket::Accept() will called.
+            socket is not the instance of the socket server that receives the request,
+            but rather the instance of the new ISocket instance that must been
+            used for communication.
+            Because of this, the application must save the pointer given in socket and
+            delete that object, if no longer be used.
+        </dd>
+
+        <dt>void SocketSendResult(ISocket * const socket)</dt>
+        <dd>
+            Will be called after the socket has send the data given to Send().
+            socket is the calling socket object.
+            Note that all Send() calls will lead to a send result,
+            unless Send() needs to cache data.
+            In that case, SocketSendResult() only will be used once after all cached data had been sent.
+        </dd>
+
+        <dt>void SocketRecvResult(ISocket * const socket, void * buf, size_t len)</dt>
+        <dd>
+            Will be called after Recv() had been called and data had been received.
+            socket is the calling socket object. buf is the buffer given to Recv(),
+            len the number of bytes received (if recvPartial of Recv() was false,
+            len will be the same as given to Recv()).
+            Note that only after an SocketRecvResult a new Recv() call can be done.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+
+    <pre>
+app::app(class IIoMux * iomux)
+    : iomux(iomux)
+{
+    ISocketProvider * provider = CreateTCPSocketProvider();
+    this->serverSocket = provider->Create(iomux, this, false);
+    delete provider;
+    
+    this->serverSocket->Bind();
+}
+
+void app::SocketBindResult(ISocket * const socket, const char * localAddr, word localPort)
+{
+    this->serverSocket->Listen();
+}
+
+void app::SocketListenResult(ISocket * const socket, const char * remoteAddr, word remotePort)
+{
+    // Deny local connections...
+    if (strcmp(remoteAddr, "127.0.0.1") == 0)
+        this->serverSocket->Accept(NULL);
+    else
+        this->serverSocket->Accept(new remoteUser());
+}
+
+void app::SocketShutdown(ISocket * const socket, shutdownreason_t reason)
+{
+    // If true, an error occured during a call to Bind() and SocketBindResult()
+    if (this->serverSocket == NULL)
+        delete socket;
+    else {
+        delete this->serverSocket;
+        this->serverSocket = NULL;
+    }
+
+    this->iomux->Terminate();
+}
+
+// remoteUser
+
+void remoteUser::SocketAcceptComplete(ISocket * const socket)
+{
+    this->remoteSocket = socket;
+    this->remoteSocket->Recv(buffer, 1024);
+    this->remoteSocket->Send("Hello world", 11);
+}
+
+void remoteUser::SocketSendResult(ISocket * const socket)
+{
+    printf("Data had been sent\n");
+}
+
+void remoteUser::SocketRecvResult(ISocket * const socket, void * buf, size_t len)
+{
+    printf("Received data\n");
+    debug->HexDump(buf, len);
+    this->remoteSocket->Recv(buffer, 1024);
+}
+
+void remoteUser::SocketShutdown(ISocket * const socket, shutdownreason_t reason)
+{
+    delete socket;
+    delete this;
+}
+
+    </pre>
+</body>
+</html>

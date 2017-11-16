@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>webserver_plugin</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>Webserver Plugin</h1>
+    <p>
+        To register itself to the innovaphone webserver as a plugin, an application has to use
+        a set of interfaces. Theese interfaces will handle the communication between the
+        application and the innovaphone webserver using a local socket. What kind of interface
+        the application needs to use depends on the type of supported functionality. However,
+        the IWebserverPlugin interface is the main class and must be used to let the application
+        act as an webserver plugin. 
+    </p>
+
+	<dt>inline wsr_type_t GetResponseTypeForFileName(const char * fileName)</dt>
+	<dd>
+		Returns the response type depending on the file suffix. Have a look to IWebserverGet::SetTransferInfo() for a list
+		of available resource types.
+	</dd>
+	
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>WebserverPlugin</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class WebserverPluginProvider</h3>
+        <p>
+            Used to create an instance of an IWebserverPlugin. The instance of the
+            IWebserverPluginProvider itself will be created by calling
+            CreateWebserverPluginProvider() and need to be released by the application after it
+            now longer will be used.
+        </p>
+    <dl>
+        <dt>IWebserverPlugin * CreateWebserverPlugin(IIoMux * const iomux, ISocketProvider * localSocketProvider, UWebserverPlugin * const user, const char * webserverAddress, const char * appWebRoot, IInstanceLog * const log)</dt>
+        <dd>
+            Creates the IWebserverPlugin instance. iomux has to be the IIoMux instance,
+            the plugin will use for the local socket. localSocketProvider will be used to create the local socket.
+            user has to be an instance of an UWebserverPlugin, that will receive all callbacks. The webserverPath is
+            the path to the local webserver socket, needed for communication with the webserver. The applications
+            root inside the web structure will be given in appWebRoot. Each call of one of the listen functions of
+            the IWebserverPlugin will add the appWebRoot to the path given to that funtion.
+            log is used for logs dependent of the log flag LOG_WEBSERVER_PLUGIN.
+        </dd>
+    </dl>
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>class IWebserverPlugin </h3>
+    <p>
+        The IWebserverPlugin is the main class and will communicate with the webserver.
+        If a request for a file arrives, and that file is inside a list of static files,
+        the plugin will directly response to that request The application will not be informed. Note that only
+        request for the appWebRoot path will be handled in that way, too. (To see how to add static files to
+        your application, look to the innovaphone APIDemo example.)
+        If the requested file is not part of the list of static files, the plugin will ask the given user.
+        With this, dynamic files can be realized. Beside this, the plugin also supports
+        websocket communication. If the plugin was registered to the server,
+        and the connection to the server was lost, the IWebserverPlugin itself automatically makes a reconnect.
+    </p>
+
+    <dl>
+        <dt>void HttpListen(const char * path, UWebserverPlugin * user, const char * authUser = NULL, const char * authUserPwd = NULL, const char * staticFilePrefix = NULL)</dt>
+        <dd>
+            Will listen at the given path for an incoming HTTP request. Path will be added to appWebRoot, given during the creation
+            of the Plugin. If path is NULL or "", appWepRoot will be used to listen to. Registering means, that the app will be
+            added to an intarnal virtual filesystem of the webserver with "appWenRoot/path". After that, the app is accessable through
+            a web browser, calling the addess of the webserver with the address. The requested resource will be passed to
+            the application. E. g. appWebRoot is "/test", path is "/html", a request "http://&lt;address of server&gt;/app/html/main/info.html"
+            will be redirected to the application with the resource name of "main/info.html". Note that only one instance can listen to a path.
+            If any application tries to listen to a path someone alrady is listening to, the webserver will return an error.
+            User will be an UWebserverPlugin instance, that will be informed if a request for the given path will occure. If NULL, the
+            default user passed to CreateWebserverPlugin will be used.
+            If authUser and authUserPwd is given, the Webserver will use theese two informations
+            to make a digest authentication until allow the browser to access the data the application provides. If you make an additional HttpListen()
+            to a path tha is a sub-path for static files, and set authentication informations for that path, you can define the need of autorization for
+            some static files.
+            If staticFilePrefix is given, this prefix will be added to all static file request. For example: if staticFilePrefix is set to "1234",
+            and the static files lies in /myfile.html, the request must go to /1234/myfile.html to be related to that static file.
+        </dd>
+
+        <dt>void PassthroughListen(const char * path, UWebserverPlugin * user)</dt>
+        <dd>
+            Will register the given path to receive passthrough requests. Passthrough has priority over
+            all other kinds of requests. Everything received from the browser will redirected
+            to the application, while everything from the application will be redirected to the browser.
+            Doing this, the application will receive full control over the communication with the browser.
+            That means on the other hand, that the application will be responsible to send
+            a correct answer and parse a HTTP header itself. (The classes of the HTTPLib like
+            HTTPParser and HTTPHeader can be a good help a this point). path will be the path
+            inside the appWebRoot to receive passthrough access. If you whant a special "file" in the request
+            to use for passtrough, you have to use that file as path
+            (e. g. webserverPlugin->PassthroughListen("/pass/through.html").
+            User will be the UWebserverPlugin instance, that will be informed about incomming data. If NULL,
+            the user given to CreateWebserverPlugin() will be used.
+        </dd>
+        <dd>
+            <b>NOTE:</b> Passthrough will only work if the requested path is exaclty the the same as
+            the registered. If you appWebRoot is  "/myapp" and you make a PassthroughListen to "/pt", a request to
+            "/myapp/pt" will be handled as passthrough, while a request to "/myapp/pt/info.html" will be
+            handled as a normal HTTP request.
+        </dd>
+
+        <dt>void WebsocketListen(const char * path = NULL, UWebserverPlugin * user)</dt>
+        <dd>
+            Will start to listen to incomming websocket connections. If path is NULL, the
+            plugin will register itself to listen to websocket connections to the same path
+            that was given to RegisterForPath. If path is not NULL, the value of path will
+            be appended to the already registered path.
+            (e. g. "/app/main" was given to RegisterForPath(), and Listen() will
+            be called with "/websocket", the IWebserverPlugin will be registered to listen
+            to incomming websocket connections on "/app/main/websocket").
+            User will be the UWebserverPlugin instance, that will be informed about incomming websocket request.
+            If NULL, the user given to CreateWebserverPlugin() will be used.
+        </dd>
+
+        <dt>void SendCertificate(const char * password, const byte * certBuf, size_t certLen, const char * hostName = NULL, UWebserverPlugin * user = NULL)</dt>
+        <dd>
+            Sends a new hostname specific certificate to the webserver.<br />
+            password is the password of the app-password argument with which the webserver has been spawned.<br />
+            <i>The password is only known to the taskmanager, as the general idea is, that only the taskmanager is allowed to set new certificates!</i>
+            A SendCertificateResult is triggerd on success.<br/>
+            <i>Just call this function if the WebserverPlugin is already connected, so basically inside your UWebserverPlugin::WebserverPluginConnected() callback!</i>
+        </dd>
+
+        <dt>void Cancel(wsr_cancel_type_t reason)</dt>
+        <dd>
+            Rejects a request. This function should be used to cancel each type of request,
+            except websocekt requests. reason needs to be one of the following values:
+            <ul>
+                <li>WSP_CANCEL_NOT_FOUND = The requested resource could not be found.</li>
+                <li>WSP_CANCEL_BAD_REQUEST = Somethign with the given request was bad.</li>
+                <li>WSP_CANCEL_UNAVAILABLE = the requested resource is unavailble.</li>
+                <li>WSP_CANCEL_MISSING_LENGTH = report the missing length in a request.</li>
+                <li>WSP_CANCEL_STREAM = must be used to cancel a currently active data transfer.</li>
+                <li>WSP_CANCEL_ACCESS_DENIED = the access to the requested resource is denied.</li>
+                <li>WSP_CANCEL_INTERNAL_ERROR = report an internal error.</li>
+            </ul>
+        </dd>
+
+        <dt>void Redirect(const char * newDestination)</dt>
+        <dd>
+            Redirects a request to a given resource. newDestination can be only a path relative to
+            the one registered with RegisterPath() or an absolute address including the leading http://.
+        </dd>
+
+        <dt>void Accept(class UWebserverGet * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverPost * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverPut * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverPassthrough * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverPropfind * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverMove * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverMkCol * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverCopy * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverOptions * const user)</dt>
+        <dd>
+        </dd>
+        <dt>void Accept(class UWebserverCopy * const user)</dt>
+        <dd>
+            Accepts an incoming request. Passing NULL to user will have the same effect as calling
+            IWebserverPlugin::Cancel(WSP_CANCEL_NOT_FOUND). Otherwise, the *AcceptComplete() function of the
+            given user will be called. You have to make sure to give a user that combines with the request.
+            If not, an assertion will be raised. If NULL needs to be passed, a typecast need to be made to
+			the type of user that combines with the request type - e. g. Accept((UWebserverGet *)NULL).
+        </dd>
+
+        <dt>void WebsocketAccept(class UWebsocket * user)</dt>
+        <dd>
+            Needs to be called with an UWebsocket instance to accept an incomming websocket connection.
+            The given user will be the user of the new websocket connection. If user is NULL, the request
+            will be rejected. Note that unless for other kind of requests, calling IWebserverPlugin::Cancel()
+            will lead to unexpacted behavior. This is, because websocket needs a different kind of handling.
+            So call WebsocketAccept(NULL) to reject a websocket request.
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Will close the plugin by closing the local socket. The webserver will regognize it and removes
+            the registering of the application.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> UWebserverPlugin </h3>
+
+    <dl>
+        <dt>void WebserverPluginConnected()</dt>
+        <dd>Override this function to be informed if the WebserverPlugin is connected to the webserver.
+        Will be also called after successfull reconnects, e.g. if the webserver has been restarted or crashed.<br/>
+        This can be e.g. used to send certificates, which shall be used by the webserver and this just works
+        if the webserver is connected.
+        </dd>
+        <dt>void WebserverPluginClose(IWebserverPlugin * plugin, wsp_close_reason_t reason, bool lastUser)</dt>
+        <dd>
+            Will be called if the connection of the plugin has been closed. The default implenetation deletes
+            the given plugin. If you override this function, you need to delete the given plugin instance, too.
+            plugin is the calling IWebserverPlugin object, lastUser a flag, if the user informed of that close
+            is the last user in the list of internal registered users. Technically, the user given to CreateWebserverPlugin
+            will be the last one that will be informed about the close. reason one of the following values:
+            <ul>
+                <li>WSP_NORMAL_CLOSE: The app itself initiated the shutdown.</li>
+                <li>WSP_REGISTER_PATH_INVALID: The given path is invalid.</li>
+                <li>WSP_WEBSOCKET_PATH_INVALID: The given Websocket listen path is invalid.</li>
+                <li>WSP_WEBSOCKET_PATH_ALREADY_LISTENING: An other registration alrady is listening to that pathfor websocekt connections.</li>
+                <li>WSP_PATH_ALREADY_REGISTERD: A data provider already registered to that resource.</li>
+                <li>WSP_ADDRESS_INVALID: The address the application tried to connect to was invalid.</li>
+                <li>WSP_CONNECTION_ERROR: An connection error occured. See log for details.</li>
+            </ul>
+        </dd>
+
+        <dt>void WebserverPluginHttpListenResult(IWebserverPlugin * plugin, ws_request_type_t requestType, char * resourceName, char * registeredPathForRequest, size_t dataSize)</dt>
+        <dd>
+            Will be called if a request from a browser arrives that could not be realized from the webserver 
+            plugin internally. The kind of the request will be given to requestType, resourceName is the
+            resource requested. registeredPathForRequest ist the path listening (including the appWebRoot).
+            dataSize only will be of interest for POST and PUT requests, for all other
+            requests, the value is 0. You can cancel the request by calling IWebserverPlugin->Cancel()
+            (or calling an Accept() function giving NULL as user). To accept the request, call
+            IWebserverPlugin::Accept(), giving an instance of the correct user. If the given user is wrong,
+            an assertion will be raised. requestType can be one of the following types:
+            <ul>
+                <li>WS_REQUEST_GET</li>
+                <li>WS_REQUEST_POST</li>
+                <li>WS_REQUEST_PUT</li>
+				<li>WS_REQUEST_PROPFIND</li>
+				<li>WS_REQUEST_MOVE</li>
+				<li>WS_REQUEST_COPY</li>
+				<li>WS_REQUEST_MKCOL</li>
+				<li>WS_REQUEST_DELETE</li>
+				<li>WS_REQUEST_OPTIONS</li>
+            </ul>
+            <b>NOTE:</b> Websocket will be handled differently.
+        </dd>
+
+        <dt>void WebserverPluginWebsocketListenResult(IWebserverPlugin * plugin, const char * registeredPathForRequest, const char * host)</dt>
+        <dd>
+            Will be called after the application calls Listen() to listen to an incomming
+            websocket connection and a websocket connection request arrives. plugin is the calling
+            IWebserverPlugin object, registeredPathForRequest the path that listens to websocket connections
+            and host the host that initiated the connection. An application can use that value to check if
+            the conenction will be accepted or not. The connection will be accepted by calling
+            IWebserverPlugin::Accept() with an instance of UWebsocket. Calling WebsocketAccept()
+            with NULL will deny the request. The dafault implementation of that function denies the request.
+        </dd>
+
+        <dt>void WebserverPluginSendCertificateResult(IWebserverPlugin * plugin, byte * certBuffer)</dt>
+        <dd>
+            Will be called as SendResult of a previous IWebserverPlugin::SendCertificate call. The pointer certBuffer is handed, so it might be freed here.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> Code Example (static file) </h3>
+    <p>
+        This code demonstrates how to use the IWebserverPlugin to provide static files.
+        An example of how to link static files to an application can be found in the innovaphone apidemo project.
+    </p>
+
+    <pre>
+app::app(IIoMux * iomux)
+    : iomux(iomux)
+{
+    this->webserverPlugin = IWebserverPlugin::Create(iomux, this, "/path/to/webserver", "/demoapp", instanceLogInstance);
+    this->webserverPlugin->HttpListen();
+}
+
+// Will be called else where to close the application...
+void app::CloseApp()
+{
+    this->webserverPlugin->Close();
+}
+
+void app::WebserverPluginClose(IWebserverPlugin * plugin, wsp_close_reason_t reason, bool lastUser)
+{
+    if (lastUser) {
+        delete this->webserverPlugin;
+        iomux->Terminate();
+    }
+}
+    </pre>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>General notes about IWebserver* handlers</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Each request sent to and accepted by the Webserver will be passed to the application. After the application
+        accpets that specified request (by passing a user object), the IWebserverPlugin will create a handler object
+        for that request. This object is an instance of one of the following classes. There are more or less equal
+        in their functionality, depending on the type of the request.
+    </p>
+    <h3>Closing a handler</h3>
+    <p>
+        It is important to call the Close() function of the handler object after it will no longer be used. If not,
+        the handler will block the existing connection between the browser and the webserver as well as the handling of
+        the request it self. So after the user handles everything he needs to do with that request and after sending
+        an adequat result, he must call Close(). This leads to a CloseComplete() callback of the handlers user. You need
+        to override this callback and it is important to delete the given handler instance as well as the user itself 
+        (if the user will not be deleted on an other place). If not, the application will produce memory leaks and maybe 
+        some assertions at a later point.
+    </p>
+    <h3>Receiving data</h3>
+    <p>
+        Some handler (like IWebserverPost, IWebserverPut, ...) can receive additional data sent with the request. For this,
+        the application needs to call Recv() of that handler. There are three combinations how Recv() can be called with
+        slightly different results:
+        <ul>
+            <li><b>Recv(buffer, 1024)</b>: The Webserver will receive 1024 bytes of data and send it to the application. There
+            the data will be stored in the given buffer and RecvResult() of the handlers user will be called.</li>
+            <li><b>Recv(NULL, 1024)</b>: The Webserver will receive 1024 bytes of data and send it to the application. There the
+            RecvBuffer() function of the handlers user will be called to request a buffer with the size given to Recv() (in our
+            example 1024 bytes) or less (see below). The application needs to return a valid buffer (NULL will lead to an assertion,
+            a buffer smaller than requested to a segmentation fault). After that, RecvResult() of the handlers user will be called.</li>
+            <li><b>Recv()</b> (same as <b>Recv(NULL, 0)</b>, because "NULL, 0" are the default parameters of Recv()): The Webserver will
+            receive data (max 16kb) and send it to the application as soon as possible. There, the RecvBuffer() function of the handlers
+            user will be called with the number of bytes needed. After the functions returns a valid buffer, RecvResult() of the handlers
+            user will be called. This variant is like calling ISocket::Recv() with partialRead = true.</li>
+        </ul>
+        <p>That means, that the Webserver always will collect the given amount of data (for the first two cases) and send it to the application.
+        It doesn't matter whether the data will be send to the Webserver in chunk encoded format or not. It makes no difference fot the application itself.
+        But it could be, that the data send is less than requested by the application. This happens, if the end of the transfer
+        had been reached and the last part is less then the number of bytes given to Recv(). That means, that the application also can
+        call Recv() after all data had been received. The Webserver than will return a RecvResult with the len set to 0. Doing that,
+        the application can realize the end of transfer by simply callign Recv() until RecvResult() reports a len of 0.</p>
+    </p>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>WebserverGet</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> IWebserverGet </h3>
+    <p>
+        The IWebserverGet interface is the handler for an incoming GET request. It will become active,
+        if the applicaion passes an UWebserverGet instance to IWebserverPlugin::GetRequestAccept().
+        After everyting had been set up, WebserverPluginGetRequestAccept() of the given user will be called.
+        The interface also supports everythign you need to handle range requests. Because of this,
+        the IWebserverPlugin supports range requests for the static files of the application,
+        too (if the browser requests them).
+    </p>
+
+    <dl>
+        <dt>const char * GetResourceName()</dt>
+        <dd>
+            Returnes the name of the resource accesed by the request.
+        </dd>
+
+        <dt>size_t GetRangeCount()</dt>
+        <dd>
+            Returns the number of ranges sent with the HTTP header.
+        </dd>
+
+        <dt>IWebserverGetRange * const GetRange(size_t idx)</dt>
+        <dd>
+            Returns the range information for the given index. If idx is out of range (the same or
+            a higher value as returned by GetRange()), an assertion will be raced.
+            <b>NOTE:</b> Don't relase the returned object, also don't save the pointer for later use.
+            The values returned by the IWebserverGetRange instance will be valid until calling GetRange()
+            again. Also, when deleting the IWebserverGet instance, the IWebserverGetRange instance
+            returned by the function will be deleted, too.
+        </dd>
+
+        <dt>char * GetETag()</dt>
+        <dd>
+            Returns the etag of the resource send by the browser. This value noramly will be used to support
+            chaching of static files. So normally, there is no need to use it inside the applicaions code.
+        </dd>
+
+        <dt>void Cancel(wsr_cancel_type_t reason)</dt>
+        <dd>
+            Cancels the request. This can be done here, too, and my become useful if you started a transfer
+            of data and need to cancel that.
+        </dd>
+
+        <dt>void SetTransferInfo(wsr_type_t resourceType, size_t dataSize, wsr_flags_t flags = WSP_FLAG_NONE, const char * etag = NULL)</dt>
+        <dd>
+            Needs to be called before sending data with Send(). With this, the webserver will receive all
+            informations need to send a proper response to the browser. resourceType is one of the
+            following (mostly selfexplaining) data types and needs to mach the type of data you will send:
+            <ul>
+                <li>WSP_RESPONSE_NO_TYPE = Use this type in combination with dataSize = 0 to send a OK response to the browser without sending data (the Webserver willset the content-length field to 0).</li>
+                <li>WSP_RESPONSE_BINARY</li>
+                <li>WSP_RESPONSE_JAVA</li>
+                <li>WSP_RESPONSE_WAV</li>
+                <li>WSP_RESPONSE_OGG</li>
+                <li>WSP_RESPONSE_MP3</li>
+                <li>WSP_RESPONSE_GIF</li>
+                <li>WSP_RESPONSE_PNG</li>
+                <li>WSP_RESPONSE_BMP</li>
+                <li>WSP_RESPONSE_ICON</li>
+                <li>WSP_RESPONSE_TTF</li>
+                <li>WSP_RESPONSE_EOT</li>
+                <li>WSP_RESPONSE_PDF</li>
+                <li>WSP_RESPONSE_TEXT</li>
+                <li>WSP_RESPONSE_XML</li>
+                <li>WSP_RESPONSE_CSS</li>
+                <li>WSP_RESPONSE_JAVASCRIPT</li>
+                <li>WSP_RESPONSE_JSON</li>
+                <li>WSP_RESPONSE_HTML</li>
+                <li>WSP_RESPONSE_SVG</li>
+                <li>WSP_RESPONSE_WOFF</li>
+				<li>WSP_RESPONSE_G711</li>
+				<li>WSP_RESPONSE_G722</li>
+				<li>WSP_RESPONSE_G729</li>
+            </ul>
+        </dd>
+    </dl>
+
+    <p>
+        dataSize will be the size of data to send. By passing 0xFFFFFFFF, the webserver will realize a chuncked
+        transfer of data. flags can be one of the following values:
+    </p>
+
+    <ul>
+        <li>WSP_FLAG_NONE = No flag</li>
+        <li>WSP_FLAG_ENCODING_GZIP = The data sent is compress in GZIP format.</li>
+        <li>WSP_FLAG_SEND_RANGE = Use this if you send only a range of the data. When using that flag, the range itself also need to be set by using SetTransferRange()</li>
+    </ul>
+
+    <p>
+        etag is only used internally for the handling of static files, so normaly there is no need
+        for you to use it until you whant to support caching of your response data. If so, please
+        make sure that the etag has a fixed length of 32 bytes (for the static files, the MD5 sum
+        of the data is used).
+    </p>
+
+    <p>
+        <b>NOTE:</b> After setting the type to WSP_RESPONSE_NO_TYPE with a dataSize of 0,
+        you must not make a IWebserverGet::Send() call. Just close the IWebserverGet instance to
+        finalize the request.
+    <p/>
+
+    <dl>
+        <dt>void SetTransferRange(size_t rangeStart, size_t rangeEnd)</dt>
+        <dd>
+            Set the range of the transfered data. Note that the bytes need to be 0 based, like used by
+            the HTML protocol.
+        </dd>
+
+        <dt>void ForceDownloadResponse(const char * fileName = NULL)</dt>
+        <dd>
+            Calling this function sets the Content-Disposition header field with the value "attachment". Doing this forces
+            the browser to download the send response instead of inlining it (e. g. directly start to play MP3 fields). The
+            file name the browser should use for download can be given in fileName. If fileName is NULL, the browser will
+            use the same file name as given with the request.
+        </dd>
+
+        <dt>void Send(void * buffer, size_t len)</dt>
+        <dd>
+            Sends the given data with the given length. After the data had been send to the browser,
+            the application will receive a UWebserverGet::SendResult() callback.
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Closes the IWebserverGet instance. If there are pending send results, IWebserverGet will
+            wait until all SendResults() had been processed. After calling closed, all further Send()
+            calls will be ignored. You must call Close() to finalize am active GET request.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> IWebserverGetRange </h3>
+
+    <p>
+        An instance to this interface will be returned by IWebserverGet::GetRange(). You will receive
+        each informations that you need about the range part from that object.
+        The interface has no functions. Note that each start- and end value is zero based.
+    </p>
+
+    <dl>
+        <dt>rangeType</dt>
+        <dd>
+            The type of the range, depending on the range information given by the HTML header.
+            It could be one of the following values:
+            <ul>
+                <li>RANGE_NONE No range information given. Should never be set.</li>
+                <li>RANGE_START_END The range is given by a start and an end value.</li>
+                <li>RANGE_START_ONLY Only a start has been given (e. G. "range: bytes=200-"). In that case, you have determine the end depending of the data size, and give it as end value to IWebserverGet::SetTransferRange().</li>
+                <li>RANGE_LAST_BYTES The number of the last bytes to send has been given (e. g.: "range: bytes=-400). In that case the number of the last bytes to return will be given in IWebserverGetRange::end. You have to determine the start value depending on the size of data to send.</li>
+            </ul>
+        </dd>
+
+        <dt>start</dt>
+        <dd>
+            The start value of the range or the number of the last bytes to send.
+        </dd>
+
+        <dt>end</dt>
+        <dd>
+            The end value of the range. If the rangeType is not RANGE_START_END, the value will be 0.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> UWebserverGet </h3>
+    <p>
+        A user for a IWebserverGet handler must be a derived class of UWebserverGet.
+    </p>
+
+    <dl>
+        <dt>void WebserverGetRequestAcceptComplete(IWebserverGet * const webserverGet)</dt>
+        <dd>
+            Will be called after the application accepts a GET request calling
+            IWebserverPlugin::GetRequestAccept() and passing an instance to UWebserverGet.
+            webserverGet is the calling IWebserverGet instance.
+        </dd>
+
+        <dt>void WebserverGetSendResult(IWebserverGet * const webserverGet)</dt>
+        <dd>
+            Will be called after calling IWebserverGet::Send(). Use this to implement the
+            flow control inside your app. webserverGet is the calling IWebserverGet instance.
+        </dd>
+
+        <dt>void WebserverGetCloseComplete(IWebserverGet * const webserverGet)</dt>
+        <dd>
+            Will be called after the IWebserverGet instance closes. The application needs
+            to delete the given IWebserverGet instance to prevent memory leaks. 
+            webserverGet is the calling IWebserverGet instance.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> Code Example </h3>
+    <p>
+        This code demonstrates how to answer a GET request from the application.
+    </p>
+    <pre>
+app::app(IIoMux * iomux)
+    : iomux(iomux)
+{
+    this->webserverPlugin = IWebserverPlugin::Create(iomux, this);
+    this->webserverPlugin->RegisterForPath("/path/to/webserver", "/demoapp/main");
+}
+
+void app::WebserverPluginWebRequest(IWebserverPlugin * plugin, ws_request_type_t requestType, char * resourceName, size_t dataSize)
+{
+    if (requestType != WS_REQUEST_GET || strcmp(resourceName, "myresource.png") != 0)
+        plugin->Cancel(WSP_CANCEL_NOT_FOUND);
+    else {
+        plugin->Accept(new MyGetHandler);
+    }
+}
+
+// ==== MyGetHandler
+
+class MyGetHandler {
+protected:
+    char * dataBuffer;
+    size_t dataSize;
+    size_t dataSend;
+
+public:
+    MyGetHandler() {}
+    ~MyGetHandler() {}
+
+    void WebserverGetRequestAcceptComplete(IWebserverGet * const webserverGet)
+    {
+        // We assume that there is a function that returns the http file instance...
+        httpfile * myFile = GetFileForName(webserverGet->GetResourceName());
+
+        dataBuffer = myFile->GetData();
+        dataSize = myFile->GetSize();
+        dataSend = 0;
+
+        webserverGet->SetTransferInfo(wsr_type_t(myFile->GetResourceType()),
+                                      myFile->GetSize(),
+                                      wsr_flags_t(myFile->GetFlags()));
+
+        this->SendNextPart(webserverGet);
+
+    }
+
+    void WebserverGetSendResult(IWebserverGet * const webserverGet)
+    {
+        this->SendNextPart(webserverGet);
+    }
+
+    void SendNextPart(IWebserverGet * const webserverGet)
+    {
+        size_t dataSize = staticFile->GetSize();
+
+        if (bytesSend < dataSize) {
+            size_t dataSizeDiff = dataSize - bytesSend;
+            size_t sendSize = dataSizeDiff > WS_MAX_DATA_SIZE ? WS_MAX_DATA_SIZE : dataSizeDiff;
+            webserverGet->Send((void *)(dataBuffer + bytesSend), sendSize);
+            bytesSend += sendSize;
+            if (bytesSend == dataSize)
+                webserverGet->Close();
+        }
+    }
+
+
+    void WebserverGetCloseComplete(IWebserverGet * const webserverGet)
+    {
+        delete webserverGet;
+        delete this;
+    }
+};
+</pre>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>WebserverPost</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class IWebserverPost </h3>
+    <p>
+        The IWebserverPost interface is the handler for an incoming POST request.
+        It will become active, if the applicaion passes an UWebserverPost instance
+        to IWebserverPlugin::PostRequestAccept(). After everyting had been set up,
+        WebserverPluginPostRequestAccept() of the given user will be called.
+    </p>
+
+    <dl>
+        <dt>const char * GetResourceName()</dt>
+        <dd>
+            Returns the name of the resource used for the post request.
+        </dd>
+
+        <dt>size_t GetDataSize()</dt>
+        <dd>
+            Returns the complete size of available data.
+        </dd>
+		
+		<dt>bool DataIsChunkEncoded()</dt>
+		<dd>
+			Returns true, if the data to receive had been send in chunk encoded format. In that case, the application
+			has to call Recv() until UWebserverPost::WebserverPostRecvResult() will be called with NULL as buffer and
+			0 as size of the buffer.
+		</dd>
+
+		<dt>void SetContentLength(size_t len)</dt>
+		<dd>
+			Used to set the length of content sending as a response to a post request. Call this before calling
+			IWebserverPost::Send(). If the contentsize if onknown, call this function with passing WS_RESPONSE_CHUNKED
+			as dataSize to enable sending of chunk encoded data. After calling IWebserverPost::Close(), the transfer of
+			chunk encoded data will be finalized.
+		</dd>
+
+        <dt>void Cancel(wsr_cancel_type_t reason)</dt>
+        <dd>
+            Cancels the post request while alrady started to receive or send data.
+            See IWebserverGet::Cancel() for the reason types.
+        </dd>
+		
+		<dt>void Send(void * buffer, size_t len)</dt>
+		<dd>
+			Sends the data of the given buffer. The length of the buffer will be given with len. IWebserverPost will
+			automatically set xml as content-type for the data.
+		</dd>
+		
+        <dt>void Recv(void * buffer = NULL, size_t len = 0)</dt>
+        <dd>
+            Prepares IWebserverPost to receive data. If buffer and size are NULL/0,
+            the UWebserverPost::WebserverPostRecvBuffer() function will be called
+            to get the buffer of the needed size. Else, the given lenght of data will
+            be received and stored in the given buffer. The application has to take care
+            of the value given in len and make sure, that it never will be greater than
+            the data still available. How much bytes are available to read will be given
+            as information to UWebserverPlugin::WebserverPluginPostRequest() or by calling
+            IWebserverPost::GetPostDataSize().
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Closes the IWebserverPost instance. You have to call this to let the webserver
+            accept other data over this connection.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class UWebserverPost </h3>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        A user for a IWebserverPost handler must be a derived class of UWebserverPost.
+    </p>
+
+    <dl>
+        <dt>void WebserverPostRequestAcceptComplete(IWebserverPost * const webserverPost)</dt>
+        <dd>
+            Will be called after the application accepts a POST request calling IWebserverPlugin::Accept()
+            and passing an instance to UWebserverPost. webserverPost is the calling IWebserverPost instance.
+        </dd>
+
+        <dt>void WebserverPostRecvResult(IWebserverPost * const webserverPost)</dt>
+        <dd>
+            Will be called after data had been received because of a previous IWebserverPost::Recv() call.
+            webserverPost is the calling IWebserverPost instance.
+        </dd>
+
+        <dt>virtual void * WebserverPostRecvBuffer(size_t len)</dt>
+        <dd>
+            Will be called if IWebserverPost::Recv() had been called without giving a buffer.
+            The function has to return a pointer to buffer with the given size.
+            The default implementation returns NULL and raises an assertion doing this.
+        </dd>
+
+        <dt>void WebserverPostCloseComplete(IWebserverPost * const webserverPost)</dt>
+        <dd>
+            Will be called after the IWebserverPost instance closes.
+            The application needs to delete the given IWebserverPost instance
+            to prevent memory leaks.
+            webserverPost is the calling IWebserverPost instance.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>WebserverPassthrough</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class IWebserverPassthrough </h3>
+    <p>
+        This class is the handler for a passthrough request.
+        A passthrough makes exactly what it seems to do: pass all data received by
+        the webserver directly to the app that is registered to receive passthrough
+        for a given path (See IWebserverPlugin::RegisterForPassthrough).
+        That means, that the webserver doesn't handle any fields from the incoming HTTP header
+        as well as won't build up any response for the browser.
+        So data send using IWebserverPassthrough will directly transfered to the other
+        side of the conection.
+        So it's the responsibility of the app to send a correct HTTP response to the
+        browser (or to who ever the app is communicating to).
+    </p>
+
+    <dl>
+        <dt>const char * GetResourceName()</dt>
+        <dd>
+            Returns the name of the resource of the request.
+        </dd>
+
+        <dt>Send(void * buffer, size_t size)</dt>
+        <dd>
+            Sends the given buffer with the given size to who ever is communication with the application.
+        </dd>
+
+        <dt>void Recv(void * buffer = NULL, size_t len = 0)</dt>
+        <dd>
+            Prepares to receive incoming data. The incoming data will be stored in buffer and will
+            have a maximum of len bytes. Note that because of the nature of the passthrough,
+            the webserver itself don't have control ofer the data.
+            So he dosn't know how much bytes will be available.
+            Because of this, IWebserverPassthrough::Recv() won't wait until len bytes had been read.
+            So len is only the maximum to receive, not the minumum.
+            (Like calling ISocket::Recv() with the flag to make partitial reads).
+            If you passing NULL to buffer, IWebserverPassthrough will call
+            UWebserverPassthrough::WebserverPassthroughRecvBuffer() to let the application return
+            a buffer to store the incoming data to. There the application can realize how
+            much data is available.
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Closes the IWebserverPassthrough connection.
+            If there are pending SendResult() callbacks, the close will be done when all
+            SendResults() had been arrived.
+            Close() also closes the socket connection between the webserver and the browser.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class UWebserverPassthrough </h3>
+    <p>
+        A user for a IWebserverPassthrough handler must be a derived class of UWebserverPassthrough.
+    </p>
+
+    <dl>
+        <dt>void WebserverPassthroughRequestAcceptComplete(IWebserverPassthrogh * const webserverPassthrough)</dt>
+        <dd>
+            Will be called after the application accepts a passthrough request calling IWebserverPlugin::Accept()
+            and passing an instance to UWebserverPassthrough.
+            webserverPassthrough is the calling IWebserverPassthrough instance.
+        </dd>
+
+        <dt>void WebserverPassthroughSendResult(IWebserverPassthrough * const webserverPassthrough)</dt>
+        <dd>
+            Will be called when data, send by IWebserverPassthrough::Send(), had been sent by the webserver.
+            webserverPassthrough is the calling IWebserverPassthrough instance.
+        </dd>
+
+        <dt>void WebserverPassthroughRecvResult(IWebserverPassthrough * const webserverPassthrough)</dt>
+        <dd>
+            Will be called after data had been received because of a previous IWebserverPut::Recv() call.
+            webserverPut is the calling IWebserverPut instance.
+        </dd>
+
+        <dt>virtual void * WebserverPassthroughRecvBuffer(size_t len)</dt>
+        <dd>
+            Will be called if IWebserverPassthrough::Recv() had been called without giving a buffer.
+            The function has to return a pointer to buffer with the given size.
+            The default implementation returns NULL and raises an assertion doing this.
+        </dd>
+
+        <dt>void WebserverPassthroughCloseComplete(IWebserverPassthrough * const webserverPassthrough)</dt>
+        <dd>
+            Will be called after the IWebserverPassthrough instance closes.
+            The application needs to delete the given IWebserverPassthrough instance
+            to prevent memory leaks.
+            webserverPassthrough is the calling IWebserverPassthrough instance.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>WebserverOptions</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class IWebserverOptions </h3>
+    <p>
+        This is the handler for an OPTIONS request. The application needs to return the HTTP requests
+		its supports.
+    </p>
+
+    <dl>
+        <dt>void SetSupportedRequests(dword requestList)</dt>
+        <dd>
+            After the request had been accepted, the application needs to set the supported requests using this
+			function and call Close() after that. requestList is one or more of the following values, combined
+			using a logical or (note that WS_REQUEST_PASSTHROUGH is not part of that list and will simply be
+			ignored in case of usage):
+			<ul>
+				<li>WS_REQUEST_GET</li>
+				<li>WS_REQUEST_POST</li>
+				<li>WS_REQUEST_PUT</li>
+				<li>WS_REQUEST_PROPFIND</li>
+				<li>WS_REQUEST_MOVE</li>
+				<li>WS_REQUEST_COPY</li>
+				<li>WS_REQUEST_MKCOL</li>
+				<li>WS_REQUEST_DELETE</li>
+				<li>WS_REQUEST_OPTIONS</li>
+			</ul>
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Closes the IWebserverOptions connection. The app must call SetSupportedRequests() before calling Close().
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class IWebserverOptions </h3>
+    <dl>
+        <dt>void WebserverOptionsRequestAcceptComplete(IWebserverOptions * const webserverOptions)</dt>
+        <dd>
+            Will be called after the application accepts an option request. This function will be a good place
+			to set the accepted requests and close the IWebserverOptions handler again. If you want to support
+			all kinds of transfer the Webserver supports, you can use the default implementation of this function.
+			The calling instance will be given in webserverOptions.
+        </dd>
+
+        <dt>void WebserverOptionsCloseComplete(IWebserverOptions * const webserverOptions)</dt>
+        <dd>
+            Will be called after the IWebserverOptions instance had been closed. The application must release the
+			webserverOptions instance as well as the UWebserverOptions instance.
+        </dd>
+    </dl>
+
+	
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>WebDAV related interfaces</h2>
+    <!-- ---------------------------------------------------------------------- -->
+	<p>
+		With the following interfaces, an application can response to WebDAV request messages. The functions of this
+		interfaces are the same, so the some of the functions are only supported by some of the interfaces. The
+		description of the function will have a note if the function is only available for some of the interfaces.
+		The WebDAV related interfaces are:
+		<ul>
+			<li>IWebserverPut</li>
+			<li>IWebserverPropfind</li>
+			<li>IWebserverMove</li>
+			<li>IWebserverMkCol</li>
+			<li>IWebserverCopy</li>
+			<li>IWebserverDelete</li>
+		</ul>
+	</p>
+    <!-- ---------------------------------------------------------------------- -->
+    <dl>
+        <dt>const char * GetResourceName()</dt>
+        <dd>
+            Returns the name of the resource of the request.
+        </dd>
+		
+		<dt>size_t GetDataSize()</dt>
+		<dd>
+			(only IWebserverPut and IWebserverPropfind): Returns the size of data send with the request. If the data is
+			chunk encoded, GetDataSize() will return 0.
+		<dd>
+		
+		<dt>bool bool DataIsChunkEncoded()</dt>
+		<dd>
+			(only IWebserverPut and IWebserverPropfind): Returns true, if the data to receive is chunk encoded. In that case
+			call Recv() until RecvResult of the user will return NULL as buffer.
+		</dd>
+
+		<dt>const char * GetHeaderFieldValue(const char * fieldName)</dt>
+		<dd>
+			Returns the value of the header field given in fieldName. If the requested header field wasn't part of
+			the request, the function returns NULL.
+		</dd>
+		
+		<dt>
+		
+        <dt>void SetResultCode(ws_webdav_result_t result, size_t dataSize = 0)</dt>
+        <dd>
+            Set the webdav result code as well as the dataSize to send (if there is any data to send). If the data
+			needs to be send in chunk encoded format, use WS_RESPONSE_CHUNKED for dataSize. This function need to be called before calling Send() or Close() (if not data needs to be send, set dataSize to 0 and directly call Close()).
+			result can be one of the following constants (depending on the request, not all of that constants will make sense):
+			<ul>
+				<li>WEBDAV_RESULT_CREATED</li>
+				<li>WEBDAV_RESULT_NO_CONTENT</li>
+				<li>WEBDAV_RESULT_MULTIPLE_STATUS</li>
+				<li>WEBDAV_RESULT_FORBIDDEN</li>
+				<li>WEBDAV_RESULT_METHOD_NOT_ALLOWED</li>
+				<li>WEBDAV_RESULT_CONFLICT</li>
+				<li>WEBDAV_RESULT_PRECONDITION_FAILED</li>
+				<li>WEBDAV_RESULT_LOCKED</li>
+				<li>WEBDAV_RESULT_BAD_GATEWAY</li>
+				<li>WEBDAV_RESULT_INSUFFICIENT_STORAGE</li>
+			</ul>
+        </dd>
+		
+		<dt>void SetLocation(const char * location)</dt>
+		<dd>
+			(Only IWebserverMkCol and IWebserverMove) Set the location that will be added to the HTTP response header. MkCol can and Move need to set this field when responding.
+		</dd>
+
+		<dt>void Cancel(wsr_cancel_type_t reason)</dt>
+		<dd>
+			Cancels the current operation or data transfer. Reason can be one of the following constants:
+			<ul>
+				<li>WSP_CANCEL_NOT_FOUND</li>
+				<li>WSP_CANCEL_BAD_REQUEST</li>
+				<li>WSP_CANCEL_UNAVAILABLE</li>
+				<li>WSP_CANCEL_MISSING_LENGTH</li>
+				<li>WSP_CANCEL_STREAM</li>
+				<li>WSP_CANCEL_ACCESS_DENIED</li>
+				<li>WSP_CANCEL_INTERNAL_ERROR</li>
+			</ul>
+		</dd>
+		
+        <dt>Send(void * buffer, size_t size)</dt>
+        <dd>
+            Sends the given buffer with the given size.
+        </dd>
+
+        <dt>void Recv(void * buffer = NULL, size_t len = 0)</dt>
+        <dd>
+            (only IWebserverPut, IWebserverPropfind): Prepares to receive data. If buffer and size are NULL/0,
+			the RecvBuffer() function of the user will be called to get a propriate buffer. Else, the given lenght
+			of data will be received and stored in the given buffer.
+			If the data is not chunk encoded, the application has to take care of the value given in len and make sure,
+			that it never will be greater than the data still available. For this, call GetDataSize() to know the size
+			of the data available.
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Closes the request. You have to call this to let the webserver accept other data over this existing tcp connection.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>User classes for the WebDAV interfaces</h3>
+    <!-- ---------------------------------------------------------------------- -->
+	<p>
+		Like other interfaces, the WebDAV related interfaces also have a user class for callbacks. The name of these
+		classes are the same as of the interfaces with the difference, that they start with an U instead of an I (e. G. 
+		Interface: IWebserverPut, User: UWebserverPut). Each function has the name of the class (without the U at the begin,
+		e. g. UWebserverPut::WebserverPutRequestAcceptComplete(), UWebserverCopy::WebserverCopyRequestAcceptComplete(), ...).
+		An application needs to pass an instance of a devired class to the propriate IWebserverPlugin::Accept() function.
+		The available user classes for the WebDAV related interfaces are:
+		<ul>
+			<li>UWebserverPut</li>
+			<li>UWebserverPropfind</li>
+			<li>UWebserverMove</li>
+			<li>UWebserverMkCol</li>
+			<li>UWebserverCopy</li>
+			<li>UWebserverDelete</li>
+		</ul>
+	</p>
+    <!-- ---------------------------------------------------------------------- -->
+    <dl>
+        <dt>void WebserverPutRequestAcceptComplete(IWebserverPut * const webserverPut)</dt>
+        <dt>void WebserverPropfindRequestAcceptComplete(IWebserverPropfind * const webserverPropfind)</dt>
+        <dt>void WebserverMoveRequestAcceptComplete(IWebserverMove * const webserverMove)</dt>
+        <dt>void WebserverMkColRequestAcceptComplete(IWebserverMkCol * const webserverMkCol)</dt>
+        <dt>void WebserverCopyRequestAcceptComplete(IWebserverCopy * const webserverCopy)</dt>
+        <dt>void WebserverDeleteRequestAcceptComplete(IWebserverDelete * const webserverDelete)</dt>
+        <dd>
+            Will be called after the app accepts a request by calling IWebserverPlugin::Accept(). The passed
+			webserver* object is the calling instance.
+        </dd>
+
+        <dt>void WebserverPutSendResult(IWebserverPut * const webserverPut)</dt>
+        <dt>void WebserverPropfindSendResult(IWebserverPropfind * const webserverPropfind)</dt>
+        <dt>void WebserverMoveSendResult(IWebserverMove * const webserverMove)</dt>
+        <dt>void WebserverMkColSendResult(IWebserverMkCol * const webserverMkCol)</dt>
+        <dt>void WebserverCopySendResult(IWebserverCopy * const webserverCopy)</dt>
+        <dt>void WebserverDeleteSendResult(IWebserverDelete * const webserverDelete)</dt>
+        <dd>
+            Will be called after the application had send data an after that data had been send by the webserver.
+			The given webserver* object is the calling instance.
+        </dd>
+		
+        <dt>void WebserverPutRecvResult(IWebserverPut * const webserverPut, void * buffer, size_t len)</dt>
+        <dt>void WebserverPropfindRecvResult(IWebserverPropfind * const webserverPropfind, void * buffer, size_t len)</dt>
+        <dd>
+            Will be called after the application calls Recv() and data had been read. The data is stored in buffer, the number
+			of bytes read are stored in len. <b>Note:</b> If the data to receive is chunk encoded, buffer will be NULL and
+			len 0 to tell, that all parts of the chunk encoded data had been read. The webserver* object will be the calling
+			instance.
+        </dd>
+
+        <dt>void * WebserverPutRecvBuffer(size_t len)</dt>
+        <dt>void * WebserverPropfindRecvBuffer(size_t len)</dt>
+        <dd>
+            Will be called if the application calls Recv() without parameters (or NULL, 0 as parameter). In that case, after
+			reading data, RecvBuffer() will be called. The application <b>must</b> return a buffer that has at least the size
+			of len. If NULL will be retunred, an assertion will be raised. If the buffer is smaler, the WebserverPlugin will
+			write data out of the bounds of the buffer. The best thing will be, if the application simply return malloc(len)
+			and frees that buffer in RecvResult again, after handling the data.
+        </dd>
+		
+        <dt>void WebserverPutCloseComplete(IWebserverPut * const webserverPut)</dt>
+        <dt>void WebserverPropfindCloseComplete(IWebserverPropfind * const webserverPropfind)</dt>
+        <dt>void WebserverMoveCloseComplete(IWebserverMove * const webserverMove)</dt>
+        <dt>void WebserverMkColCloseComplete(IWebserverMkCol * const webserverMkCol)</dt>
+        <dt>void WebserverCopyCloseComplete(IWebserverCopy * const webserverCopy)</dt>
+        <dt>void WebserverDeleteCloseComplete(IWebserverDelete * const webserverDelete)</dt>
+        <dd>
+            Will be called the IWebserver* interface closes. The application needs to delete the webserver* object as well
+			as the own unser instance, too. 
+        </dd>
+    </dl>
+
+	
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>Websocket</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class IWebsocket </h3>
+    <p>
+        The interface IWebsocket is used to support websocket communication over the webserver.
+        The webserver itself will handle all websocket related stuff and redirect the (decoded)
+        data to the application.
+        Data the application will send using the IWebsocket interface will be redirected from
+        the innovaphone webserver to the connected websocket client.
+        Again, the webserver will handle all of the websocket protocol related stuff.
+        An IWebsocket instance will be created, when the application listens to incomming websocket
+        connections, an connection request will arrive and the appliction will accept the request.
+        As with other classes, the application will be responsible to delete the object if no longer used.
+        <b>Note:</b> If an application whants to initialize a websocket connection,
+        it has to use the IWebsocketClient interface.
+        Over the webserver only websocket connections initiated by an external client are possible.
+    </p>
+
+    <dl>
+        <dt>void Send(const void * buffer, size_t len, bool text = true)</dt>
+        <dd>
+            Sends the data of the given buffer with the given len.
+            If the data is in textformat, text needs to be true (wich is the default), else false.
+            An application can send data over the websocket connection as soon as an instance
+            of that object had been created.
+        </dd>
+
+        <dt>void Recv(void * buffer, size_t len)</dt>
+        <dd>
+            Prepares the object to receive data with the size of len.
+            The data will be stored into the given buffer.
+            If the webserver receives more bytes over websocket than buffer can hold,
+            the webserver sends an error and closes the connection (WSCR_BUFFER_OVERFLOW).
+            If the size of data to receive per frame is unknown, it could be a good idea to use
+            the maximum the webservers websocket implementation supports
+            (WS_MAX_DATA_SIZE, define in webserverplugin.h).
+        </dd>
+
+        <dt>void Close()</dt>
+        <dd>
+            Closes the websocket connection.
+            After the socket had been closed, the instance of IWebsocket need to be
+            deleted to prevent memory leaks.
+            See UWebsocket::WebsocketCloseComplete() for more information.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> class UWebsocket </h3>
+    <p>
+        An instance of this class needs to be given to the
+        IWebserverPlugin::WebsocketAccept() function to accept an incomming websocket connection
+        and receive the callbacks of the corresponding IWebsocket instance.
+    </p>
+
+    <dl>
+        <dt>void WebsocketAcceptComplete(class IWebsocket * websocket)</dt>
+        <dd>
+            Will be called after an incomming websocket connection was accepted
+            by an UWebserverPlugin instance. websocekt is the instance of IWebsocket to use.
+            Theese instance needs to be deleted by the application if no longer needed.
+        </dd>
+
+        <dt>void WebsocketSendResult(class IWebsocket * websocket)</dt>
+        <dd>
+            Will be called after a IWebsocket::Send() call was completed. That means,
+            that the data to send was send to the client by the webserver and not only
+            to the webserver by the application. websocket will be the calling instance.
+        </dd>
+
+        <dt>void WebsocketRecvResult(class IWebsocket * websocket, const void * buffer, size_t len, bool text, bool isFragmented)</dt>
+        <dd>
+            Will be called after the application prepares to receive data by calling IWebsocket::Recv()
+            and after data had been arrived.
+            websocket is the calling instance, buffer the pointer to tha buffer given to IWebsocket
+            with the Recv() call.
+            size is the length of bytes arrived. If the data is binary data, text will be false. In case that the message
+            is part of a websocket-fragmented message, isFragmented is true. The end of a fragmented transfer had been reached,
+            if isFragmented is false again. That means, that an application has to receive data until isFragmented is false.
+        </dd>
+
+        <dt>void WebsocketCloseComplete(class IWebsocket * websocket, ws_close_reason_t reason)</dt>
+        <dd>
+            Will be called after the websocket connection had been closed.
+            websocket is the calling instance, reason one of the following values:
+            <ul>
+                <li>WSCR_NORMAL_CLOSE: A normal close, initiated by the application or by the client.</li>
+                <li>WSCR_BUFFER_OVERFLOW: Data send to the webserver over websocket was to big fit into the buffer given with IWebsocket::Recv() or more than the websocket implementation of the webserver supports. See the log of the webserver for details.</li>
+                <li>WSCR_SOCKET_LOST: The socket connection had been lost. See the log of the webserver and / or application for details.</li>
+                <li>WSCR_ERROR: The websocket client had been closed because of an error. See the log of the webserver and / or the application for details.</li>
+            </ul>
+
+            <b>Note:</b> After the function the IWebsocket intance could no longer be used.
+            Because of this that function is a good place to delete the instance.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3> Code Example </h3>
+    <pre>
+app::app(IIoMux * iomux)
+    : iomux(iomux)
+{
+    this->webserverPlugin = IWebserverPlugin::Create(iomux, this);
+    this->webserverPlugin->RegisterForPath("/path/to/webserver", "/demoapp/main");
+    this->webserverPlugin->WebsocketListen();
+}
+
+void app::WebserverWebsocketListenResult(IWebserverPlugin * plugin, const char * path, const char * host)
+{
+    if (strcmp(host, "some-bad-host.de") == 0)
+        this->webserverPlugin->Accept(NULL); // Deny conection.
+    else
+        this->webserverPlugin->Accept(new appWebsocket());
+}
+
+// appWebsocket - user for IWebsocket
+
+void appWebsocket::WebsocketAcceptComplete(class IWebsocket * websocket)
+{
+    this->websocketInst = websocket;
+}
+
+void appWebsocket::WebsocketSendResult(class IWebsocket * websocket)
+{
+    printf("Websocket data sent\n");
+    this->websocketInst->Close();
+}
+
+void appWebsocket::WebsocketRecvResult(class IWebsocket * websocket, const void * buffer, size_t len, bool text)
+{
+    printf("Websocket - received data (text = %s)\n", (text ? "true" : "false"));
+    debug->HexDump(buffer, len);
+    this->websocketInst->Send(buffer, len, text);
+}
+
+void appWebsocket::WebsocketCloseComplete(class IWebsocket * websocket, ws_close_reason_t reason)
+{
+    delete this->websocketInst;
+    delete this;
+}
+    </pre>
+</body>
+</html>

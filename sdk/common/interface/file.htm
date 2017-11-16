@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>file</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>files</h1>
+    <p>
+        Interface for basic file and directory operations.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>class FileSystem</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        The basic class to deal with linux files and directories for creating, reading, writing and obtaining infos. 
+        class IInstanceLog * log in each static function call is used for instance related logs dependent on the log flag LOG_FILE.
+    </p>
+    <dl>
+        <dt>static class IFileWrite * OpenWriteFile(const char * fileName, bool append, class IInstanceLog * log)</dt>
+        <dd>
+            Initiates a write operation. A file with absolute path <i>fileName</i> is opened for writing or appending based on the value of <i>append</i>. If the file is opened successfully,
+            an object of class IFileWrite is returned; otherwise a null pointer is returned. The object returned needs to be deleted when no longer needed.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static class IDirectory * OpenDirectory(const char * directoryPath, class IInstanceLog * log)</dt>
+        <dd>
+            Opens a directory with absolute path given by <i>directoryPath</i>. If the directory is successfully opened, an object of class IDirectory is returned; otherwise a null pointer is returned.
+            The object returned needs to be deleted when no longer needed.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool ReadWholeFile(const char * filename, char * readBuffer, size_t size, class IInstanceLog * log)</dt>
+        <dd>
+            Opens the file with an absolute path <i>filename</i> and reads the whole content into the specified buffer <i>readBuffer</i>. The size of the buffer should be big enough.
+            The file is closed afterwards. The returned bool indicates if the operation is successful or not.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool WriteWholeFile(const char * filename, const char * writeBuffer, size_t size, class IInstanceLog * log)</dt>
+        <dd>
+            Opens the file with an absolute path <i>filename</i> and writes the whole content of the write buffer into the file. 
+            The file is closed afterwards. The returned bool indicates if the operation is successful or not.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool ScanFile(class IInstanceLog * log, const char * filename, const char * format, ...)</dt>
+        <dd>
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool FileExists(const char * filename, class IInstanceLog * log)</dt>
+        <dd>
+            Checks if a file with the absolute path <i>filename</i> exists.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static time_t GetLastWriteTime(const char * filename, class IInstanceLog * log)</dt>
+        <dd>
+            Returns the time in seconds of the last write operation performed on the file <i>filename</i>. On error, -1 is returned.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static off_t GetFileSize(const char * filename, class IInstanceLog * log)</dt>
+        <dd>
+            Returns the current size of the file <i>filename</i>. On error, -1 is returned.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool Rename(const char * oldName, const char * newName, class IInstanceLog * log)</dt>
+        <dd>
+            Changes the name of the file with absolute path <i>oldPath</i> into the given new name <i>newPath</i>.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool RemoveFile(const char * filename, class IInstanceLog * log)</dt>
+        <dd>
+            Deletes the file with absolute path <i>filename</i>.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool CreateDirectory(const char * absolutePath, int mode, class IInstanceLog * log)</dt>
+        <dd>
+            Creates a new directory with the give mode to set the file permission bits.<br />
+            Example : <pre>FileSystem::CreateDirectory("/home/new", 0755);</pre>
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool RemoveDirectory(const char * directoryPath, class IInstanceLog * log)</dt>
+        <dd>
+            Deletes the directory with absolute path <i>directoryPath</i>. if the directory is not empty, all included directories and files are deleted as well.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool ChangeOwner(const char * path, const char * newOwner, const char * newGroup, class IInstanceLog * log)</dt>
+        <dd>
+           Changes the owner and group of the directory specified by the absolute path <i>path</i>.
+        </dd>
+    </dl>
+    <dl>
+        <dt>static bool ChangeMode(const char * path, int mode, class IInstanceLog * log)</dt>
+        <dd>
+            Changes the mode of a file. <br />
+            Example: <pre>FileSystem::ChangeMode("/directory", 0744)</pre>
+        </dd>
+    </dl>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>class IFileWrite</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        An instance of this class is created after a call to OpenWriteFile(const char * fileName, bool append, class IInstanceLog * log). A write operation can then be performed.
+    </p>
+    <dl>
+        <dt>bool IsOpen() const</dt>
+        <dd>
+            Checks if the file is opened.
+        </dd>
+    </dl>
+    <dl>
+        <dt>bool Write(const void * buffer, size_t len)</dt>
+        <dd>
+            Writes to the file the contents of <i>buffer</i> of size <i>len</i>. Returns true if the specified <i>len</i> is written successfully; otherwise false is returned.
+        </dd>
+    </dl>
+    <dl>
+        <dt>void Flush()</dt>
+        <dd>
+            Forces a write operation to the assocaited file.
+        </dd>
+    </dl>
+    <dl>
+        <dt>bool Close()</dt>
+        <dd>
+            Closes the associated file. Upon success true is returned, otherwise false. After the write operation is completed a call to Close() should be performed explicitly. 
+        </dd>
+    </dl>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>class IFileRead</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        An instance of this class is created after a call to OpenReadFile(const char * fileName, class IInstanceLog * log). A read operation can then be performed.
+    </p>
+    <dl>
+        <dt>bool IsOpen() const</dt>
+        <dd>
+            Checks if the file is opened.
+        </dd>
+    </dl>
+    <dl>
+        <dt>size_t Read(void * buffer, size_t len)</dt>
+        <dd>
+            Reads the content of the file in the <i>buffer</i> of size <i>len</i>. Returns the count of the written bytes in the buffer.
+        </dd>
+    </dl>
+    <dl>
+        <dt>bool Close()</dt>
+        <dd>
+            Closes the associated file. Upon success true is returned, otherwise false. After the last read operation is completed a call to Close() should be performed explicitly.
+        </dd>
+    </dl>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>class IDirectory</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        An instance of this class is created after a call to OpenDirectory(const char * directoryPath). The directory is opened and the first entry is ready to be read.
+    </p>
+    <dl>
+        <dt>bool IsOpen() const</dt>
+        <dd>
+            Returns true if the directory is opened successfully.
+        </dd>
+    </dl>
+    <dl>
+        <dt>class DirectoryEntry * ReadNext()</dt>
+        <dd>
+            Starts reading the first entry of the directory. An instance of class DirectoryEntry is returned specifying whether the entry is a regular file or a directory.
+            This function iterates through the whole directory and returns a null pointer if the end of the directory is reached or if an error occurs.
+        </dd>
+    </dl>
+    <dl>
+        <dt>bool Close()</dt>
+        <dd>
+            Closes the associated directory. A call to Close() should be done explicitly after reading is done.
+        </dd>
+    </dl>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>class IDirectoryEntry</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        An instance of this class is created after every ReadNext() function call. After this object is no longer needed, it should be deleted.
+    </p>
+    <dl>
+        <dt>const char * GetName() const</dt>
+        <dd>
+            Returns the name of the read directory entry.
+        </dd>
+    </dl>
+    <dl>
+        <dt>bool IsFile() const</dt>
+        <dd>
+            Returns true if the read directory entry is a regular file and false if the entry is a directory.
+        </dd>
+    </dl>
+</body>

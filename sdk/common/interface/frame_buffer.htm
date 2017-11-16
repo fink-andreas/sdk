@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Frame Buffer</title>
+</head>
+
+<body>
+    <h1>Frame Buffer</h1>
+    <p>
+        The Frame Buffer is responsible for:<br />
+        <ul>
+            <li>capturing an application bitmap</li>
+            <li>finding differences between bitmaps</li>
+            <li>generating blocks with these differences</li>
+            <li>compressing the blocks</li>
+        </ul>
+        <br/>
+        It also enables to mark specific areas for retransmission in case messages are lost.
+    </p>
+    <h2>Interface</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr /><h2>static IFrameBuffer * CreateFrameBuffer(UFrameBuffer * const user, callbackTrace * cbTrace)</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Function to allocate the FrameBuffer Resource.<br />It receives as argument a FrameBuffer User class which should implement the callbacks for managing existing applications.
+    </p>
+    <dl>
+        <dt>void Capture(unsigned int appId)</dt>
+        <dd>
+            This function makes all the task described above, starting with the capture of an application bitmap till the generation of the compressed blocks.<br/>
+            It receives as argument the Id of the application to be captured.
+        </dd>
+    </dl>
+    <dl>
+        <dt>class CompressedBlock * GetNextBlock(unsigned int appId, bool retransmissions)</dt>
+        <dd>
+            Get next compressed block for an specific application. The blocks are provided from top-left corner to bottom-right corner<br />
+            If retransmissions flag is false, blocks which were marked for retransmissions are skipped.
+        </dd>
+    </dl>
+    <dl>
+        <dt>void Mark(unsigned int appId, int coorX, int coorY, int dimX, int dimY)</dt>
+        <dd>
+            Mark an specific area of an application for retransmission. 
+        </dd>
+    </dl>
+    <dl>
+        <dt>void Clean(unsigned int appId)</dt>
+        <dd>
+            Clean all information related to an application (bitmaps, blocks, ...).
+        </dd>
+    </dl>
+    <dl>
+        <dt>void SubscribeApplications(void)</dt>
+        <dd>
+            The Frame Buffer will return throughout the UFrameBuffer class which applications are available for capturing.<br />
+            The Frame Buffer will also inform about closed applications or updates in the name or description of the existing applications.
+        </dd>
+    </dl>
+    <dl>
+        <dt>void UnsubscribeApplications(void)</dt>
+        <dd>
+            The Frame Buffer will not provide information to the application about the existing applications.
+        </dd>
+    </dl>
+    <h2>UFrameBuffer</h2>
+    <dl>
+        <dt>void Add(unsigned int id, const char * name, const char * description)</dt>
+        <dd>
+            A new application is ready to be shared. 
+        </dd>
+    </dl>
+    <dl>
+        <dt>void Update(unsigned int id, const char * name, const char * description)</dt>
+        <dd>
+            Name or description was changed for a existing application.
+        </dd>
+    </dl>
+    <dl>
+        <dt>void Remove(unsigned int id)</dt>
+        <dd>
+            An application became unavailable and it should be removed.
+        </dd>
+    </dl>
+</body>
+</html>

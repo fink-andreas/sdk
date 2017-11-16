@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.listview</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+
+    <script src="../ui.container/innovaphone.ui.Container.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.Scrollbar.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.ListView.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.listview</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var element = new innovaphone.ui.Container(20, 10, 400, 300);
+element.container.style.backgroundColor = "grey";
+element.container.style.border = "1px solid black";
+out.appendChild(element.container);
+var rows = 3;
+var columns = 4;
+
+listView = new innovaphone.ui.ListView(element.container);
+for (i = 0; i < columns; i++) {
+    listView.addColumn("Col" + i, 50);
+}
+for (i = 0; i < rows; i++) {
+    var row = [];
+    for (j = 0; j < columns; j++) {
+        row.push("C(" + i + "," + j + ")");
+    }
+    listView.addRow(row);
+}
+listView.resize();
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+    <h1>ui.listview</h1>
+    <h2>innovaphone.ui.ListView(container, storageId, funcItemSelectionChanged, multiSelect, noHeader)</h2>
+    <p>
+        A sortable and resizable list view.
+    </p>
+    <ul>
+        <li><dl><dt>[container]</dt><dd></dd></dl>
+        <li><dl><dt>[storageId]</dt><dd>remembers the width of a columns</dd></dl>
+        <li><dl><dt>[funcItemSelectionChanged]</dt><dd>if this function is given, items can be selected. On item selection, this function is called (without parameters)</dd></dl>
+        <li><dl><dt>[multiSelect]</dt><dd>multiple items can be selected</dd></dl>
+        <li><dl><dt>[noHeader]</dt><dd>the list view won't have a column header</dd></dl>
+    </ul>
+    <p>
+        Call resize after you added all columns/rows to resize the scrollbar.
+    </p>
+
+    <dl>
+        <dt>container</dt>
+        <dd>
+        </dd>
+        <dt>addColumn(text, width, headTextAlign, columnTextAlign, sortFunction)</dt>
+        <dd>
+            adds a new column
+            <dl>
+                <dt>text</dt>
+                <dd>
+                    header text
+                </dd>
+                <dt>width</dt>
+                <dd>
+                    initial width of the column
+                </dd>
+                <dt>[headTextAlign]</dt>
+                <dd>
+                    alignment of column text in the head line ("left", "center", "right")
+                </dd>
+                <dt>[columnTextAlign]</dt>
+                <dd>
+                    alignment of column text in the column ("left", "center", "right")
+                </dd>
+                <dt>[sortFunction]</dt>
+                <dd>
+                    special sort function, e.g. to sort german dates (dd.mm.yyyy)
+                </dd>
+            </dl>
+        </dd>
+        <dt>addRow(elements, id)</dt>
+        <dd>
+            Adds a row and returns an object of type Row
+            <dl>
+                <dt>elements</dt>
+                <dd>
+                    an array of elements. The length must match the count of columns. An element can by a primitive type or an HTML element.
+                </dd>
+                <dt>[id]</dt>
+                <dd>
+                    an id of a row. This id is used for row selection(s).
+                </dd>
+            </dl>
+
+            <h3>Members of class Row</h3>
+            <dl>
+                <dt>id</dt>
+                <dd>returns the id of the row</dd>
+            </dl>
+            <h3>Functions of class Row</h3>
+            <dl>
+                <dt>setDblClick(func)</dt>
+                <dd>
+                    sets the function executed on double click
+                </dd>
+                <dt>setOnClick(func)</dt>
+                <dd>
+                    executed on click
+                </dd>
+                <dt>setFontBold()</dt>
+                <dd>
+                    to display row bold
+                </dd>
+                <dt>setFontNormal()</dt>
+                <dd>
+                    to reset row Display to normal
+                </dd>
+                <dt>setColumnBackgroundColor (colIndex, backgroundColor)</dt>
+                <dd>sets the backgroundColor of the specified column with colIndex</dd>
+                <dt>setTitle (text)</dt>
+                <dd>sets the title aka tooltip of the row</dd>
+                <dt>scrollTo()</dt>
+                <dd>scrolls to this row</dd>
+            </dl>
+        </dd>
+        <dt>removeRow(id)</dt>
+        <dd>
+            removes the row with the specified ID
+        </dd>
+        
+        <dt>sortByColumn (index, descending)</dt>
+        <dd>
+            to sort data by specified column 
+            <dl>
+            <dt>index</dt>
+                <dd>
+                    the index of the column
+                </dd>
+                <dt>[descending]</dt>
+                <dd>
+                    True / false
+                </dd>
+            </dl>
+        </dd>
+        <dt>sort()</dt>
+        <dd>
+            sorts the list with the last used sort column/direction
+        </dd>
+        <dt>setRowHeight(height)</dt>
+        <dd>
+            changes the height of all listview rows
+        </dd>
+
+        <dt>resize()</dt>
+        <dd>
+            resizes the inner scrollbar. Should be called after adding all columns and rows.
+        </dd>
+
+        <dt>selectedId()</dt>
+        <dd>
+            returns the id of the selected row, null if no row is selected
+        </dd>
+        <dt>selectedIds()</dt>
+        <dd>
+            returns an array of ids which are currently selected
+        </dd>
+
+        <dt>selectId(id)</dt>
+        <dd>
+            selects the row with the given id
+        </dd>
+        <dt>selectIds(ids)</dt>
+        <dd>
+            selects all rows with the ids inside the '''ids''' array
+        </dd>
+    </dl>
+
+</body>
+</html>

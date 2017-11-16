@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ISystem</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>system</h1>
+
+    <h2>class ISystem</h2>
+    <p>
+        An interface to access system information.
+    </p>
+    <dl>
+        <dt>static void GetArchitecture(char * buffer, size_t len)</dt>
+        <dd>
+            Returns a string containing the architecture of the machine (e.g. armv7l on IP811).
+        </dd>
+        <dt>static architecture_t GetArchitecture()</dt>
+        <dd>
+            Returns the main architecture of the machine (ARM or I386).
+        </dd>
+        <dt>static const char * Label()</dt>
+        <dd>
+            Returns the label of the installed application platform.
+        </dd>
+        <dt>static const char * ReleaseState()</dt>
+        <dd>
+            Returns the release state of the installed application platform.
+        </dd>
+        <dt>static void Sync()</dt>
+        <dd>
+            synchronize data on disk with memory
+        </dd>
+        <dt>static bool SetBindServiceCapability(const char * path)</dt>
+        <dd>
+            sets the capability <i>CAP_NET_BIND_SERVICE</i> for the file given by the absolute path <i>path</i>
+        </dd>
+    </dl>
+</body>
+</html>

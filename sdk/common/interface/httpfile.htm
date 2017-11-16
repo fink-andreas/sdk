@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>httpfile</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>httpfile</h1>
+    <p>
+        httpfile is a class used by the IWebserverPlugin to realize static files. A static file that will be provided
+		by the IWebserverPlugin needs to converted with the httpfiles tool and added to the project during the building
+		process (have a look to the API demo to see how to implement static files). Each file that will be statically
+		included will be represented by an httpfile instance and placed inside a btree. So generally there is no need
+		to use the httpfile class "manually".
+		<br><b>NOTE:</b> The interface of httpfile is compatible to the innovaphone firmware internals.
+    </p>
+
+    <h2> class httpfile</h2>
+    <dl>
+        <dt>httpfile(const char * fileName, word /* servlettype unused */, word theFlags, byte * data, size_t dataSize)</dt>
+        <dd>
+			fileName is the name of the static file. The name can include a path (e. G. "/main/index.html"). theFlags currently
+			only supports the flag HTTP_GZIP. If that flag is set, the data of the file must be in gzip compressed format.
+			The Webserver will set the proper encoding when sending the file to the browser. data is a pointer to the data of
+			the file, dataSize the size of the file. The resource type of the file will be autodetected by parsing the file 
+			suffix.
+        </dd>
+
+        <dt>const byte * GetData()</dt>
+        <dd>
+            Returns the pointer to the buffer passed to the constructor.
+        </dd>
+
+        <dt>size_t GetSize()</dt>
+        <dd>
+			Returns the size of the file as given to the constructor.
+        </dd>
+
+        <dt>word GetResourceType()</dt>
+        <dd>
+			Returns the resource type of the file. That value will send from the webbrowser as content-type header field. The
+			constructor of httpfile autodetecst the resource type by parsing the file suffix.
+        </dd>
+		
+        <dt>word GetFlags()</dt>
+        <dd>
+			Returns the flags that had been given to the constructor of httpfiles. For now, only HTTP_GZIP is supported.
+        </dd>
+		
+        <dt>const char * GetMD5String()</dt>
+        <dd>
+			Returns the MD5 sum of the file content. This value will be calculated when in the constructor of httpfile and
+			used by IWenserverPlugin / Webserver as etag to support the browsers file caching.
+        </dd>
+	</dl>
+    
+</body>
+</html>

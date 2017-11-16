@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.dragList</title>
+
+    <link rel="stylesheet" href="../lib1/innovaphone.lib1.css" type="text/css" />
+
+
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../lib1/innovaphone.lib1.js" type="text/javascript"></script>
+    <script src="../ui1.lib/innovaphone.ui1.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui1.draglist.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var out = document.getElementById('out');
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+
+
+             eval(document.getElementById('code').value);
+
+        }
+
+
+    </script>
+</head>
+
+<body style="overflow:scroll">
+    <h1>ui.DragList</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+            var dragList = new innovaphone.ui1.DragList("width: 150px");
+
+            dragList.addItem("first");
+            dragList.addItem("second");
+            dragList.addItem("third");
+            dragList.addItem("last");
+
+            out.appendChild(dragList.container);
+            var list = dragList.getElements();
+            var displayContainer = new innovaphone.ui1.Div("div");
+
+            out.appendChild(displayContainer.container);
+
+            displayContainer.container.innerHTML = displayContainer.container.innerHTML + "<br>";
+            for (var i = 0; i < list.length; i++) {
+            displayContainer.container.innerHTML = displayContainer.container.innerHTML + list[i] + ",";
+            }
+            displayContainer.container.innerHTML = displayContainer.container.innerHTML + "<br>";
+
+            function elementRemoved() {
+                list = dragList.getElements();
+                displayContainer.container.innerHTML = displayContainer.container.innerHTML + "<br>";
+                for (var i = 0; i < list.length; i++) {
+                    displayContainer.container.innerHTML = displayContainer.container.innerHTML + list[i] + ",";
+                }
+                displayContainer.container.innerHTML = displayContainer.container.innerHTML + "<br>";
+            }
+            dragList.setOnRemoveElement(elementRemoved);
+
+
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+    <h1>innovaphone.ui.DragList(container</h1>
+    <p>Creates a display list that can be edited by the user by dragging items and deleting them</p>
+
+    <h2>Arguments</h2>
+    <dl>
+        <dt>container</dt>
+        <dd>container for list</dd>
+
+
+    </dl>
+
+    <h2>Functions</h2>
+    <dl>
+        <dt>addItem(content)</dt>
+        <dd>Add a new string item to the list. The string is specified by content</dd>
+        <dt>getElements</dt>
+        <dd>Return an array with the current string items in the list in the order specified</dd>
+        <dt>setOnRemoveElement</dt>
+        <dd>Add a event fired when a item is removed from the list</dd>
+
+    </dl>
+
+
+</body>
+</html>

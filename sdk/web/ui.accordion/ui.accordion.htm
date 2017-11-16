@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.accordion</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.input/innovaphone.ui.Input.js" type="text/javascript"></script>
+    <script src="../ui.listview/innovaphone.ui.ListView.js" type="text/javascript"></script>
+    <script src="../ui.container/innovaphone.ui.Container.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.Scrollbar.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.accordion.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var out = document.getElementById('out');
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+
+
+    </script>
+</head>
+
+<body style="overflow:scroll">
+    <h1>ui.accordion</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var accordion = new innovaphone.ui.Accordion(out);
+
+element = new innovaphone.ui.Container(20, 10, 400, 300);
+element.container.style.backgroundColor = "grey";
+element.container.style.position = "relative";
+element.container.style.border = "1px solid black";
+var rows = 3;
+var columns = 4;
+
+listView = new innovaphone.ui.ListView(element.container);
+for (i = 0; i < columns; i++) {
+    listView.addColumn("Col" + i, 50);
+}
+for (i = 0; i < rows; i++) {
+    var row = [];
+    for (j = 0; j < columns; j++) {
+        row.push("C(" + i + "," + j + ")");
+    }
+    listView.addRow(row);
+}
+
+accordion.addSection("Title 1", element.container);
+listView.resize();
+accordion.addSection("Title 2");
+
+
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+  <h1>innovaphone.ui.Accordion(container, left, top, accWidth, accHeight)</h1>
+    <p>Creates an Accordion display</p>
+
+    <h2>Arguments</h2>
+    <dl>
+        <dt>container</dt>
+        <dd>container for the accordion</dd>
+        <dt>left</dt>
+        <dd>left position relative to the container</dd>
+        <dt>top</dt>
+        <dd>top position relative to the container</dd>
+
+        <dt>accWidth</dt>
+        <dd>the maximum width of the container</dd>
+
+        <dt>accHeight</dt>
+        <dd>the maximum height of the container</dd>
+
+    </dl>
+
+    <h2>Functions</h2>
+    <dl>
+        <dt>addSection(name, container)</dt>
+        <dd>Add a new accordion section with the title "name" and content from container</dd>
+        <dt>removeSection(name)</dt>
+        <dd>Remove the section with the title "name" from the accordion</dd>
+        <dt>setOnChangeSection(onChange)</dt>
+        <dd>Add listener for handling the changing the accordion section</dd>
+        <dt>getExpandedSection</dt>
+        <dd>Returns the name of the expanded section</dd>
+        <dt>getExpandedMaxHeight</dt>
+        <dd>Returns the maximum height of the expanded section body</dd>
+    </dl>
+ 
+    
+</body>
+</html>

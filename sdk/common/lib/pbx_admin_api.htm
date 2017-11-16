@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>PbxAdminApi</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>Websocket/Json - PbxAdminApi</h1>
+    
+    <p>
+        This API can be used to read and update the configuration of the PBX.
+    </p>
+    <h2>Protocol</h2>
+    <p>
+        The Websocket/Json protocol as defined in <a href="websocket_json.htm">Websocket/Json</a>
+        is used, with the "mt", "api" and "src" properties.
+    </p>
+    <h2>Messages</h2>
+    <dl>
+        <dt>MonitorConfig</dt>
+        <dd>
+            Starts the monitoring of the PBX for config changes. Whenever there is a change, a
+            MonitorConfigInfo message containing the change is sent. The "src" property provided
+            with this message is also used with the MonitorConfigInfo messages.
+        </dd>
+        <dt>MonitorConfigResult</dt>
+        <dd>
+            Sent as response to MonitorConfig.
+        </dd>
+        <dt>MonitorConfigInfo</dt>
+        <dd>
+            This message is used to send config updates. A first MonitorConfigInfo message is sent
+            right after the MonitorCOnfig message to send the current config.
+            <dl>
+                <dt>domain (string)</dt>
+                <dd>
+                    The domain or Gatekeeper Identifier of the PBX.
+                </dd>
+                <dt>pbx (string)</dt>
+                <dd>
+                    The name of the PBX instance
+                </dd>
+                <dt>dns (string)</dt>
+                <dd>
+                    The configured DNS name of the PBX
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+</body>
+</html>

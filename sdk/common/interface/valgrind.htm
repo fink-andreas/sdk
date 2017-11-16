@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>valgrind</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>valgrind</h1>
+
+    <h2> class IValgrind</h2>
+    <dl>
+        <dt>static bool RunningOnValgrind()</dt>
+        <dd>
+            Returns true if the app has been started with valgrind.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+if(IValgrind::RunningOnValgrind()) {
+}
+    </pre>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>web</title>
+    <link rel="stylesheet" href="lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>web</h1>
+    <p>
+        The innovaphone Web User Interfaces are build with Javascript Components,
+        which generate HTML. The applications itself do not generate any HTML.
+        Each component is a separate Javascript file so that only the components,
+        which are actually needed have to be loaded.
+        The components are build in a way that they can be loaded on demand so that
+        the application can be loaded incrementally.
+    </p>
+
+    <h2> General Rules </h2>
+
+    <p>
+        The user interface elements should be designed that they are usable for any,
+        even non-innovaphone application. So no assumptions on any innovaphone specifics shall be made.
+    </p>
+    <p>
+        There should be a strict seperation between applications code and UI element code.
+        Application code should not know anything about the HTML Layout and style, this should
+        be all handled within the UI elements.
+    </p>
+    <h2> Files, Names </h2>
+    <p>
+        A javascript element consists of a single javascript source file. 
+        It contains a single constructor function which can be used to instantiate the object
+        by using the new operator. The name of the file should be identical to the name
+        of the function.
+    </p>
+    <p>
+        We're using "namespaces".
+    </p>
+    <p>
+        Example
+    </p>
+    <pre>
+File: innovaphone.ui.Element.js
+
+var innovaphone = innovaphone || {};
+innovaphone.ui = innovaphone.ui || {};
+innovaphone.ui.Element = innovaphone.ui.Element || (function () {
+    function Element(container, storageId) {
+       ...
+    }
+    return Element;
+}());
+    </pre>
+
+    <h2> The constructor function </h2>
+
+    <dl>
+    <dt>container</dt>
+    <dd>
+        The first argument of any constructor function is named <b>container</b> and is used
+        for the HTML element to which this User Interface element is appended as child.
+        If null, the element allocates an HTML span element, which is used as container.
+        A this.container property is set to container. A container of null is supported
+        only for elements, which may be added later to other UI elements.
+    </dd>
+    <dt>storageId</dt>
+    <dd>
+        Some components may save some properties so that the next time the application
+        is started, they will be restored. For example a splitPanel may save the position.
+        In this case the second argument is named '''storageId''' and contains a string
+        which sould be website unique. To enshure uniqueness each applocation on a website
+        should be given a name and the storage id should use '&lt;name&gt;.' as prefix.
+    </dd>
+    </dl>
+    <p>
+        Example:
+    </p>
+    <pre>
+function Element(container, storageId) {
+    if(!container) container = document.createElement('span'):
+    this.container = container;
+    ...
+}
+    </pre>
+
+    <h2> Use of object properties </h2>
+
+    <p>
+        Object properties are only used for public interfaces of the respective object.
+        For internal variables, variable are used, which are defined in the scope of the object.
+    </p>
+
+    <h2> Finding of HTML elements </h2>
+
+    <p>
+        HTML elements are found in the code by storing a reference to it. So no getElementById,
+        getElementbyClassName etc. is needed.
+    </>
+
+    <h2> The HTML start page </h2>
+    <p>
+        HTML is only used on a start page, which load the initial script and css files and
+        instantiates the object for the application.
+    </p>
+    <p>
+        Example:
+    </p>
+    <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+
+&lt;head&gt;
+    &lt;title&gt;js1&lt;/title&gt;
+    &lt;link rel="stylesheet" href="web/lib/innovaphone.lib.css" type="text/css" /&gt;
+    &lt;link rel="stylesheet" href="web/styles/innovaphone.styles.css" type="text/css" /&gt;
+    &lt;script src="web/lib/innovaphone.Lib.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="tests/tests.js" type="text/javascript"&gt;&lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body onload="new tests(document.body,'tests')"&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </pre>
+
+    <h2> Loading of Components </h2>
+
+    <p>
+        Only the very basic .js and all the .css files are loaded statically thru the html header.
+        All other javascript files are loaded on demand, so enshure a short initial loading time.
+        Whenever a component needs another component it checks if it is available already and
+        if not loads it by using the loadObjectScripts function.
+    </p>
+    <p>
+        The loadObjectScripts function loads required dependencies asynchronously and calls
+        the onload function after all resources have been loaded.
+    </p>
+    <p>
+        If a resource contains a fixed '''Resources''' function, these resources are also
+        loaded and the onload function is just called after additional resources have been loaded.
+    </p>
+    <p>
+        Example:
+    </p>
+    <pre>
+var innovaphone = innovaphone || {};
+innovaphone.sysadmin = innovaphone.sysadmin || {};
+innovaphone.sysadmin.LicensesResources = innovaphone.sysadmin.LicensesResources || function (onload) {
+    innovaphone.lib.loadObjectScripts(
+        ["web/ui.ribbon/innovaphone.ui.Ribbon",
+         "web/ui.splitpanel/innovaphone.ui.SplitPanel",
+         "web/ui.hider/innovaphone.ui.Hider",
+         "web/ui.treeview/innovaphone.ui.TreeView",
+         innovaphone.lib.languageFile("innovaphone.sysadmin.LicensesLang")
+        ], function () {
+            innovaphone.sysadmin.LicensesResourcesLoaded = true;
+            onload();
+        });
+};
+innovaphone.sysadmin.Licenses = innovaphone.sysadmin.Licenses || (function () {
+    function Licenses(container, storageId) {
+...
+    </pre>
+
+    <h2> Use of CSS </h2>
+
+    <p>
+        CSS files are only loaded from the HTML start page and they are only used for colours,
+        never for size definitions etc.
+    </p>
+
+    <h2> Localization </h2>
+    <p>
+        The components of this framework do not contain any strings, which need to be localized.
+        Any strings needed are provided as arguments. The application module loads all strings
+        as a resource inside the loadObjectScripts function with the use
+        of <b>innovaphone.lib.languageFile</b> which automatically appends the current language.
+        The strings are located inside a <b>js</b> file, which is created by tl.innovaphone.com
+        Its contents look like this:
+    </p>
+
+    <p>
+    Example language file innovaphone.sysadminLang.de.js:
+    </p>
+    <pre>
+var innovaphone = innovaphone || {};
+innovaphone.sysadminLang = innovaphone.sysadminLang || {
+    "devices": "Geräte",
+    "users": "Benutzer"
+};
+    </pre>
+
+    <p>
+        Example of language file loading:
+    </p>
+    <pre>
+innovaphone.lib.loadObjectScripts(
+        ["web/js/innovaphone.ui.Ribbon",
+         innovaphone.lib.languageFile("innovaphone.sysadmin.LicensesLang")
+    </pre>
+
+    <p>
+    The application must initialize the languages just once:
+    </p>
+    <pre>
+innovaphone.lib.initLanguages("sysadmin.lang", [{ "short": "en", "name": "English" }, { "short": "de", "name": "Deutsch" }]);
+    </pre>
+
+    <h2> Styles </h2>
+    <p>
+        The style of the UI (colors, backgrounds, shadows, ...) is defined by a single .css file,
+        which is used for 'style' only. This .css file may reference images, which are placed
+        together with the .css in one folder, so that different styles can be implemented by
+        just referencing different style .css files from the html start page.
+    </p>
+    <p>
+        Each class name '''must''' be prefixed by '''ijs-''' to ensure compatibility with unknown CSS sources.
+    </p>
+
+    <h2> SVG </h2>
+    <p>
+        We decided not to use SVGs.
+        It's to hard to design the icons, as different designer tools have flaws.
+    </p>
+    <p>
+        Also using these SVGs in javascript is quite hard, as they have to be parsed and modified.
+        Browsers also behave differently with SVGs.
+    </p>
+    <h2>Code Optimizations</h2>
+
+    <p>
+        for loops: the most performant loop seems to be this one
+    </p>
+    <pre>
+var length = myArray.length;        // store length to avoid calling myArray.length the whole time
+for(var i = 0; i < length; i++) {
+    myArray[i]...
+}
+    </pre>
+
+    <p>
+        Array and Object creation:
+    </p>
+    <pre>
+var myArray = [];       // faster than myArray = new Array();
+var myObject = {};      // faster than myObject = new Object();
+    </pre>
+
+    <h2>Width/Height etc. as integers</h2>
+
+    <p>
+        These values should be given as integers in constructors and functions.
+    </p>
+    <pre>
+function test(width) {
+}
+
+test(100);      // correct
+test("100px");  // wrong
+    </pre>
+
+    <h2>Touch devices</h2>
+    <p>
+        All modules should be compatible with touch devices. <b></b>innovaphone.lib.isTouch</b>
+        let's you check if you're currently on a touch device or not.
+    </p>
+    <h3>Known issues</h3>
+    <ul>
+        <li>
+            element.style.transform does not work on mobile '''Chrome/Safari'''.
+            Use element.style.webkitTransform additionally.
+        </li>
+        <li>
+            ajax requests on '''Safari''' do not trigger a password prompt.
+            Password protect the root page to workaround this issue.
+        </li>
+        <li>
+            the hover effect of elements stays active after a touch on an element with a hover CSS style.
+            As a workaround, the body gets a class '''no-touch''' on no touch devices
+            (this is done automatically inside innovaphone.lib.js) and inside the CSS,
+            the hover style is only applied to elements inside body with '''no-touch''':
+            <p><pre>.no-touch .mein-element:hover { color:red; }</pre></p>
+        </li>
+    </ul>
+
+    <h1>Links</h1>
+
+    <h2>applicationsharing</h2>
+    <a href="applicationsharing/applicationsharing.htm">applicationsharing</a>
+
+    <h2>appwebsocket</h2>
+    <a href="appwebsocket/appwebsocket.htm">appwebsocket</a>
+
+    <h2>audio</h2>
+    <a href="audio/audio.htm">audio</a>
+
+    <h2>common</h2>
+    <a href="common/common.htm">common</a>
+
+    <h2>fonts</h2>
+    <a href="fonts/fonts.htm">fonts</a>
+
+    <h2>lib</h2>
+    <a href="lib/lib.htm">lib</a>
+
+    <h2>mypbx</h2>
+    <a href="mypbx/mypbx.htm">mypbx</a>
+
+    <h2>pbxwebsocket</h2>
+    <a href="pbxwebsocket/pbxwebsocket.htm">pbxwebsocket</a>
+
+    <h2>phpsession</h2>
+    <a href="phpsession/phpsession.htm">phpsession</a>
+
+    <h2>styles</h2>
+    <a href="styles/styles.htm">styles</a>
+
+    <h2>ui.accordion</h2>
+    <a href="ui.accordion/ui.accordion.htm">ui.accordion</a>
+
+    <h2>ui.anchor</h2>
+    <a href="ui.anchor/ui.anchor.htm">ui.anchor</a>
+
+    <h2>ui.autocompleteinput</h2>
+    <a href="ui.autocompleteinput/ui.autocompleteinput.htm">ui.autocompleteinput</a>
+
+    <h2>ui.apptabs</h2>
+    <a href="ui.apptabs/ui.apptabs.htm">ui.apptabs</a>
+
+    <h2>ui.button</h2>
+    <a href="ui.button/ui.button.htm">ui.button</a>
+
+    <h2>ui.calendar</h2>
+    <a href="ui.calendar/ui.calendar.htm">ui.calendar</a>
+
+    <h2>ui.clipboard</h2>
+    <a href="ui.clipboard/ui.clipboard.htm">ui.clipboard</a>
+
+    <h2>ui.confirmationpopup</h2>
+    <a href="ui.confirmationpopup/ui.confirmationpopup.htm">ui.confirmationpopup</a>
+
+    <h2>ui.container</h2>
+    <a href="ui.container/ui.container.htm">ui.container</a>
+
+    <h2>ui.contentheader</h2>
+    <a href="ui.contentheader/ui.contentheader.htm">ui.contentheader</a>
+
+    <h2>ui.dateselector</h2>
+    <a href="ui.dateselector/ui.dateselector.htm">ui.dateselector</a>
+
+    <h2>ui.drag</h2>
+    <a href="ui.drag/ui.drag.htm">ui.drag</a>
+
+    <h2>ui.dragList</h2>
+    <a href="ui.dragList/ui.dragList.htm">ui.dragList</a>
+
+    <h2>ui.dropdown</h2>
+    <a href="ui.dropdown/ui.dropdown.htm">ui.dropdown</a>
+
+    <h2>ui.editor</h2>
+    <a href="ui.editor/ui.editor.htm">ui.editor</a>
+
+    <h2>ui.editpopup</h2>
+    <a href="ui.editpopup/ui.editpopup.htm">ui.editpopup</a>
+
+    <h2>ui.elementscontainer</h2>
+    <a href="ui.elementscontainer/ui.elementscontainer.htm">ui.elementscontainer</a>
+
+    <h2>ui.error</h2>
+    <a href="ui.error/ui.error.htm">ui.error</a>
+
+    <h2>ui.grid</h2>
+    <a href="ui.grid/ui.grid.htm">ui.grid</a>
+
+    <h2>ui.hider</h2>
+    <a href="ui.hider/ui.hider.htm">ui.hider</a>
+
+    <h2>ui.icon</h2>
+    <a href="ui.icon/ui.icon.htm">ui.icon</a>
+
+    <h2>ui.iframe</h2>
+    <a href="ui.iframe/ui.iframe.htm">ui.iframe</a>
+
+    <h2>ui.input</h2>
+    <a href="ui.input/ui.input.htm">ui.input</a>
+
+    <h2>ui.inputfieldcollection</h2>
+    <a href="ui.inputfieldcollection/ui.inputfieldcollection.htm">ui.inputfieldcollection</a>
+
+    <h2>ui.label</h2>
+    <a href="ui.label/ui.label.htm">ui.label</a>
+
+    <h2>ui.lang</h2>
+    <a href="ui.lang/ui.lang.htm">ui.lang</a>
+
+    <h2>ui.listview</h2>
+    <a href="ui.listview/ui.listview.htm">ui.listview</a>
+
+    <h2>ui.popup</h2>
+    <a href="ui.popup/ui.popup.htm">ui.popup</a>
+
+    <h2>ui.progressbar</h2>
+    <a href="ui.progressbar/ui.progressbar.htm">ui.progressbar</a>
+    <h2>ui.radioButton</h2>
+    <a href="ui.radioButton/ui.radioButton.htm">ui.radioButton</a>
+    <h2>ui.ribbon</h2>
+    <a href="ui.ribbon/ui.ribbon.htm">ui.ribbon</a>
+
+    <h2>ui.scrollbar</h2>
+    <a href="ui.scrollbar/ui.scrollbar.htm">ui.scrollbar</a>
+
+    <h2>ui.splitpanel</h2>
+    <a href="ui.splitpanel/ui.splitpanel.htm">ui.splitpanel</a>
+
+    <h2>ui.splitpanelvertical</h2>
+    <a href="ui.splitpanelvertical/ui.splitpanelvertical.htm">ui.splitpanelvertical</a>
+
+    <h2>ui.text</h2>
+    <a href="ui.text/ui.text.htm">ui.text</a>
+
+    <h2>ui.textarea</h2>
+    <a href="ui.textarea/ui.textarea.htm">ui.textarea</a>
+
+    <h2>ui.timefield</h2>
+    <a href="ui.timefield/ui.timefield.htm">ui.timefield</a>
+
+    <h2>ui.tilelist</h2>
+    <a href="ui.tilelist/ui.tilelist.htm">ui.tilelist</a>
+
+    <h2>ui.treeview</h2>
+    <a href="ui.treeview/ui.treeview.htm">ui.treeview</a>
+
+    <h2>ui.visibilityobserver</h2>
+    <a href="ui.visibilityobserver/ui.visibilityobserver.htm">ui.visibilityobserver</a>
+
+    <h2>ui.wizard</h2>
+    <a href="ui.wizard/ui.wizard.htm">ui.wizard</a>
+
+    <h2>widget</h2>
+    <a href="widget/widget.htm">widget</a>
+</body>
+</html>

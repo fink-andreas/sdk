@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>files</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>files</h1>
+    <p>
+        Interface for asyncronous reading and writing of files in an &lt;app-instance&gt;.files folder. The file
+        to be read/written is identified by a ulong64 id, which is converted to a filename with
+        _sprintf(name, "%llu", id).
+    </p>
+    <p>
+        Note: currently the implementation is blocking, but could be changed to non-blocking without change
+        to the app.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>class IFilesProvider * CreateFilesProvider(class IIoMux * iomux)</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Function to allocate the FilesProvider resource, to be called from the app-main, so that the real
+        FileProvider can be replaced by a unit-test implementation.
+    </p>
+    <h2>class IFiles * IFilesProvider::CreateFiles(class IInstanceLog * const log, const char * serviceId, const char * path)</h2>
+    <p>
+        Allocate the FilesProvider for a given instance. <br/> 
+        serviceId should be AppService->GetAppServiceId(),  path should be the same as the dbName, it is used
+        to create the actual path on the system for the files in the form /apps/&lt;serviceId&gt;/&lt;dbName&gt;.files, which
+        is a folder created by the taskmanager for the app.
+        log is used to log dependent of the log flag LOG_FILES.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>IFiles</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Interface class to initiate the read and write operations
+    </p>
+    <dl>
+        <dt>class IFilesWrite * Write(class UTask * user, ulong64 id)</dt>
+        <dd>
+            Initiates a write operation. The allocated IFilesWrite class is derived from ITask, so the ITask/UTask
+            mechanisms are used for progress and completion
+        </dd>
+    </dl>
+    <dl>
+        <dt>class IFilesRead * Read(class UTask * user, ulong64 id, unsigned length, unsigned offset = 0, bool progress = false)</dt>
+        <dd>
+            Initiates a read operation. The allocated IFilesRead class is derived from ITask, so the ITask/UTask
+            mechanisms are used for progress and completion. <b>length</b> is the length of the initial block,
+            to be read. This block is available at the first TaskProgress callback.
+            <b>offset</b> is the offset inside the file from which reading should start.
+            <b>progress</b> indicates that a TaskProgress call should be used always when the data
+            is available, even if this is the last data. In this case TaskComplete is
+            called after the next read, when the file is closed.
+        </dd>
+    </dl>
+    <dl>
+        <dt>class IFilesDel * Del(class UTask * user, ulong64 id)</dt>
+        <dd>
+            Initiates a delete operation. The allocated IFilesDel class is derived from ITask, so the ITask/UTask
+            mechanisms are used for completion.
+        </dd>
+    </dl>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>IFilesWrite</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        ITask class for a write operation
+        <dl>
+            <dt>void Write(byte * data, unsigned length, bool last)</dt>
+            <dd>
+                Write a block of data to the file. This function may be called in the TaskProgress
+                callback or assynchronously after the first TaskProgress call. The passed buffer
+                may be freed on return from the call. <b>last</b> indicates the last block of data, when
+                set the file is closed and the task completes.
+            </dd>
+
+            <dt>ulong64 GetId() const</dt>
+            <dd>
+                Returns the id of the file.
+            </dd>
+
+            <dt>const char * GetAbsoluteFileName() const</dt>
+            <dd>
+                Returns the absolute path file name of the file, if needed for a command execution.
+            </dd>
+        </dl>
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>IFilesRead</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        ITask class for a read operation
+        <dl>
+            <dt>void Read(unsigned length, bool last)</dt>
+            <dd>
+                Initiates reading of the next block. May be called after TaskProgress for the
+                previous block.
+                <dl>
+                    <dt>last</dt>
+                    <dd>
+                        Indicates that this is the last block of data to read. The task terminates
+                        after this, even if there is more data available
+                    </dd>
+                </dl>
+            </dd>
+            <dt>void Get(const byte * & data, unsigned & length)</dt>
+            <dd>
+                Get a pointer to the read block of data. May be called after the TaskProgress
+                for the read operation. The pointer is valid until the next call to Read. A length
+                of 0 indicates the end of file.
+            </dd>
+        </dl>
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>IFilesDel</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        ITask class for a delete operation
+    </p>
+</body>
+</html>

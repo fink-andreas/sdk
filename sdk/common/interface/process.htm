@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>IProcess</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>process</h1>
+    
+    <h2>IProcess</h2>
+    <p>
+        An interface to create new child processes, kill processes and inspect the existance of a process.
+        Each static function has a class IInstanceLog * const log pointer, which is used for instance related<br />
+        logs dependent of the log flag LOG_PROCESS.
+    </p>
+    <dl>
+        <dt>int Spawn(const char *filename, int argc, char ** argv, class IInstanceLog * const log)</dt>
+        <dd>
+            spawns a new child process based on the filename and the set of arguments determined
+            by char **argv. On success it returns the process id of the spawned process;
+            otherwise 0 is returned.
+        </dd>
+        <dt>int System(class IInstanceLog * const log, const char * command, ...)</dt>
+        <dd>
+            Issues a system call with the given command. The variable argument list is used with vsnprintf and the given command.<br />
+            It returns a value below zero if the process couldn't be started properly, otherwise the exit code of the started process.
+        </dd>
+        <dt>int Kill(int pID, int signalNr, class IInstanceLog * const log)</dt>
+        <dd>
+            kills a specific process with signalNr based on the given process id (pID).
+            If the kill is successful 1 is returned; otherwise 0 is returned.
+        </dd>
+        <dt>bool ProcessExist(int pid, class IInstanceLog * const log)</dt>
+        <dd>
+            checks if a process exists based on the given process id.
+            If process is running 1 is returned; otherwise 0 is returned.
+        </dd>
+        <dt>int GetOwnPID(class IInstanceLog * const log)</dt>
+        <dd>returns the PID of the running process</dd>
+        <dt>int GetParentPID(class IInstanceLog * const log)</dt>
+        <dd>returns the parent PID of the running process</dd>
+        <dt>void GetOwnName(const char * buffer, size_t len, class IInstanceLog * const log)</dt>
+        <dd>stores the name of the binary into buffer</dd>
+</dl>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>uri</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>class uri_dissector</h1>
+    <p>
+        This class takes an URI and creates pointers to each single URI part.<br />
+        The given URI is not modified, instead you get a start and end pointer<br />
+        for each URI part.
+    </p>
+
+    <h2>functions</h2>
+    <dl>
+        <dt>uri_dissector()</dt>
+        <dd>Constructor</dd>
+
+        <dt>bool dissect_uri(char *uri)</dt>
+        <dd>Returns true if the given uri could be successfully parsed. <br />
+        On success you have afterwards access to the differnt URI parts.
+        </dd>
+
+        <dt>bool path_to_argv(char *buf, int sz, int &argc, char * argv[])</dt>
+        <dd>Splits the path part of the URI into an argv array. The chars inside argv<br />
+            are set inside the buf char array. argc contains the number of found parts.</dd>
+
+        <dt>bool querystring_to_argv(char *buf, int sz, int &argc, char * argv[])</dt>
+        <dd>
+            Splits the query string part of the URI into an argv array. The chars inside argv<br />
+            are set inside the buf char array. argc contains the number of found parts.
+        </dd>
+
+        <dt>char* compose(char *buf, dword len_buf, dword flags = COMPOSE_ALL)</dt>
+        <dd>
+            Writes the parts defined by flags into the given buffer.<br />
+            Possible flags:
+            <ul>
+                <li>COMPOSE_SCHEME</li>
+                <li>COMPOSE_HIER</li>
+                <li>COMPOSE_USR</li>
+                <li>COMPOSE_PWD</li>
+                <li>COMPOSE_HOST</li>
+                <li>COMPOSE_PORT</li>
+                <li>COMPOSE_PATH</li>
+                <li>COMPOSE_FILE</li>
+                <li>COMPOSE_ANCHOR</li>
+                <li>COMPOSE_QUERY</li>
+                <li>COMPOSE_PARAMS</li>
+                <li>COMPOSE_ALL</li>
+            </ul>
+        </dd>
+    </dl>
+
+    <h2>members</h2>
+    <dl>
+        <dt>char *scheme, *e_scheme</dt>
+        <dd>the URI scheme, e.g.: http</dd>
+        <dt>char *hier, *e_hier</dt>
+        <dd>hierarchy e.g.: //</dd>
+        <dt>char *usr, *e_usr</dt>
+        <dd>user</dd>
+        <dt>char *pwd, *e_pwd</dt>
+        <dd>password</dd>
+        <dt>char *ip, *e_ip</dt>
+        <dd>host part is an ip address</dd>
+        <dt>char *fqdn, *e_fqdn</dt>
+        <dd>host part is a fully qualified domain name</dd>
+        <dt>char *port, *e_port</dt>
+        <dd>port past ip/fqdn</dd>
+        <dt>char *path, *e_path</dt>
+        <dd>the complete path without the file</dd>
+        <dt>char *file, *e_file</dt>
+        <dd>the file</dd>
+        <dt>char *anchor, *e_anchor</dt>
+        <dd>eg: #bla</dd>
+        <dt>char *query, *e_query</dt>
+        <dd>'?' cgi query string</dd>
+        <dt>char *params, *e_params</dt>
+        <dd>';' host parameters</dd>
+    </dl>
+
+    <h2>sample</h2>
+    <code type="cpp">
+        <pre>
+uri_dissector uri;
+uri.dissect_uri("http://admin:ip800@172.16.16.43/bla#funny?cgpn=73&cdpn=123");
+printf("%.*s", uri.e_user - uri.user, uri.user); // prints "admin"
+
+char buf[256];                                                                       
+uri.dissect_uri("sip:1234@anywhere.de:8888;user=phone");                             
+uri.compose(buf,sizeof(buf),COMPOSE_PARAMS);   // yields "user=phone"                
+uri.compose(buf,sizeof(buf),COMPOSE_USR);      // yields "1234"                      
+uri.compose(buf,sizeof(buf),COMPOSE_HOST);     // yields "anywhere.de"               
+uri.compose(buf,sizeof(buf),COMPOSE_PORT);     // yields "8888" 
+</pre>
+    </code>
+</body>
+</html>

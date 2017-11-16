@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>app_updates</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>app_updates</h1>
+    <p>
+        Many App Services need to frequently send out messages to the Apps to do life updates of the UI.
+        Care must be taken, that these updates don't monopolize the bandwidth nor the CPU time, so that the
+        Apps become slow on reaction to user actions. The library <b>app_updates</b> implements a strategy
+        where updates are sent out fast, but not in a single loop over all sessions/updates but in smaller
+        pieces. After each piece the next piece is scheduled with SetIoExec, so there is opportunity to
+        process incoming requests. Sending response to these incoming requests is given priority to
+        sending the updates.
+    </p>
+    <h2>Basic ideas</h2>
+    <ul>
+        <li>
+            A class <b>AppUpates</b> is used to keep all information needed per instance. These are
+            a lists of all sessions, a queue of updates and the current update filter being processed.
+            The main instance class, which uses AppInstance as base class should use this class
+            as base class as well.
+        </li>
+        <li>
+            For each type of update, a class should be defined, using <b>AppUpdate</b> as a base class.
+            For each such class a corresponding filter should be defined as class using 
+            <b>AppUpdatesFilter&lt;update-class&gt;</b> as base class. The AppUpdates::StartUpdate function
+            is used to put this class into the updates queue and starts the update process.
+        </li>
+        <li>
+            For each filter a seperate list per instance is used. The type of this list is
+            AppUpdatesFilters&lt;update-class&gt;
+        </li>
+        <li>
+            For the update process all filters in the list for this type of update are processed.
+            All filters in this list are checked one after the other if the Update needs to be sent,
+            but only a limited number at a time to avoid CPU monopolization.
+        </li>
+        <li>
+            When a filter is scheduled for processing the update is sent right away, if there is no sending
+            of an update pending for the session already.
+            If sending of an update is pending, a <b>AppUpdatesQueued</b> object
+            is allocated and put in the AppUpdatesSession::queue list. Whenever sending of an update
+            on a givend session is complete, the entries in these lists are processed and the AppUpatesQueued
+            object is deleted. The AppUpdate object is deleted when all sessions are processed and no
+            AppUpdatesQueued object is allocated for this AppUpdate anymore.
+        </li>
+        <li>
+            Some types of updates need to be sent to the sessions of a given user only. Since this is
+            a frequent case an optimization is implemented, so that not all filters need to be checked in
+            this case. For each filter list there is a userTree of all users currently having filters.
+            When a new filter is created it is checked if the user is already in this tree. If not an object
+            <b>AppUpdatesUser</b> is allocated and put in this tree. AppUpdatesUser::filters is a
+            pointer to the first filter of this user in the filters list. New filters are put in the
+            list before any filter existing for the user already.<br/>
+            The filters list can be proccesed started from AppUpdatesObject::filters until the user
+            changes to cover all filters of a given user.
+        </li>
+        <li>
+            The AppUpdatesFilters&lt;update-class&gt; objects are put in a tree per session, using
+            <b>src</b> and a reference to the filter list as key. When a new filter is created and
+            for the same type of filter a filter with the same src already exists for the given session
+            the existing filter is deleted and replaced by the new filter.
+        </li>
+    </ul>
+    <h2>Tutorial</h2>
+    <h3>Step 1: Use AppUpdates as base class for your App instance class</h3>
+    <p>
+        This class holds the list of updates queued and schedules updates in an IoExec handler.
+    </p>
+    <h3>Step 2: Use AppUpdatesSession as base class for your websocket session object</h3>
+    <p>
+        The AppUpdatesSession coordinates messages sent to this websocket session. For this it contains
+        the AppWebsocket class as base class.
+    </p>
+    <p>
+        The variables
+        <dl>
+            <dt>bool sendingUpdate</dt>
+            <dt>bool sendingResponse</dt>
+        </dl>
+        Keep trace what kind of message is beeing sent.</br>
+    </p>
+    <h3>Step 3: Use class AppUpdate as base class for objects holding update information</h3>
+    <p>
+        For any update to be sent to multiple Apps, there must be an object, which holds the information
+        about the update. These objects should use the class AppUpdate as base class.
+    </p>
+    <h3>Step 4: Use AppUpdatesFilter&lt;update-class&gt; as base class the filter objects</h3>
+    <p>
+        For each type of update a corresponding filter class has to be defined
+    </p>
+    <p>
+        The virtual functions
+        <dl>
+            <dt>virtual bool Test(U * update)</dt>
+            <dt>virtual void Send(U * update)</dt>
+        </dl>
+        need to be overriden. <b>Test</b> should return true if the update needs to be sent. Then
+        <b>Send</b> is called to send the update. Use
+        <b>AppUpdatesFilter::SendUpdate(class json_io & msg, char * buffer)</b> for sending.
+    </p>
+    <h3>Step 5: Define filter list variables in the App Instance class</h3>
+    <p>
+        For each update/filter type a list is needed per App Instance. Define public members<br/>
+        AppUpdatesFilters&lt;update-class&gt; assignedFilters&lt;<br/>
+        in the App Instance class for this.
+    </p>
+    <h3>Step 6: Use AppUpdates::StartUpdate to start any update process</h3>
+    <h2>Reference</h2>
+    <h3>class AppUpdates</h3>
+    <dl>
+        <dt>AppUpdates(IIoMux * const iomux)</dt>
+        <dd>
+            The constructor needs iomux for the SetExec mechanism
+        </dd>
+        <dt>void StartUpdate(class AppUpdate * update)</dt>
+        <dd>
+            To be called to start the update process.
+        </dd>
+    </dl>
+    <h3>class AppUpdatesSession</h3>
+    <dl>
+        <dt>AppUpdatesSession(class AppUpdates * app, IWebserverPlugin * plugin, class IInstanceLog * const log, class JsonApiContext * jsonApiContext)</dt>
+        <dd>
+            Constructor
+        </dd>
+        <dt>void SendResponse(class json_io & msg, char * buffer)</dt>
+        <dd>
+            This function should be called to send responses on the Websocket connection.
+        </dd>
+        <dt>void SendUpdate(class json_io & msg, char * buffer)</dt>
+        <dd>
+            This function should be called to send updates on the Websocket connection.
+        </dd>
+        <dt>void AppFilterClose(istd::list&lt;AppUpdatesFilterY&gt; & filters, const char * src)</dt>
+        <dd>
+            Function which may be called to explictly close a filter on a given session. The filter
+            is identified by <b>src</b> and the filters reference from the AppUpdatesFilters class is
+            used to identify the type of filter.
+        </dd>
+        <dt>ulong64 sessionId</dt>
+        <dd>
+            unique session id. Maybe used in filters for example to avoid sending updates to sessions
+            which originated the action causing the update.
+        </dd>
+    </dl>
+    <h3>class AppUpdate</h3>
+    <dl>
+        <dt>AppUpdate(istd::list&lt;AppUpdatesFilterY&gt; & filters, class btree * & usersTree, const char * sip = 0)</dt>
+        <dd>
+            Constructor. filters and usersTree should be used from the corresponding AppFilters class.
+            sip is used to identify the user, if the update is to be sent to session of this user only.
+        </dd>
+    </dl>
+    <h3>class AppUpdatesQueued</h3>
+    <p>
+        Internal class to queue updates on a session.
+    </p>
+    <h3>class AppUpdatesUser</h3>
+    <p>
+        Internal class to determine the first session of a given user.
+    </p>
+    <h3>class AppUpdatesFilter</h3>
+    <dl>
+        <dt>AppUpdatesFilter(class AppUpdatesSession * session, const char * src)</dt>
+        <dd>
+            Constructor. src is a string identifying the filter. If a filter with this name already
+            exists for the session, the old filter is deleted.
+        </dd>
+    </dl>
+    <h3>class AppUpdatesQueued</h3>
+    <p>
+        Internal class to queue updates.
+    </p>
+    <h3>class AppUpdatesFilterY</h3>
+    <p>
+        Internal class used as base class for filters.
+    </p>
+    <h3>template &gt;class U&lt; class AppUpdatesFilter</h3>
+    <p>
+        Base class for update specific filter classes.
+    </p>
+    <dl>
+        <dt>AppUpdatesFilter(AppUpdatesFilters&lt;U&gt; & filters, class AppUpdatesSession * session, const char * src, const char * sip = 0)</dt>
+        <dd>
+            Constructor. <b>src</b> is the unique identifier for the filter on a given session of a given type.
+            Use <b>sip</b> to identify users, if there are updates sent to single users only.
+        </dd>
+        <dt>virtual bool Test(U * update)</dt>
+        <dd>
+            Function to test if an update needs to be sent.
+        </dd>
+        <dt>virtual void Send(U * update)</dt>
+        <dd>
+            Function called when the update is to be sent.
+        </dd>
+    </dl>
+    <h3>template &lt;class U&gt; class AppUpdatesFilters</h3>
+    <p>
+        Template class to store the list of filters of a given type.
+    </p>
+</body>
+</html>

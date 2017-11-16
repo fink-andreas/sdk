@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>http_query_args</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>http_query_args</h1>
+    <p>
+        A class to parse HTTP query arguments, e.g. <b>?arg1=value1&arg2=value2</b>
+    </p>
+
+    <dl>
+        <dt>class HttpQueryArgs(char * query)</dt>
+        <dd>
+            note that the '''query''' will be '''modified'''!
+            <dl>
+                <dt>Current()</dt>
+                <dd>
+                    returns HttpQueryArg of current argument or NULL
+                </dd>
+                <dt>Next()</dt>
+                <dd>
+                    returns HttpQueryArg of next argument or NULL
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>class HttpQueryArg()</dt>
+        <dd>
+            <dl>
+            <dt>name</dt>
+                <dd>
+                    the name of the argument
+                </dd>
+                <dt>value</dt>
+                <dd>
+                    the already URL decoded value of the argument
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <pre>
+char * query = "?arg1=value1&arg2=value2";
+for (HttpQueryArgs args(query); args.Current(); args.Next()) {
+    HttpQueryArg * arg = args.Current();
+    debug->printf("%s=%s", arg->name, arg->value);
+}
+    </pre>
+</body>
+</html>

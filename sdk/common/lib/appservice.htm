@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>applicationservice</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>applicationservice</h1>
+    <p>
+        Basically each App has one class which is derived from the base class AppService.<br />
+        This base class establishes a unix domain socket connection to the taskmanager over which <br />
+        starting and stopping of instances is controlled.<br />
+        Each instance itself is derived from AppInstance and gets its own <br />
+        AppInstanceArgs.
+    </p>
+    <h2>AppService</h2>
+    <p>
+        The service class of the App must be derived from the class AppService and implement<br />
+        the following virtual functions:
+    </p>
+    <dl>
+        <dt>class AppInstance * CreateInstance(AppInstanceArgs * args)</dt>
+        <dd>
+            Creates an object of the instance class of the App which must be derived from the class <br />
+            AppInstance.<br />
+            If this object is closed and has finished closing, it <b>must</b> call AppClosed(), see below.
+        </dd>
+        <dt>void AppServiceApps(istd::list&lt;AppServiceApp&gt; * appList)</dt>
+        <dd>
+            Push your provided apps to the appList. Each app has to be an instance of class AppServiceApp.
+            An app of an AppService might be configured inside the PBX App object.
+        </dd>
+    </dl>
+    <p>
+        The following functions are public within the AppService class:
+    </p>
+    
+    <dl>
+        <dt>AppService(class IIoMux * const iomux, class ISocketProvider * const localSocketProvider, AppServiceArgs * serviceArgs)</dt>
+        <dd>Constructor</dd>
+
+        <dt>void AppStart(AppInstanceArgs * args)</dt>
+        <dd>
+            This function is just called for debugging purposes without the taskmanager inside the App main cpp.<br />
+            It directly starts an AppInstance with the given arguments.
+        </dd>
+
+        <dt>void AppStopped(class AppInstance * instance)</dt>
+        <dd>
+            AppStopped must be called by the class which is derived from AppInstance, <br />
+            if it finished it's stopping procedure and is ready to be deleted (which is done here).
+        </dd>
+
+        <dt>const char * GetAppServiceId() const</dt>
+        <dd>
+            Returns the AppServiceArgs serviceId.
+        </dd>
+    </dl>
+
+    <h3>AppServiceApp</h3>
+    <p>
+        The class AppServiceApp is used to describe an app which is provided by an AppService.
+        Each app has a (for the service) unique name, which will be later used inside the URL 
+        which points to the app of the AppService.
+    </p>
+    <dl>
+        <dt>AppServiceApp(const char * name, bool websocketOnly = false)</dt>
+        <dd>Constructor of the class AppServiceApp. The <b>name</b> describes the last URL part
+        of the app and the flag <b>websocketOnly</b> can be set to true, if there is no
+        corresponding HTML part for the App, just a websocket URL.</dd>
+    </dl>
+
+    <h3>AppServiceArgs</h3>
+    <p>
+        The AppServiceArgs are handed as command line parameters by the taskmanager<br />
+        to the application itself.
+    </p>
+    <dl>
+        <dt>const char * serviceID;</dt>
+        <dd>Currently the filename of a service binary.</dd>
+
+        <dt>const char * taskmanager;</dt>
+        <dd>The unix domain socket file of the taskmanager.</dd>
+    </dl>
+    
+    <h2>AppInstance</h2>
+    <p>
+        The instance class of an App must be derived from AppInstance and implement <br />
+        the following virtual functions:
+    </p>
+
+    <dl>
+        <dt>void Stop()</dt>
+        <dd>
+            This function is called if the taskmanager stops an instance. If stopping has finished, <br />
+            AppService AppStopped(this) <b>must</b> be called.
+        </dd>
+        <dt>void ServerCertificateUpdate(const byte * cert, size_t certLen)</dt>
+        <dd>
+            This function is called immediatly after the instance is created and if the server certificate is updated <br />
+            inside the taskmanager. cert might be a NULL pointer!<br />
+            This certificate can be used for an own ISocketContext instance which has been handed to server sockets, see the example below.<br />
+        </dd>
+    </dl>
+
+    <p>
+        The following members are protected within the AppInstance class:
+    </p>
+    <dl>
+        <dt>AppInstanceArgs args</dt>
+        <dt>class AppService * appService</dt>
+    </dl>
+
+    <p>
+        The following functions are public within the AppInstance class:
+    </p>
+
+    <dl>
+        <dt>AppInstance(class AppService * appService, AppInstanceArgs * args)</dt>
+        <dd>Constructor</dd>
+
+        <dt>const char * GetAppServiceId() const</dt>
+        <dd>
+            Returns the AppServiceArgs serviceId.
+        </dd>
+        <dt>const char * GetAppName() const</dt>
+        <dd>
+            Returns the App name which is stored within the AppInstanceArgs.
+        </dd>
+        <dt>const char * GetAppDomain() const</dt>
+        <dd>
+            Returns the App domain which is stored within the AppInstanceArgs.
+        </dd>
+
+        <dt>void Log(const char * format, ...)</dt>
+        <dd>
+            Your <b>primary</b> function to log messages! These messages are only logged, if the corresponding<br />
+            LOG_APP flag is set in the logFlags of the IInstanceLog base class.<br />
+            The function always logs the appName and appDomain of the AppInstanceArgs.<br />
+            <br />
+            <i>If you want to log during development independent of the log flags, you can use the debug class<br />
+            directly.</i>
+        </dd>
+        <dt>void LogV(const char * format, va_list ap)</dt>
+        <dd>
+            Like Log, just with a va_list argument list.
+        </dd>
+        <dt>void HexDump(const void * buffer, size_t size)</dt>
+        <dd>
+            Logs a hexdump of the given buffer.
+        </dd>
+    </dl>
+
+    <h3>base class IInstanceLog</h3>
+    <p>
+        This class is used for log flag dependent logs inside interface classes, e.g. the IDatabase interface.<br />
+        The log flags are set through the taskmanager and controlled by the taskmanager web interface.<br />
+        Dependent of the log flags, the interface classes provide AppInstance related logs, so that each interface<br />
+        log can be assigned to a certain AppInstance object.
+    </p>
+    <h4>available log flags</h4>
+    <dl>
+        <dt>LOG_APP</dt>
+        <dt>LOG_DATABASE</dt>
+        <dt>LOG_DB_FILES</dt>
+        <dt>LOG_DNS</dt>
+        <dt>LOG_ETHERNET</dt>
+        <dt>LOG_FILE</dt>
+        <dt>LOG_FILES</dt>
+        <dt>LOG_HTTP_CLIENT</dt>
+        <dt>LOG_HTTP_FILE</dt>
+        <dt>LOG_PROCESS</dt>
+        <dt>LOG_TLS</dt>
+        <dt>LOG_UDS</dt>
+        <dt>LOG_TCP</dt>
+        <dt>LOG_WEBSERVER_PLUGIN</dt>
+        <dt>LOG_WEBSOCKET_CLIENT</dt>
+        <dt>LOG_APP_WEBSOCKET</dt>
+        <dt>LOG_WEBDAV_SERVICE</dt>
+    </dl>
+    <h4>public functions (normally just used by common interface classes)</h4>
+    <dl>
+        <dt>void Log(enum LogFlags flag, const char * format, ...)</dt>
+        <dd>Logs with debug->appPrintfV if the log flag is set.</dd>
+        <dt>void HexDump(enum LogFlags flag, const void * buffer, size_t size)</dt>
+        <dd>Logs with debug->appHexdump if the log flag ist set.</dd>
+        <dt>bool LogFlagSet(enum LogFlags flag)</dt>
+        <dd>Returns true if the log flag is currently set.</dd>
+    </dl>
+    <h4>protected members</h4>
+    <dl>
+        <dt>ulong64 logFlags</dt>
+        <dd>Contains the log flags, which are currently set (OR concatenated).</dd>
+    </dl>
+
+    <h3>struct AppInstanceArgs</h3>
+    <p>
+        App instance arguments are defined by an Administrator inside the taskmanager.<br />
+        The AppService class gets them through the socket connection and uses them<br />
+        to create a new AppInstance class.
+    </p>
+    <dl>
+        <dt>const char * appName;</dt>
+        <dd></dd>
+        <dt>const char * appDomain;</dt>
+        <dd></dd>
+        <dt>const char * appPassword;</dt>
+        <dd></dd>
+        <dt>const char * webserver;</dt>
+        <dd>The unix domain socket file which is used to connect to the webserver.</dd>
+        <dt>const char * webserverPath;</dt>
+        <dd>The relative path which is used to access the application via HTTP.</dd>
+        <dt>const char * dbHost;</dt>
+        <dd></dd>
+        <dt>const char * dbName;</dt>
+        <dd>The database name of the App instance.</dd>
+        <dt>const char * dbUser;</dt>
+        <dd></dd>
+        <dt>const char * dbPassword;</dt>
+        <dd></dd>
+    </dl>
+    
+    <h2>Example</h2>
+    <code type="cpp">
+        <pre>
+class TestInstance : public AppInstance {
+    ISocketContext * socketContext;
+    ISocket * socket;
+    void Stop();
+    void ServerCertificateUpdate(const byte * cert, size_t certLen);
+    void TryStop();
+public:
+    TestInstance(class IIoMux * const iomux, class TestService * testService, class ISocketProvider * localSocketProvider, class IDatabaseProvider * databaseProvider, class IWebserverPluginProvider * webserverPluginProvider, AppInstanceArgs * instanceArgs);
+    ~TestInstance();
+};
+
+class TestService : public AppService {
+    class IIoMux * const iomux;
+    class ISocketProvider * localSocketProvider;
+    class ISocketProvider * tlsSocketProvider;
+    class IDatabaseProvider * databaseProvider;
+    class IWebserverPluginProvider * webserverPluginProvider;
+public:
+    TestService(class IIoMux * const iomux, class ISocketProvider * localSocketProvider, class ISocketProvider * tlsSocketProvider, class IDatabaseProvider * databaseProvider, class IWebserverPluginProvider * webserverPluginProvider, AppServiceArgs * serviceArgs);
+    ~TestService();
+    class AppInstance * CreateInstance(AppInstanceArgs * instanceArgs);
+    void AppServiceApps(class json_io & json, word base);
+};
+
+TestService::TestService(class IIoMux * const iomux, class ISocketProvider * localSocketProvider, class ISocketProvider * tlsSocketProvider, class IDatabaseProvider * databaseProvider, class IWebserverPluginProvider * webserverPluginProvider,  AppServiceArgs * serviceArgs)
+    : AppService(iomux, localSocketProvider, serviceArgs),
+    iomux(iomux)
+{
+    this->databaseProvider = databaseProvider;
+    this->localSocketProvider = localSocketProvider;
+    this->tlsSocketProvider = tlsSocketProvider;
+    this->webserverPluginProvider = webserverPluginProvider;
+}
+
+TestService::~TestService()
+{
+}
+
+class AppInstance * TestService::CreateInstance(AppInstanceArgs * instanceArgs)
+{
+    return new class TestInstance(iomux, this, localSocketProvider, tlsSocketProvider, databaseProvider, webserverPluginProvider, instanceArgs);
+}
+
+void TestService::AppServiceApps(istd::list&lt;AppServiceApp&gt; * appList)
+{
+    appList->push_back(new AppServiceApp("devices"));
+    appList->push_back(new AppServiceApp("sysclients", true));
+}
+
+TestInstance::TestInstance(class IIoMux * const iomux, class TestService * testService, class ISocketProvider * localSocketProvider, class ISocketProvider * tlsSocketProvider, class IDatabaseProvider * databaseProvider, class IWebserverPluginProvider * webserverPluginProvider, AppInstanceArgs * instanceArgs) :
+AppInstance(testService, instanceArgs)
+{
+    this->iomux = iomux;
+    this->databaseProvider = databaseProvider;
+    this->webserverPlugin = webserverPluginProvider->CreateWebserverPlugin(iomux, localSocketProvider, this);
+    this->socketContext = tlsSocketProvider->CreateSocketContext(this);
+    this->socket = tlsSocketProvider->CreateSocket(iomux, NULL, this, false, socketContext);
+    webserverPlugin->RegisterForPath(instanceArgs->webserver, instanceArgs->webserverPath);
+    this->Log("TestInstance created");
+}
+TestInstance::~TestInstance()
+{
+    this->Log("TestInstance deleted");
+}
+void TestInstance::ServerCertificateUpdate(const byte * cert, size_t certLen)
+{
+    this->socketContext->SetServerCertificate(cert, certLen, NULL);
+}
+void TestInstance::Stop()
+{
+    TryStop();
+}
+void TestInstance::TryStop()
+{
+    // if everything has been closed, call AppStopped
+    appService->AppStopped(this);
+}
+        </pre>
+    </code>
+</body>
+</html>

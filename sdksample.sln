@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sdksample", "sdksample.vcxproj", "{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}"
+EndProject
+Global
+	GlobalSection(VaultVsipSolution-v2) = preSolution
+		VaultHost = http://vault.innovaphone.com/VaultService
+		VaultRepositoryID = 5
+		VaultRepositoryGUID = cee3f1c3-6458-4830-96fb-728c05908862
+		ProjectCount = 1
+		ProjectRelativeDiskPath1 = sdksample.vcxproj
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		arm|Win32 = arm|Win32
+		arm-debug|Win32 = arm-debug|Win32
+		arm-visual-gdb|Win32 = arm-visual-gdb|Win32
+		i386|Win32 = i386|Win32
+		i386-debug|Win32 = i386-debug|Win32
+		i386-visual-gdb|Win32 = i386-visual-gdb|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.arm|Win32.ActiveCfg = arm|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.arm|Win32.Build.0 = arm|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.arm-debug|Win32.ActiveCfg = arm-debug|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.arm-debug|Win32.Build.0 = arm-debug|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.arm-visual-gdb|Win32.ActiveCfg = arm-visual-gdb|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.arm-visual-gdb|Win32.Build.0 = arm-visual-gdb|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.i386|Win32.ActiveCfg = i386|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.i386|Win32.Build.0 = i386|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.i386-debug|Win32.ActiveCfg = i386-debug|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.i386-debug|Win32.Build.0 = i386-debug|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.i386-visual-gdb|Win32.ActiveCfg = i386-visual-gdb|Win32
+		{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}.i386-visual-gdb|Win32.Build.0 = i386-visual-gdb|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

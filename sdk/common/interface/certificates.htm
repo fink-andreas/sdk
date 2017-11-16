@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>certificates</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>certificates</h1>
+
+    <h2> class ICertificates</h2>
+    <dl>
+        <dt>static certificate_error_t ValidateCertificate(class IInstanceLog * log, const byte * cert, size_t certLen)</dt>
+        <dd>
+            byte * cert must contain a certificate in PEM format. Other formats are currently not supported.<br />
+            ValidateCertificate checks if there is a public key, a private key and verifies the certificate chain.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+byte * cert ...;
+size_t certLen ...;
+certificate_error_t error = ICertificates::ValidateCertificate(this, cert, certLen);
+    </pre>
+</body>
+</html>

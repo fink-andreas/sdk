@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.ribbon</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.icon/innovaphone.ui.Icon.js"></script>
+    <script src="../ui.ribbon/innovaphone.ui.Ribbon.js"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ribbon</h1>
+    
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var ribbon = new innovaphone.ui.Ribbon(out);
+var ribbonGroupAdd = ribbon.addGroup("blub");
+var b1 = ribbonGroupAdd.addButton("Klick",
+                                  "ui.ribbon.example.png",
+                                  0,
+                                  0,
+                                  function () { alert('1'); });
+ribbonGroupAdd.addButton("Klack",
+                         "ui.ribbon.example.png",
+                          0,
+                          -30,
+                          function () { alert('2'); });
+ribbon.getContent().innerHTML = "Content"
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+    <h2> innovaphone.ui.Ribbon(container) </h2>
+    <p>
+        Creates a ribbon area, which can be filled with ribbon groups from the left and elements can be added to the right side.<br>
+    </p>
+
+    <dl>
+        <dt>addGroup(text)</dt>
+        <dd>
+            creates, appends and returns class Group with footer '''text''' to the left elements
+        </dd>
+        <dt>addRight(element)</dt>
+        <dd>
+            appends an existing element to the right side
+        </dd>
+        <dt>getContent()</dt>
+        <dd>
+            returns the content element
+        </dd>
+    </dl>
+
+    <h3>class Group</h3>
+    <p>
+        A ribbon group which stores the buttons.
+    </p>
+
+    <dl>
+        <dt>container</dt><dd>
+        </dd>
+        <dt>addButton(text, iconUrl, iconPosX, iconPosY, funcOnClick)</dt>
+        <dd>
+            adds and returns the class Button
+            <dl>
+                <dt>text</dt>
+                <dd>
+                    caption of the button
+                </dd>
+                <dt>iconUrl</dt>
+                <dd>
+                    the URL to the icon (see example ui.ribbon.example.png)<br />
+                    <i>The icon <b>must</b> be a sprite icon with icons in the size 25x25px.<br />
+                    There must be four icons next together on the x axis for each icon symbol:
+                    <ul>
+                        <li>Black icon at 0px</li>
+                        <li>White icon at 25px</li>
+                        <li>Blue icon at 50px (CSS hover)</li>
+                        <li>Orange icon at 75px (CSS active)</li>
+                    </ul>
+                    The image states are automatically controlled by the CSS class ijs-sprite-25px
+                    </i>
+                </dd>
+                <dt>[iconPosX]</dt>
+                <dd>
+                    the X position of the icon inside the image
+                </dd>
+                <dt>[iconPosY]</dt>
+                <dd>
+                    the Y position of the icon inside the image
+                </dd>
+                <dt>[funcOnClick]</dt>
+                <dd>
+                    an optional onclick function for the button
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>disable()</dt>
+        <dd>
+            disables all buttons of the group
+        </dd>
+        <dt>enable()</dt>
+        <dd>
+            enables all buttons of the Group
+        </dd>
+
+        <dt>addElementButton(element, text)</dt>
+        <dd>
+            to add and return an element button containing the predefined element
+        <dt>element</dt>
+        <dd>
+            the predefined element, e.g. an input field 
+        </dd>
+        <dt>text</dt>
+        <dd>
+            caption of the element button
+        </dd>
+    </dl>
+    <h3>class Button</h3>
+    <p>
+        A ribbon button.
+    </p>
+    <dl>
+        <dt>setOnClick(funcOnClick)</dt>
+        <dd>
+            funcOnClick can be <b>null</b>
+        </dd>
+        <dt>disable()</dt>
+        <dd>
+            disables the button
+        </dd>
+        <dt>enable()</dt>
+        <dd>
+            enables the button
+        </dd>
+    </dl>
+
+    <h3>class ElementButton</h3>
+    <p>
+        A ribbon element button.
+    </p>
+
+    <dl>
+        <dt>setOnClick(funcOnClick)</dt>
+        <dd>
+            onClick function (optional)
+        </dd>
+        <dt>disable()</dt>
+        <dd>
+            disables the element button
+        </dd>
+        <dt>enable()</dt>
+        <dd>
+            enables the  element button
+        </dd>
+    </dl>
+</body>
+</html>

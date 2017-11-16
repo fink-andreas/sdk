@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>webdavservice</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>webdavservice</h1>
+	<p>
+        webdavservice is a library, which provides the service of the webdav.
+        It is an interface between webserver and dbfiles. The webdav requests from the client 
+		are only forwarded to this library, which gets the information and sends it back
+		to the client.
+    </p>
+	<!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>Initialization</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+		An instance can be initiated with with an dbfiles and a database Pointer, which 
+		is created with 
+    </p>
+	<pre>this->dbfiles = dbfilesProvider->CreateDbFiles();</pre>
+	
+	<p>
+		With these two pointers, the instance can be created with
+	
+	</p>
+	<pre>this->webdav = new class WebdavService(dbFiles, database);</pre>
+
+    <!-- ---------------------------------------------------------------------- -->
+	
+	<!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>Interface Functions</h2>
+    <!-- ---------------------------------------------------------------------- -->
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h3>bool GetCompleted()</h3>
+    
+    <p>
+        Request, if connection between webdav and dbfiles is established 
+    </p>
+	
+	<h3>void Start()</h3>
+    
+    <p>
+        Starts the connection with the database. This function can be called to initialize the connection but it can also be done in the main modul.
+    </p>
+	
+	<h3>void WebRequestWebdavService(IWebserverPlugin * const webserverPlugin, ws_request_type_t requestType, char * resourceName, size_t dataSize)</h3>
+    
+    <p>
+        Webdav Requests from the webserver, which can be forwarded to the webdav library.
+		The callback function WebserverPluginRequest(IWebserverPlugin * const webserverPlugin, ws_request_type_t requestType, char * resourceName, size_t dataSize) can be fully forwarded to this function
+    </p>
+    <dl>
+        <dt>webserverPlugin</dt><dd>Webserver Plugin Interface</dd>
+        <dt>requestType</dt><dd>Request Type (Put, Get, Propfind ...)</dd>
+        <dt>resourceName</dt><dd>Path, where is the resource</dd>
+        <dt>dataSize</dt><dd>Datasize of the Request</dd>
+    </dl>
+	
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>cipher.h</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>cipher</h1>
+    This is a basic encryption library that supports AES, DES and RC4.
+    <h2> enum cipher_t </h2>
+    <p>
+        <ul>
+            <li>CIPHER_DES</li>
+            <li>CIPHER_AES</li>
+            <li>CIPHER_RC4</li>
+        </ul>
+    </p>
+    <h2> class cipher </h2>
+    <p>
+        The class cipher can be used for encrypting or decrypting data.
+    </p>
+    <p>
+        <dl>
+            <dt>Cipher()</dt>
+            <dd>Empty constructor for the class.</dd>
+
+            <dt>void Init(cipher_t type, const byte * key, int keyLen, bool encrypt)</dt>
+            <dd>Initializes the cipher class using a type, a key and the key length in bytes. Key sizes:
+                <ul>
+                    <li>DES - 8 bytes</li>
+                    <li>AES-128 - 16 bytes</li>
+                    <li>AES-192 - 24 bytes</li>
+                    <li>AES-256 - 32 bytes</li>
+                </ul>
+            </dd>
+
+            <dt>void Block(const byte * in, byte * out)</dt>
+            <dd>Reads a block from the in buffer, crypts it and writes to the out buffer. Block sizes are 8 bytes for DES and 16 bytes for AES. Not supported for RC4</dd>
+
+            <dt>void Crypt(const byte * in, byte * out, int len)</dt>
+            <dd>Implements the ECB mode of operation for AES and DES, and regular encyption for RC4. Note that for DES the data length bust be a multiple of 8 bytes. For AES a multiple of 16 byes.</dd>
+
+            <dt>void CtrCrypt(const byte * in, byte * out, int len, byte * iv)</dt>
+            <dd>
+                Implementation of the counter mode of operation. Encrypts or decrypts the given data of arbitrary length using a the given initialization vector (iv). The number in the iv buffer is incremented, so it can be reused for subsequent encryptions.
+                <br />
+                <b>Note that counter mode is a stream cipher. The same combination of key and iv MUST NEVER BE REUSED!!!</b>
+            </dd>
+        </dl>
+    </p>
+</body>
+</html>

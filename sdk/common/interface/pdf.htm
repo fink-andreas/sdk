@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>pdf</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>pdf</h1>
+    <p>
+        Interface to create a PDF document.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <h2>class IPdfProvider</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <dl>
+        <dt>class IPdf * CreatePdf();</dt>
+        <dd>
+            Creates an IPdf object. This object is to be deleted after use.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h2>class IPdf</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+    </p>
+    <dl>
+        <dt>void SetCompressionMode(unsigned compressionMode)</dt>
+        <dd>The function sets the compression mode of the PDF document.</dd>
+        <dt>
+            class IPdfPage * AddPage(enum IPdf::Sizes size = IPdf::SizeA4,
+            enum IPdf::Directions direction = IPdf::DirectionPortrait)
+        </dt>
+        <dd>Add a new page to the document.</dd>
+        <dt>void Complete()</dt>
+        <dd>The function is to be called if the document is completly defined and should be rendered.</dd>
+        <dt>void Get(const byte * & data, unsigned & length, bool * last = 0)</dt>
+        <dd>
+            Get the document data. The data pointer is set to a pointer allocated by IPdf and
+            length is set to the length of the data. The end of the document is reached if length is zero or last is true.
+        </dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h2>class IPdfPage</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+    </p>
+    <dl>
+        <dt>void SetSize(enum IPdf::Sizes size)</dt>
+        <dd>Set the page size.</dd>
+        <dt>void SetDirection(enum IPdf::Directions direction)</dt>
+        <dd>Set the page direction.</dd>
+        <dt>float GetWidth()</dt>
+        <dd>Get the page width.</dd>
+        <dt>float GetHeight()</dt>
+        <dd>Get the page height.</dd>
+        <dt>class IPdfImageStream * AddImageStream(enum IPdf::StreamTypes type)</dt>
+        <dd>Add an image stream to the page.</dd>
+        <dt>void Complete()</dt>
+        <dd>The function is to be called if the page is complete. After this, IPdfPage is invalid.</dd>
+    </dl>
+
+    <!-- ---------------------------------------------------------------------- -->
+    <h2>class IPdfImageStream</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+    </p>
+    <dl>
+        <dt>void Write(const byte * data, unsigned length)</dt>
+        <dd>The function is to be called to write data to the image stream.</dd>
+        <dt>void SetStreamWidth(unsigned int width)</dt>
+        <dd>Set the width of the image in pixel.</dd>
+        <dt>void SetStreamHeight(unsigned int height)</dt>
+        <dd>Set the height of the image in pixel.</dd>
+        <dt>void Draw(float x, float y, float width, float height)</dt>
+        <dd>
+            The function is to be called if the stream is complete. After this, IPdfImageStream is invalid.
+            <dl>
+                <dt>x</dt>
+                <dd>Horizontal start position of the image in the page.</dd>
+                <dt>y</dt>
+                <dd>Vertical start position of the image in the page.</dd>
+                <dt>width</dt>
+                <dd>Width of the image in the page.</dd>
+                <dt>height</dt>
+                <dd>Height of the image in the page.</dd>
+            </dl>
+        </dd>
+    </dl>
+
+</body>
+</html>
+

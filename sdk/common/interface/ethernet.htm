@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ethernet</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>ethernet</h1>
+    
+    <h2> class IEthernet</h2>
+    <dl>
+        <dt>static bool GetMACAddress(byte * mac, class IInstanceLog * const log)</dt>
+        <dd>
+            Writes the MAC address of the first ethernet adapter to the given * mac array.
+            Returns true if a MAC address was found, otherwise false.
+            log is used to log debugs dependent of the log flag LOG_ETHERNET.
+            The byte array is not NULL terminated and just contains the six MAC bytes!
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+byte mac[MAC_ADDRESS_SIZE];
+bool success = IEthernet::GetMACAddress(mac, this); // this is an AppInstance object
+    </pre>
+
+
+</body>
+</html>

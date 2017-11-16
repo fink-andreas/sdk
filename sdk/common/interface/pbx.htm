@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>dns</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>pbx</h1>
+    <p>
+        IPbxApi is a task-oriented interface that allows app services to access PBX data and functionality.
+    </p>
+
+    <h2> </h2>
+    <dl>
+        <dt>class IPbxApi * CreatePbxApi(class IJsonApiConnection * conn);</dt>
+        <dd>
+            Creates a IPbxApi object that will be connected to a given IJsonApiConnection, typically an AppWebsocket.
+        </dd>
+    </dl>
+
+    <h2> class IPbxApi </h2>
+    <dl>
+        <dt>class ITask * CreateSetPresence(const char * guid, const char * sip, const char * contact, const char * activity, const char * note)</dt>
+        <dd>
+            Creates an ITask that sets the presence for a given contact of a given user.
+            <dl>
+                <dt>guid</dt>
+                <dd>The GUID of the affected user object. (guid or sip must be specified)</dd>
+                
+                <dt>sip</dt>
+                <dd>The SIP URI of the affected user. (guid or sip must be specified)</dd>
+                
+                <dt>contact</dt>
+                <dd>The contact string of the presence (e.g. tel:)</dd>
+                
+                <dt>activity</dt>
+                <dd>A SIP activity string (e.g. away, busy, lunch, vacation, dnd, ...). If not set the activity will be displayed as "available".</dd>
+                
+                <dt>note</dt>
+                <dd>A free text.</dd>
+            </dl>
+        </dd>
+
+        <dt>class IPbxApiPresenceSubscription * CreatePresenceSubscription(const char * sip, const char * num, const char * sourceSip)</dt>
+        <dd>
+            Returns a presence subscription for a given SIP URI or phone number.
+
+            <dl>
+                <dt>sip</dt>
+                <dd>The SIP URI of the monitored user. (sip or num must be specified)</dd>
+
+                <dt>number</dt>
+                <dd>The phone number of the monitored user. (sip or num must be specified)</dd>
+
+                <dt>sourceSip</dt>
+                <dd>Can be specified if the monitoring should be done on behalf of a specific user.</dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <h2> class IPbxApiPresenceSubscription </h2>
+    <dl>
+        <dt>void Start(class UTask * user)</dt>
+        <dd>Starts the presence subscription. The specified UTask will get the TaskProgress callback on any changes or TaskFailed on a fatal error.</dd>
+
+        <dt>void Stop()</dt>
+        <dd>Stops the presence subscription. The UTask will get the TaskComplete callback, when the presence subscription has terminated.</dd>
+
+        <dt>bool IsUp()</dt>
+        <dd>Tells if the presence monitor is up or down. All the other info is just available, if the presence monitor is up.</dd>
+
+        <dt>const char * GetSip()</dt>
+        <dd>Returns the SIP URI of the monitored endpoint.</dd>
+
+        <dt>const char * GetCn()</dt>
+        <dd>Returns the comon name of the monitored endpoint.</dd>
+
+        <dt>const char * GetDn()</dt>
+        <dd>Returns the display name of the monitored endpoint.</dd>
+
+        <dt>const char * GetNum()</dt>
+        <dd>Returns the phone number of the monitored endpoint.</dd>
+
+        <dt>const char * GetEmail()</dt>
+        <dd>Returns email address of the monitored endpoint.</dd>
+
+        <dt>class IPbxApiPresence * GetPresence()</dt>
+        <dd>Returns an object that contains the list of presence entries, or null if there are none.</dd>
+    </dl>
+
+    <h2>class IPbxApiPresence</h2>
+    <dl>
+        <dt>const char * GetContact()</dt>
+        <dd>Returns the contact string of the presence entry.</dd>
+
+        <dt>const char * GetStatus()</dt>
+        <dd>Returns the status of the presence entry. (open, closed, unset)</dd>
+
+        <dt>const char * GetActivity()</dt>
+        <dd>Returns the activity string of the presence entry. (e.g. away, busy, lunch, vacation, dnd, ...)</dd>
+
+        <dt>const char * GetNote()</dt>
+        <dd>Returns the note string of the presence entry.</dd>
+
+        <dt>class IPbxApiPresence * GetNext()</dt>
+        <dd>Returns the next presence entry, or null of there is none.</dd>
+    </dl>
+</body>
+</html>

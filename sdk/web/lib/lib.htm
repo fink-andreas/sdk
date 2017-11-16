@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>lib</title>
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>lib</h1>
+    <p>
+        Library of commonly used functions. They are all available by using the namespace '''innovaphone.lib'''.
+    </p>
+    <dl>
+        <dt>innovaphone.lib.submitGet(url, funcComplete, blockUI)</dt>
+        <dd>
+            <dl>
+                <dt>url</dt>
+                <dd>
+                </dd>
+                <dt>[funcComplete]</dt>
+                <dd>
+                    A function which is asynchronously called when the request has finished. If not set,<br />
+                    submitGet is used synchronously.
+                </dd>
+
+                <dt>[blockUI]</dt>
+                <dd>
+                    if set blocks the UI and shows a loading GIF
+                </dd>
+
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.blockUIAndWait(block)</dt>
+        <dd>
+            blocks/unblocks the UI
+        </dd>
+
+        <dt>innovaphone.lib.buildURL(url, args)</dt>
+        <dd>
+            builds an URL from a 2 dimensional argument array
+            <dl>
+                <dt>example</dt>
+                <dd>
+                    <pre>innovaphone.lib.buildURL("SYSADMIN/DEVICES/mod_cmd.xml", [["cmd", commands.search], ["device", deviceName.value()]]);</pre>
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.loadScript(src)</dt>
+        <dd>
+            Gets a javascript src file and directly evals it.
+        </dd>
+
+        <dt>innovaphone.lib.loadObjectScript(type, onload)</dt>
+        <dd>
+            Gets the script behind type and calls onload when loading is done.
+            This function also takes care of loading additional resources behind <br />
+            the script which is loaded.<br />
+            If the given type is already loaded, onload is called directly.            
+        </dd>
+
+        <dt>innovaphone.lib.loadObjectScripts(types, onload)</dt>
+        <dd>
+            Loads an array of type with loadObjectScript and calls onload when <br />
+            everything has been finished.<br />
+            This function is usually used within App javascript files to load <br />
+            the required resource javascript files.
+        </dd>
+
+        <dt>innovaphone.lib.globalEval(src)</dt>
+        <dd>
+            evals the javascript src in the global javascript scope
+        </dd>
+
+        <dt>innovaphone.lib.fireEvent(element, eventName, memo)</dt>
+        <dd>
+            triggers the event eventName on element with an optional memo
+            <dl>
+                <dt>element</dt>
+                <dd>
+                    The element on which the event is triggered.
+                </dd>
+                <dt>eventName</dt>
+                <dd>
+                    The event which is triggered.
+                </dd>
+                <dt>[memo]</dt>
+                <dd>
+                    Event handlers can read the memo property of the event object.
+                </dd>
+
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.isInt(value)</dt>
+        <dd>
+            returns true if value is an integer
+        </dd>
+
+        <dt>innovaphone.lib.isFloat(value)</dt>
+        <dd>
+            returns true if value is a float
+        </dd>
+
+        <dt>innovaphone.lib.isPrimitiveType(value)</dt>
+        <dd>
+            returns true, if typeof(value) is 'number'||'string'||'boolean'
+        </dd>
+
+        <dt>innovaphone.lib.isTouch</dt>
+        <dd>
+            boolean which tells if the used device is a touch device
+        </dd>
+
+        <dt>innovaphone.lib.makeUnselectable(element)</dt>
+        <dd>
+            sets CSS/HTML attributes to make an element not selectable
+        </dd>
+
+        <dt>innovaphone.lib.setActiveInput(element)</dt>
+        <dd>
+            sets an active input element, which can be used to prevent actions on key presses like "Escape"
+            <dl>
+                <dt>unset</dt>
+                <dd>
+                    call '''innovaphone.lib.setActiveInput(null)''' to unset the active input element
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.getActiveInput()</dt>
+        <dd>
+            returns the active input element
+        </dd>
+
+        <dt>innovaphone.lib.stringToXml(text, mimeType)</dt>
+        <dd>
+            creates a DOMDocument of an XML string
+            <dl>
+                <dt>[mimeType]</dt>
+                <dd>
+                    default is '''text/xml'''
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.initLanguages(storageIdInit, languagesInit, defaultLanguage)</dt>
+        <dd>
+            initializes language related stuff
+            <dl>
+                <dt>[storageIdInit]</dt>
+                <dd>
+                    the storage id where the language is stored
+                </dd>
+                <dt>languages</dt>
+                <dd>
+                    an JSON array of languages, e.g. [{ "short":"de", "name":"Deutsch" },{ "short":"en", "name":"English" }]
+                </dd>
+                <dt>[defaultLanguage]</dt>
+                <dd>
+                    the default language, e.g. '''en'''
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.setActiveLanguage(lang)</dt>
+        <dd>
+            changes the language without page reload
+            <dl>
+                <dt>lang</dt>
+                <dd>
+                    a language, e.g. '''de'''
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.changeLanguage(lang)</dt>
+        <dd>
+            changes the language and reloads the page, if neccessary
+            <dl>
+                <dt>lang</dt>
+                <dd>
+                    a language, e.g. '''de'''
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.languageFile(file)</dt>
+        <dd>
+            appends the currently active language with a dot, e.g. '''.de'''
+            <dl>
+                <dt>file</dt>
+                <dd>
+                    e.g. innovaphone.sysadminLang returns innovaphone.sysadminLang.de
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.getLanguages()</dt>
+        <dd>
+            returns the language array, which has been assigned with initLanguages
+        </dd>
+
+        <dt>innovaphone.lib.getActiveLanguage()</dt>
+        <dd>
+            returns the active language string, e.g. '''de'''
+        </dd>
+
+        <dt>innovaphone.lib.translate(translatedString, param1, ..., paramX)</dt>
+        <dd>
+            <dl>
+                <dt>translatedString</dt>
+                <dd>
+                    the already translated string, which contains occurrences of $1, $2, $3... which have to be replaced
+                </dd>
+                <dt>[param1]</dt>
+                <dd>
+                    $1 will be replaced with the value of param1
+                </dd>
+                <dt>[paramX]</dt>
+                <dd>
+                    $X will be replaced with the value of paramX
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.clearSelection()</dt>
+        <dd>
+            removes text selection
+        </dd>
+
+        <dt>innovaphone.lib.submitPost (parameters, url, funcComplete, blockUI)</dt>
+        <dd>
+            <dl>
+                <dt>parameters</dt>
+                <dd>
+                    array of post parameters
+                </dd>
+                <dt>url</dt>
+                <dd>
+                </dd>
+                <dt>[funcComplete]</dt>
+                <dd>
+                    A function which is asynchronously called when the request has finished.<br />
+                    If not given, the request is done synchronously.
+                </dd>
+                <dt>[blockUI]</dt>
+                <dd>
+                    if set blocks the UI and shows a loading GIF
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.submitFormData (parameters, url, funcComplete, blockUI)</dt>
+        <dd>
+            transfers the post parameters using a FormData object
+            <dl>
+                <dt>parameters</dt>
+                <dd>
+                    array of form parameters
+                </dd>
+                <dt>url</dt>
+                <dd>
+                </dd>
+                <dt>[funcComplete]</dt>
+                <dd>
+                    A function which is asynchronously called when the request has finished.<br />
+                    If not given, the request is done synchronously.
+                </dd>
+                <dt>[blockUI]</dt>
+                <dd>
+                    if set blocks the UI and shows a loading GIF
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>innovaphone.lib.setNoSelect (container)</dt>
+        <dd>
+            sets corresponding style and callback members to disallow user selection of the given container
+        </dd>
+
+        <dt>innovaphone.lib.getLanguageUrlParam (container)</dt>
+        <dd>
+            parses location.href for the URL parameter 'lang' and returns its value (or default 'en')
+        </dd>
+
+        <dt>innovaphone.lib.addCSSFile (href)</dt>
+        <dd>
+            adds a new link tag to the document head with the given href to a CSS file.
+            Your own CSS classes should be always prefixed with <b>ijs-appName-</b> to avoid duplicates!
+        </dd>
+
+        <dt>innovaphone.lib.removeCSSFile (href)</dt>
+        <dd>
+            removes a link tag with the given href from document head
+        </dd>
+    </dl>
+
+    <h2> string prototype enhancements </h2>
+    <p>
+        The common string prototype has been enhanced by some usefull functions:
+    </p>
+
+    <dl>
+        <dt>String.prototype.trim()</dt>
+        <dd>
+        </dd>
+
+        <dt>String.prototype.insert(index, string)</dt>
+        <dd>
+        </dd>
+
+        <dt>String.prototype.startsWith(str)</dt>
+        <dd>
+        </dd>
+
+        <dt>String.prototype.endsWith(suffix)</dt>
+        <dd>
+        </dd>
+
+        <dt>String.prototype.replaceAll(search, replace)</dt>
+        <dd>
+        </dd>
+    </dl>
+
+    <h2> node prototype enhancements </h2>
+
+    <dl>
+        <dt>Node.prototype.isChildOf(node)</dt>
+        <dd>
+        </dd>
+    </dl>
+
+    <h2> "static" variables </h2>
+
+    <dl>
+        <dt>innovaphone.lib.keyCodes</dt>
+        <dd>a kind of enum with predefined keycodes, e.g.
+            <dl>
+                <dt>innovaphone.lib.keyCodes.arrowDown</dt>
+                <dd>
+                    40
+                </dd>
+                <dt>innovaphone.lib.keyCodes.arrowUp</dt>
+                <dd>
+                    38
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <h2> innovaphone.lib.css </h2>
+
+    <dl>
+        <dt>html</dt><dd></dd>
+        <dt>body</dt><dd></dd>
+        <dt>div</dt><dd></dd>
+    </dl>
+
+</body>
+</html>

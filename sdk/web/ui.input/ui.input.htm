@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.input</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.Input.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body onload="Try()">
+    <h1>ui.input</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var inputText = new innovaphone.ui.InputText(null, "text");
+var inputNumber = new innovaphone.ui.InputNumber(null, 123);
+var inputPassword = new innovaphone.ui.InputPassword(null, "password");
+var inputCheckBox = new innovaphone.ui.InputCheckbox(null, true);
+out.appendChild(inputText.container);
+out.appendChild(inputNumber.container);
+out.appendChild(inputPassword.container);
+out.appendChild(inputCheckBox.container);
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2> innovaphone.ui.Input(container, type, value) </h2>
+
+    <ul>
+        <li>type: the input type, see http://www.w3schools.com/tags/att_input_type.asp</li>
+    </ul>
+    <h2>Members</h2>
+    <dl>
+        <dt>container</dt><dd>
+        </dd>
+        <dt>style</dt>
+        <dd>
+            exposes input.style
+        </dd>
+    </dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>value()</dt>
+        <dd>
+            returns the current value of the input
+        </dd>
+        <dt>setValue(value, overrideOriginalValue)</dt>
+        <dd>
+            sets a new value, if overrideOriginalValue is true, the originalValue is also set to value
+        </dd>
+        <dt>focus()</dt>
+        <dd>
+            sets the focus on the element
+        </dd>
+        <dt>blur()</dt>
+        <dd>
+            removes the focus from the element
+        </dd>
+        <dt>setSelectionRange(start, end)</dt>
+        <dd>
+        </dd>
+        <dt>setMaxLength(maxLength)</dt>
+        <dd>
+            sets the maximum input length
+        </dd>
+        <dt>addEventListener(type, listener)</dt>
+        <dd>
+            adds events to the input element
+        </dd>
+        <dt>setWidth(width)</dt>
+        <dd>
+            sets the input field width
+        </dd>
+        <dt>setPlaceHolder(placeHolder)</dt>
+        <dd>
+            sets input.placeHolder (HTML5)
+        </dd>
+        <dt>setOnEnter(onEnter)</dt>
+        <dd>
+            sets a function which is executed on keydown enter
+        </dd>
+        <dt>setOnChange(func)</dt>
+        <dd>
+            executed if input value has changed
+        </dd>
+        <dt>checked()</dt>
+        <dd>
+            get checked member of checkbox
+        </dd>
+        <dt>check(checked)</dt>
+        <dd>
+            de-/activate checkbox
+        </dd>
+        <dt>setType(type)</dt>
+        <dd>
+            set input.type
+        </dd>
+        <dt>hasChanged()</dt>
+        <dd>
+            input value has changed?
+        </dd>
+        <dt>setTitle (title)</dt>
+        <dd>
+        </dd>
+        <dt>enable()</dt>
+        <dd>
+        </dd>
+        <dt>disable()</dt>
+        <dd>
+        </dd>
+        <dt>isDisabled()</dt>
+        <dd>
+        </dd>
+        <dt>getType()</dt>
+        <dd>
+            get input.type
+        </dd>
+        <dt>setMin(min)</dt>
+        <dd>
+            set min attribute of input
+        </dd>
+        <dt>setMax(max)</dt>
+        <dd>
+            set max attribute of input
+        </dd>
+    </dl>
+
+    <h2> innovaphone.ui.InputText(container, value) </h2>
+
+    <h2> innovaphone.ui.InputPassword(container, value) </h2>
+    <dl>
+        <dt>togglePassword()</dt>
+        <dd>
+            show/hide password
+        </dd>
+    </dl>
+
+    <h2> innovaphone.ui.InputText(container, value) </h2>
+
+    <h2> innovaphone.ui.InputCheckbox(container, checked) </h2>
+
+    <h2> innovaphone.ui.InputFile(container, value, top, left, parent)</h2>
+
+    <h2> innovaphone.ui.InputUrl(container, value, top, left, parent)</h2>
+
+    <h2> innovaphone.ui.InputDate(container, value, top, left, parent)</h2>
+
+    <h2> innovaphone.ui.InputNumber(container, value, top, left, parent, min, max)</h2>
+</body>
+</html>

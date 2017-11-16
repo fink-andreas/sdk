@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.dragList</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.input/innovaphone.ui.Input.js" type="text/javascript"></script>
+    <script src="../ui.listview/innovaphone.ui.ListView.js" type="text/javascript"></script>
+    <script src="../ui.container/innovaphone.ui.Container.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.Scrollbar.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.tilelist.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var out = document.getElementById('out');
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+
+
+             eval(document.getElementById('code').value);
+
+        }
+
+
+    </script>
+</head>
+
+<body style="overflow:scroll">
+    <h1>ui.Tilelist</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+            var Tilelist = new innovaphone.ui.Tilelist(out, 120, "#5A9BD5", "White");
+
+            Tilelist.AddItem("first");
+            Tilelist.AddItem("second");
+            Tilelist.AddItem("third");
+            Tilelist.AddItem("fourth");
+            Tilelist.AddItem("fifth");
+            Tilelist.AddItem("six");
+            Tilelist.AddItem("seven");
+            Tilelist.AddItem("eight");
+            var lastElement = Tilelist.AddItem("last");
+
+            Tilelist.ChangeElementColors("six", "red", "black");
+            Tilelist.ChangeElementColors("six");
+            Tilelist.AddSubtextToItem("six", "sub text");
+            Tilelist.ChangeElementColors("seven", "red", "black");
+            Tilelist.ChangeColorsToElement(lastElement, "red", "black");
+            Tilelist.AddSubtextToElement(lastElement, "sub text");
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+    <h1>innovaphone.ui.Tilelist(container, tileWidth, defaultBkColor, defaultTextColor, width, height)</h1>
+    <p>Creates a display list using tiles. Background and text color of the tiles can be configured for the whole list and for each element</p>
+
+    <h2>Arguments</h2>
+    <dl>
+        <dt>container</dt>
+        <dd>container for list</dd>
+        <dt>tileWidth</dt>
+        <dd>the width of a tile in pixels -> REQUIRED</dd>
+        <dt>defaultBkColor</dt>
+        <dd>the background color of the tile for the whole list -> REQUIRED</dd>
+        <dt>defaultTextColor</dt>
+        <dd>the background color of the text in the tile for the whole list -> REQUIRED</dd>
+        <dt>width</dt>
+        <dd>width of the container</dd>
+        <dt>height</dt>
+        <dd>heighth of the container</dd>
+
+
+    </dl>
+
+    <h2>Functions</h2>
+    <dl>
+        <dt>AddItem(content)</dt>
+        <dd>Add a new string item to the list. The string is specified by content</dd>
+        <dt>AddSubtextToItem(itemText, subText)</dt>
+        <dd>Add a sub text on a new line for the specified item. The item is specified by itemText</dd>
+        <dt>AddSubtextToElement(element, subText)</dt>
+        <dd>Add a sub text on a new line for the specified item.</dd>
+        <dt>RemoveElement(text)</dt>
+        <dd>Remove the element specified by text</dd>
+        <dt>RemoveAllElements()</dt>
+        <dd>Remove all elements</dd>
+        <dt>onClick</dt>
+        <dd>Set the onClick function. The function will take as parameter the container of the clicked element</dd>
+        <dt>GetElements</dt>
+        <dd>Return an array with the current string items in the list in the order specified</dd>
+        <dt>ChangeElementColors(elementText, backgroundColor, textColor)</dt>
+        <dd>Change the colors for a specified item. The item is specified by elementText. If a color is not specified, the default one specified in the constructor is used</dd>
+        <dt>ChangeColorsToElement(element, backgroundColor, textColor)</dt>
+        <dd>Change the colors for a specified element. If a color is not specified, the default one specified in the constructor is used</dd>       
+
+</dl>
+
+
+</body>
+</html>

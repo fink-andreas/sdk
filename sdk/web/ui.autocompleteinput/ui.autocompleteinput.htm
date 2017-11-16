@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.autocompleteinput</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.input/innovaphone.ui.Input.js" type="text/javascript"></script>
+    <script src="../ui.listview/innovaphone.ui.ListView.js" type="text/javascript"></script>
+    <script src="../ui.container/innovaphone.ui.Container.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.Scrollbar.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.autocompleteinput.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+
+        }
+
+
+    </script>
+</head>
+
+<body style="overflow:scroll">
+    <h1>ui.autocompleteinput</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+
+var inputText = new innovaphone.ui.Autocompleteinput(null, 300, "");
+
+function callBackData(value) {
+    var cars = ["Saab", "Suv", "Saaa", "BatMobile", "Bms", "Bmd", "Volvo", "BMW"];
+    var resultArray = [];
+    for (var i = 0; i < cars.length; i++) {
+        if (cars[i].toLowerCase().startsWith(value.toLowerCase())) {
+            resultArray.push(cars[i]);
+        }
+    }
+
+    return resultArray;
+}
+
+inputText.SetDataCallBack(callBackData);
+
+out.appendChild(inputText.container);
+
+
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+    <h1>innovaphone.ui.autocompleteinput(container, width, left, top, accWidth, accHeight)</h1>
+    <ul>
+        <li>Input type that supports autocomplete through a callback function</li>
+    </ul>
+    <h2>Members</h2>
+    <dl>
+        <dt>container</dt>
+        <dd>
+        </dd>
+        <dt>style</dt>
+        <dd>
+            exposes input.style
+        </dd>
+    </dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>SetDataCallBack(dataCallBack)</dt>
+        <dd>
+            Set a callback function - dataCallBack(value) - that will return the autocomplete values. The function should return an array of string based on the value argument, where value is the current value from the input text
+        </dd>
+        <dt>value()</dt>
+        <dd>
+            returns the current value of the input
+        </dd>
+        <dt>setValue(value)</dt>
+        <dd>
+            sets a new value
+        </dd>
+        <dt>focus()</dt>
+        <dd>
+            sets the focus on the element
+        </dd>
+        <dt>setSelectionRange(start, end)</dt>
+        <dd>
+        </dd>
+        <dt>setMaxLength(maxLength)</dt>
+        <dd>
+            sets the maximum input length
+        </dd>
+        <dt>addEventListener(type, listener)</dt>
+        <dd>
+            adds events to the input element
+        </dd>
+        <dt>setWidth(width)</dt>
+        <dd>
+            sets the input field width
+        </dd>
+        <dt>setPlaceHolder(placeHolder)</dt>
+        <dd>
+            sets input.placeHolder (HTML5)
+        </dd>
+        <dt>setOnEnter(onEnter)</dt>
+        <dd>
+            sets a function which is executed on keydown enter
+        </dd>
+        <dt>setOnChange(func)</dt>
+        <dd>
+            executed if input value has changed
+        </dd>
+        <dt>checked()</dt>
+        <dd>
+            get checked member of checkbox
+        </dd>
+        <dt>check(checked)</dt>
+        <dd>
+            de-/activate checkbox
+        </dd>
+        <dt>setType(type)</dt>
+        <dd>
+            set input.type
+        </dd>
+        <dt>hasChanged()</dt>
+        <dd>
+            input value has changed?
+        </dd>
+        <dt>setTitle (title)</dt>
+        <dd>
+        </dd>
+        <dt>enable()</dt>
+        <dd>
+        </dd>
+        <dt>disable()</dt>
+        <dd>
+        </dd>
+        <dt>isDisabled()</dt>
+        <dd>
+        </dd>
+
+    </dl>
+
+   
+
+
+</body>
+</html>
+</html>

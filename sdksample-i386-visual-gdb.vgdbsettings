@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ConfigurationName>i386-visual-gdb</ConfigurationName>
+  <Project xsi:type="com.visualgdb.project.linux">
+    <CustomSourceDirectories>
+      <Directories />
+      <PathStyle>RemoteUnix</PathStyle>
+    </CustomSourceDirectories>
+    <BuildHost>
+      <Transport>None</Transport>
+    </BuildHost>
+    <DeploymentHost>
+      <HostName>IPLinux</HostName>
+      <Transport>Alias</Transport>
+      <UserName />
+    </DeploymentHost>
+    <MainSourceTransferCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <RemoteHost>
+        <Transport>None</Transport>
+      </RemoteHost>
+      <LocalDirectory>$(ProjectDir)</LocalDirectory>
+      <RemoteDirectory>/tmp/VisualGDB/$(ProjectDirUnixStyle)</RemoteDirectory>
+      <FileMasks>
+        <string>*.cpp</string>
+        <string>*.h</string>
+        <string>*.c</string>
+        <string>*.cc</string>
+        <string>*.cxx</string>
+        <string>*.mak</string>
+        <string>Makefile</string>
+        <string>*.txt</string>
+        <string>*.cmake</string>
+      </FileMasks>
+      <TransferNewFilesOnly>true</TransferNewFilesOnly>
+      <IncludeSubdirectories>true</IncludeSubdirectories>
+      <SelectedDirectories />
+      <DeleteDisappearedFiles>false</DeleteDisappearedFiles>
+    </MainSourceTransferCommand>
+    <AllowChangingHostForMainCommands>true</AllowChangingHostForMainCommands>
+    <SkipBuildIfNoSourceFilesChanged>false</SkipBuildIfNoSourceFilesChanged>
+    <IgnoreFileTransferErrors>false</IgnoreFileTransferErrors>
+    <RemoveRemoteDirectoryOnClean>false</RemoveRemoteDirectoryOnClean>
+    <SkipDeploymentTests>false</SkipDeploymentTests>
+    <MainSourceDirectoryForLocalBuilds>$(ProjectDir)</MainSourceDirectoryForLocalBuilds>
+  </Project>
+  <Build xsi:type="com.visualgdb.build.custom">
+    <BuildCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <Command>$(T)\app-platform-buildtls\make</Command>
+      <Arguments>-j5 -f sdksample.mak i386 DEBUG=1</Arguments>
+      <WorkingDirectory>$(ProjectDir)</WorkingDirectory>
+      <Environment>
+        <Records>
+          <Record>
+            <VariableName>PATH</VariableName>
+            <Value>%PATH%;$(T)\app-platform-buildtls;$(T)\i486-7.1.0-linux-gnu\bin;$(ExecutablePath)</Value>
+          </Record>
+        </Records>
+      </Environment>
+      <BackgroundMode xsi:nil="true" />
+    </BuildCommand>
+    <CleanCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <Command>$(T)\app-platform-buildtls\make</Command>
+      <Arguments> -f sdksample.mak clean-i386 DEBUG=1</Arguments>
+      <WorkingDirectory>$(ProjectDir)</WorkingDirectory>
+      <Environment>
+        <Records>
+          <Record>
+            <VariableName>PATH</VariableName>
+            <Value>%PATH%;$(T)\app-platform-buildtls;$(T)\i486-7.1.0-linux-gnu\bin;$(ExecutablePath)</Value>
+          </Record>
+        </Records>
+      </Environment>
+      <BackgroundMode xsi:nil="true" />
+    </CleanCommand>
+    <MainBuildDirectory>$(ProjectDir)</MainBuildDirectory>
+    <AbsoluteTargetPath>$(ProjectDir)\i386-debug\sdksample\sdksample</AbsoluteTargetPath>
+    <AutoUpdateMakefiles>true</AutoUpdateMakefiles>
+  </Build>
+  <Debug xsi:type="com.visualgdb.debug.remote">
+    <AdditionalStartupCommands />
+    <AdditionalGDBSettings>
+      <Features>
+        <DisableAutoDetection>false</DisableAutoDetection>
+        <UseFrameParameter>false</UseFrameParameter>
+        <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
+        <ListLocalsSupported>false</ListLocalsSupported>
+        <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
+        <ThreadInfoSupported>false</ThreadInfoSupported>
+        <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
+        <SupportTargetCommand>false</SupportTargetCommand>
+        <ReliableBreakpointNotifications>false</ReliableBreakpointNotifications>
+      </Features>
+      <EnableSmartStepping>false</EnableSmartStepping>
+      <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
+      <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
+      <UseAppleExtensions>false</UseAppleExtensions>
+      <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
+      <MakeLogFile>false</MakeLogFile>
+      <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
+      <UseRelativePathsOnly>false</UseRelativePathsOnly>
+      <ExitAction>None</ExitAction>
+      <DisableDisassembly>false</DisableDisassembly>
+      <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
+      <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
+      <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
+      <DisableSignals>false</DisableSignals>
+      <EnableAsyncExecutionMode>false</EnableAsyncExecutionMode>
+      <EnableNonStopMode>false</EnableNonStopMode>
+    </AdditionalGDBSettings>
+    <LaunchGDBSettings xsi:type="GDBLaunchParametersNewInstance">
+      <GDBExe>/usr/bin/gdb</GDBExe>
+      <GDBEnvironment>
+        <Records />
+      </GDBEnvironment>
+      <RemoteHostOverride>
+        <HostName>IPLinux</HostName>
+        <Transport>Alias</Transport>
+        <UserName />
+      </RemoteHostOverride>
+      <DebuggedProgram>/apps/sdksample/sdksample</DebuggedProgram>
+      <GDBServerPort>2000</GDBServerPort>
+      <ProgramArguments>--webserver=/var/run/admin/webserver --webserver-path=/sdksample</ProgramArguments>
+    </LaunchGDBSettings>
+    <GenerateCtrlBreakInsteadOfCtrlC>false</GenerateCtrlBreakInsteadOfCtrlC>
+    <DeploymentTargetPath>/apps/sdksample/sdksample</DeploymentTargetPath>
+    <X11WindowMode>Local</X11WindowMode>
+    <KeepConsoleAfterExit>false</KeepConsoleAfterExit>
+    <RunGDBUnderSudo>false</RunGDBUnderSudo>
+    <DeploymentMode>Auto</DeploymentMode>
+    <LdLibraryPath />
+    <DeployWhenLaunchedWithoutDebugging>false</DeployWhenLaunchedWithoutDebugging>
+  </Debug>
+  <CustomBuild>
+    <PreBuildActions />
+    <PostBuildActions />
+    <PreCleanActions />
+    <PostCleanActions />
+  </CustomBuild>
+  <CustomDebug>
+    <PreDebugActions />
+    <PostDebugActions />
+    <DebugStopActions />
+    <BreakMode>Default</BreakMode>
+  </CustomDebug>
+  <CustomShortcuts>
+    <Shortcuts />
+    <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
+  </CustomShortcuts>
+  <UserDefinedVariables />
+  <ImportedPropertySheets />
+  <CodeSense>
+    <Enabled>False</Enabled>
+    <CFLAGS />
+    <CXXFLAGS />
+    <ExternalSourceFileList />
+    <ExtraSettings>
+      <HideErrorsInSystemHeaders>true</HideErrorsInSystemHeaders>
+    </ExtraSettings>
+  </CodeSense>
+</VisualGDBProjectSettings2>

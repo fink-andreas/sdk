@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>database</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+
+    <h1>Database</h1>
+    <div class="fixme">@msm Check me!</div>
+    <p>
+        The Database interface is an abstraction of different database libraries to allow
+        acces do different databases (for now, only PostgreSQL and MySQL are supported).
+        The interface only allows simply acces (Connect, Send SQL statement, close),
+        which will be enough in most cases. However, nearly everything you can do with the
+        SQL features supported by the database engine, you can do with IDatabase.
+    </p>
+
+    <h2> class IDatabaseProvider </h2>
+    <p>
+        This class will be used to create an IDatabase instance.
+        The instance of that class will be created with <i>CreatePostgreSQLDatabaseProvider()</i>
+        to use the PostgreSQL driver or <i>CreateMySQLDatabaseProvider()</i> to use the MySQL driver.
+        Please note that the SQL support of both of them could be different because of different
+        SQL language extensions of the databases.
+        After useage, the IDatabaseProvider instance should deleted if no longer be used.
+    </p>
+
+    <dl>
+        <dt>static IDatabase * CreateDatabase(class IIoMux * const iomux, class UDatabase * const user, class IInstanceLog * log)</dt>
+        <dd>
+            Will create an IDatabase instance. iomux is the IIoMux instance of the application,
+            user the UDatabase instance that will receive the callbacks.<br />
+            The IInstanceLog interface provides AppInstance related logs which are controlled by the log flag LOD_DATABASE.
+        </dd>
+    </dl>
+
+    <h2> class IDatabase </h2>
+    <p>
+        This is the main calss that handels the communication between the Application and the database server.
+    </p>
+
+    <dl>
+        <dt>A note to what happens when an error occures:</dt>
+        <dd>
+            <ul>
+                <li>
+                    If an SQL command failes, all pending commands of the user that sends that
+                    one that fails will be removed from the internal queue.
+                    The user itself will receive an UDatabase::DatabaseError().
+                    If the user had an active queue lock or an transaction,
+                    IDatabase will make a rollback, unlock tables (if locked) and unlock
+                    the internal queue.
+                </li>
+                <li>
+                    If an critical error occures that makes it impossible to continue
+                    using IDatabase, all pending commands of all users will be discarded and these
+                    users will receive a UDatabase::DatabaseError().
+                    The database connection will be closed and the main user (that one
+                    that created the IDatabase instance) will receive an
+                    UDatabase::DatabaseShutdown().
+                </li>
+            </ul>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>void Connect(const char * address, const char * dbname, const char * user, const char * password)</dt>
+        <dd>
+            Will connect to the databsae at the given address, using the database given in dbname,
+            authenticating with the given user name and password.
+            The address can be an IP address or a hostname (with an optionally port seperated by ':')
+            or a path to aan local socket - depending on the configuration of the database server.
+            If the connection was successfull, UDatabase::DatabaseConnectComplete() will be called,
+            otherwise UDatabase::Shotdown() with an appropriate error code.
+        </dd>
+
+        <dt>bool Connected()</dt>
+        <dd>
+            Returns true, if the connection to the server is active, or not of not.
+            Note that after calling Shutdown(), this function will return false even if the connection
+            to the server not had been closed yet.
+        </dd>
+
+        <dt>void Shutdown()</dt>
+        <dd>
+            Closes the connection to the database.
+            That function should be called before deleting the IDatabase instance.
+            Shutdown will wait for active callbacks to be completed and call UDatabase::DatabaseShutdown().
+        </dd>
+
+        <dt>size_t QueryPrint(char * buffer, size_t bufferSize, const char * sqlcmd, ...)</dt>
+        <dd>
+            Used to build up a query string. The query will be stored inside buffer with a maximum of bufferSize. The sql command
+            itself has to be passed in sqlcmd. That string could have placeholders, which will be replaced with the values of
+            the data given in a variable parameters list after sqlcmd. This helps to prevent SQL interjection, so it is recommended
+            to build up a query string using QueryPrint. The length of the build up query string will be returned by QueryPrint.
+            For the placeholders, a printf like syntax is used with the following types:
+            <ul>
+                <li><b>%i</b> Placeholder for an integer</li>
+                <li><b>%u</b> Placeholder for an unsigned integer (dword)</li>
+                <li><b>%lli</b> Placeholder for an 64 bit integer (long64)</li>
+                <li><b>%llu</b> Placeholder for an 64 bit unsigned integer (ulong64)</li>
+                <li><b>%b</b> Placeholder for a bool</li>
+                <li>
+                    <b>%q</b> Placeholder for a string that will be copied directly, without quoting or escaping of the strings data.
+                    Can be used to insert an alrady prepared query string.
+                </li>
+                <li>
+                    <b>%du</b> Placeholder for a buffer. The value of the buffer will be copied as a hex string, starting with \x. Note
+                    that an additional parameter must be passed (size_t) to tell the size of the buffer.
+                </li>
+                <li><b>%s</b> Placeholder for a string. The string will be enclosed by '.</li>
+                <li><b>%S</b> Placeholder for a string. The string will be enclosed by ".</li>
+                <li><b>%n</b> Placeholder for a string that will be insert to the SQL command without enclosing it to ' or ".</li>
+                <li>
+                    <b>%p</b> Suffix to pass a pointer instead of a value.
+                    Only in combination with integer or bool variants (%pi, %pu, %pb, %plli, %pllu).
+                    When using with prepared statements, that suffix will be ignored.
+                    <b>Note:</b> This can be used to set a field to NULL by pasing NULL
+                    instead of a valid pointer. If you need to set a string field to NULL,
+                    simply pass NULL when using %s, %S or %n.
+                </li>
+                <li><b>%%</b> An escaped % sign. </li>
+
+            </ul>
+            Note: You don't need to call QueryPrint first before calling ExeclSQL or InsertSQL. Theese functions calling query
+            print by themselfes.
+        </dd>
+
+        <dt>void ExecSQL(UDatabase * const user, dword flags, const char * sqlcmd, ...)</dt>
+        <dd>
+            Executes the given sql command. The result will be send to UDatabase::DatabaseExecSQLResult().
+            user is the user instance to send the result to (or a DatabaseError(), if an error occured).
+            If user is NULL, the default user (that one who was given to IDatabase while creating an instanz)
+            will be used. Flags can be one of the following:
+            <ul>
+                <li>
+                    DB_EXEC_FETCH_ALL'''  Normally IDatabase reads the result of an execution
+                    query row by row.
+                    This flag tells IDatabase to fetch all rows at once.
+                    Note that the handling of that data with the IDataset given to
+                    UDatabase::DatabaseExecSQLResult() will be slightly different.
+                </li>
+            </ul>
+            The sql command given in sqlcmd can have placeholders. See QueryPrint for more details. If you whant to call
+            an insert sql command an get the autoincrement id of that insert command, user InsertSQL instead.
+        </dd>
+
+        <dt>void InsertSQL(UDatabase * const user, const char * sqlcmd, ...)</dt>
+        <dd>
+            Executes an INSERT command. The parameters are the same as for ExecSQL().
+            The difference is, that instead of UDatabase::ExecSQLResult(),
+            UDatabase::DatabaseInsertSQLResult(IDatabase * const database, dword id)
+            will be called with the id of the new insert row.
+            To make this work you have to create a table that as some kind of autoincrement id.
+            The sql command given in sqlcmd can have placeholders. See QueryPrint for more details.
+        </dd>
+
+        <dt>void ExecSQL(UDatabase * const user, dword flags, class IPreparedStatement * const statement)</dt>
+        <dd>
+            Same es ExecSQL() above, only that an prepared statement will be used to execute
+            instad of a command string.
+        </dd>
+
+        <dt>void InsertSQL(UDatabase * const user, class IPreparedStatement * const statement)</dt>
+        <dd>
+            Same as InsertSQL() above, only that an prepared statement will be used to execute
+            instad of a command string.
+        </dd>
+
+        <dt>size_t QueryPrintV(char * buffer, size_t bufferSize, const char * sqlcmd, va_list argList)</dt>
+        <dt>void ExecSQLV(UDatabase * const user, dword flags, const char * sqlcmd, va_list argList)</dt>
+        <dt>void InsertSQLV(UDatabase * const user, const char * sqlcmd, va_list argList)</dt>
+        <dt>
+            These functions are the same as QueryPrint / ExecSQL / InsertSQL with the difference, that the variable parametrs list
+            will be given using a va_list pointer. If you don't know what that is, you probably don't need it.
+        </dt>
+
+        <dt>void PrepareStatement(UDatabase * user, const char * sqlcmd)</dt>
+        <dd>
+            Creates a prepared statement that can be executed using ExecSQL() or InsertSQL().
+            user will be the user that receives the answer to that call
+            (will be the user that created the IDatabase intsance if set to NULL),
+            sqlcmd the SQL command of the prepared statement.
+            Parameters that should be used for that SQL command will be defined with
+            placeholders as described in ExecSQL().
+            However, the values of that parameters will be set inside the IPreparedStatement
+            object before passing it to ExecSQL() or InsertSQL().
+            On success, the new created IPreparedStatement instance will be passed to
+            UDatabase::PrepareStatementResult().
+            It's the applications responsebility to delete that object if no longer needed.
+        </dd>
+
+        <dt>void LockQueue(UDatabase * const user = NULL)</dt>
+        <dd>
+            Will lock the internal queue of commands. That lock will become active,
+            when all other parts inside the queue before LockQueue() will be called, had been processed.
+            After that, all commands inside the internal queue that should send their result
+            to the given user (which is the main user if user == NULL),
+            will be handled first until an unlock for the queue had been given.
+            Doing this helps to group SQL commands when the IDatabase instance will be used
+            from more than only one user.
+        </dd>
+
+        <dt>void UnlockQueue(UDatabase * const user = NULL)</dt>
+        <dd>
+            Will end the queue locking.
+            You must call that function if you now longer need the locking of the internal command queue.
+        </dd>
+
+        <dt>void BeginTransaction(UDatabase * const user, const char * lockTableCmd = NULL)</dt>
+        <dd>
+            Will start a transaction block.
+            The result of the command will be send to the given user (or to the main user,
+            if NULL will be given).
+            If an an additional table lock command is necessary,
+            it must be given to lockTableCmd.
+            <b>Note:</b> Never send a lock command with a normal ExecSQL, or the lock will not been
+            canceld if an error occures. BeginTransaction() will call LockQueue() to group the commands.
+            On success, UDatabase::ExecSQLResult() will be called.
+        </dd>
+
+        <dt>void EndTransaction(UDatabase * const user, bool doRollback = false)</dt>
+        <dd>
+            Will end a transaction. User must be the same value as given to BeginTransaction().
+            If an lock table command had been given to BeginTransaction(),
+            EndTransaction() will make sure that the table will be unlocked.
+            EndTransaction() will also call UnlockQueue().
+            On success, UDatabase::ExecSQLResult() will be called.
+        </dd>
+
+        <dt>const char * GetLastErrorMessage()</dt>
+        <dd>
+            Returns the readable message of the last error occurred. This message is provided by the database system itself. So read
+            the documentation of the database system used to get more informations about the language and format of the error message.            
+        </dd>
+    </dl>
+
+    <h2> class IPreparedStatement </h2>
+    <p>
+        A prepared statement will be created by calling IDatabase::PrepareStatement()
+        and receiving the result via UDatabase::DatabasePrepareStatementResult().
+        PreparedStatements come in handy, if you use a static SQL command a multiple times
+        while only changing the parameters (if there are any).
+        With this, the execution will be faster than using a SQL command that needs to be
+        parsed each time of execution.
+        According to the ducumentation of the databsae systems (like PostgreSQL or MySQL),
+        unter some circumstances a prepared statement will not be faster or even slower
+        than a simple SQL command, so it had to be tested, if the application becomes slow.
+        Instances of IPreparedStatement can be shared between different instances of
+        worker classes, because ExecSQL() and InsertSQL() are managing the paremeters
+        of a prepared statment with reference counting.
+        Doing this, the paremeter of an prepared statement inside the execution queue of
+        IDatabase will never change, even if the will be changed elsewhere later.
+        Note that when you share an IPreparedStatement instance, there is no guarantee
+        that the parameters set before the last IDatabase::ExecSQL() or IDatabase::InsertSQL()
+        call are still the same. Because of this it will be a good idea to set all parameters
+        before passing the prepared statement to an IDatabase instance, even if only some
+        of them had been changed.
+    </p>
+
+    <dl>
+        <dt>void SetParam(dword idx, int value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, dword value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, long64 value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, ulong value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, bool value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, const char * value)</dt>
+        <dd>
+            Set the parameter at index idx to the given value.
+            Parameters will be defined buy using placeholders inside the SQL command in
+            IDatabase::PrepareStatement(). Look at IDatabase::ExecSQL() for details.
+            The only difference is, that %s, %S and %n will be treated in the same way
+            and the %p suffix will be ignored, too (use the functions below the
+            used pointers).
+            The first placeholder inside the given SQL command will be the parameter at index 0,
+            the second one the parameter at index 1 and so on.
+            If the datatype given to SetParam() is not the same as defined within the SQL command
+            while calling IDatabase::PrepareStatement(), an assertion will be raised.
+            Note that you have to set the parameters before calling IDatabase::ExecSQL()
+            or IDatabase::InsertSQL().
+            <b>Note:</b> When you pass NULL to SetParam(dword idx, const char * value),
+            the field will set to NULL, too.
+        </dd>
+
+        <dt>void SetParam(dword idx, int * value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, dword * value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, long64 * value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, ulong64 * value)</dt>
+        <dd>
+        </dd>
+        <dt>void SetParam(dword idx, bool * value)</dt>
+        <dd>
+            Same as the above versions, so with the difference that they will accept
+            a pointer instead of the direct value.
+            If the given pointer is NULL, the field itself will be set to NULL, too.
+        </dd>
+    </dl>
+
+    <h2> class IDataSet </h2>
+    <p>
+        An instance of this class will be given to UDatabase::ExecSQLResult().
+        It holds the result of the last SQL statement send with IDatabase::ExecSQL and
+        will be used to acces the data.
+        Note that the application has to delete the instance after it will no longer
+        be used, to let IDatabase handle the next request inside the internal queue.
+    </p>
+
+    <dl>
+        <dt>size_t GetColumnCount()</dt>
+        <dd>
+            Returns the number of columns of the result set.
+        </dd>
+
+        <dt>bool Eot()</dt>
+        <dd>
+            Will return true if the end of the table had been reached, else false.
+            Don't access to the data of the IDataSet after Eot returns true!
+            If Eot() returns false, IDataset now longer will be used and should be deleted.
+        </dd>
+
+        <dt>void Next()</dt>
+        <dd>
+            Fetches the next row of the dataset.
+            This function only can be used if all of the data already had been fetched
+            by calling IDatabase::ExecSQL with the flag DB_EXEC_FETCH_ALL.
+            After a call to Next() it is necessary to first check if the end of the table
+            had been reached by calling IDatabase::Eot(), before accessing the data.
+        </dd>
+
+        <dt>void FetchNextRow()</dt>
+        <dd>
+            Reads the next row from the server.
+            This only could be used if IDatabase::ExecSQL() had been called
+            without the DB_EXEC_FETCH_ALL flag. Instead of IDataSet::Next(),
+            FetchNextRow() will not directly load the next row, it will request the next row.
+            That means, that it will lead to an other UDatabase::DatabaseExecSQLResult()
+            with the same IDataset instance.
+            Because of this an application each time has to check IDataSet::Eot() first inside
+            DatabaseExecSQLResult(), before accessing the data.
+        </dd>
+
+        <dt>ulong64 GetAffectedRows()</dt>
+        <dd>Returns the number of rows which have been affected by the query of the dataset.</dd>
+
+        <dt>const char * GetColumnName(int column)</dt>
+        <dd>
+            Returns the name of the column with the given ID.
+            Make sure that column is not greater than the return value of GetColumnCount().
+        </dd>
+
+        <dt>int GetColumnID(const char * columnName)</dt>
+        <dd>
+            Returns the ID of the column with the given name.
+            If the column could not be found, -1 will be returned;
+        </dd>
+
+        <dt>bool ColumnIsNull(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>bool ColumnIsNull(int column)</dt>
+        <dd>
+            Returns true, if the field at the current row and the given column is NULL.
+        </dd>
+
+        <dt>int GetIntValue(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>int GetIntValue(int column)</dt>
+        <dd>
+            Returns the value of the given column as interger.
+        </dd>
+
+        <dt>dword GetUIntValue(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>dword GetUIntValue(int column)</dt>
+        <dd>
+            Returns the value of the given column as unsigned interger (32 bit).
+            Note that PostgreSQL don't support the storage of unsigned integers.
+        </dd>
+
+        <dt>long64 GetLong64Value(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>long64 GetLong64Value(int column)</dt>
+        <dd>
+            Returns the value of the given column as long interger (64 bit).
+        </dd>
+
+        <dt>ulong64 GetLong64Value(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>ulong64 GetLong64Value(int column)</dt>
+        <dd>
+            Returns the value of the given column as unsigned long interger (64 bit).
+        </dd>
+
+        <dt>bool GetBoolValue(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>bool GetBoolValue(int column)</dt>
+        <dd
+            >returns the value of the given column as bool.
+        True will be returned if the value of the field is 1, t or true (case insensitiv).
+        </dd>
+
+        <dt>float GetFloatValue(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>float GetFloatValue(int column)</dt>
+        <dd>
+            Return the value of the field as float.
+        </dd>
+
+        <dt>const char * GetStringValue(const char * columnName)</dt>
+        <dd>
+        </dd>
+        <dt>const char * GetStringValue(int column)</dt>
+        <dd>
+            Returns the value of the field as a string.
+            This function also should be used if the format of the field is unknown.
+        </dd>
+    </dl>
+
+    <h2> class UDatabase </h2>
+    <p>
+        An class that whants to receive callbacks form IDataset has to be a child
+        of UDataset and implement the funtions.
+    </p>
+
+    <dl>
+        <dt>void DatabaseConnectComplete(IDatabase * const database)</dt>
+        <dd>
+            Will be called when the connection to the database server had been
+            established. database is the calling instance.
+        </dd>
+
+        <dt>void DatabaseShutdown(IDatabase * const database, db_error_t reason)</dt>
+        <dd>
+            Will be called after the connection to the database server had been
+            closed successfully.
+            database will be the calling instance; reason one of the following constants:
+            <ul>
+                <li>DB_SHUTDOWN_NORMAL: The connection had been close because of a call to IDatabase::Shutdown().</li>
+                <li>DB_ERR_CONNECT_FAILED: The connection couldn't be established because of an error. See the log for details.</li>
+                <li>DB_ERR_SQL_COMMAND_FAILED: The last SQL command failed.</li>
+                <li>DB_ERR_SERVER_ERROR: An other error occured (like an internal server error or a connection lost).</li>
+            </ul>
+            DatabaseShutdown() is a good place to delete the IDatabase instance.
+            But make sure tha only the user that created the instance will delete it.
+            If not, the application will crash with a segmentation fault!
+        </dd>
+
+        <dt>void DatabaseExecSQLResult(IDatabase * const database, class IDataSet * dataset)</dt>
+        <dd>
+            Will be called after the execution of IDatabase::ExecSQL().
+            database will be the calling instance, dataset the IDataset with the result
+            set of the last SQL statement.
+            The application itself will be responsible to release the database object.
+            Note that IDatabase will wait with the execution of the next commad inside
+            the internal queue, until the dataset instance had been deleted.
+            Because of this, don't save that object for later use.
+            It will be better to read out all data and process them as soon as possible
+            (or store them temporarily enywhere else), so that dataset can be deleted
+            soon to not block other SQL commands send to IDatabase.
+        </dd>
+
+        <dt>void DatabaseInsertSQLResult(IDatabase * const database, ulong64 id)</dt>
+        <dd>
+            Will be called after the execution of IDatabase::InsertSQL().
+            database will be the calling instance, id the id of the new created row.
+            Note that this only works, if using a table with some kind of autoincrement id field.
+        </dd>
+
+        <dt>void DatabaseBeginTransactionResult(IDatabase * const database)</dt>
+        <dd>
+            Will be called after the execution of IDatabase::BeginTransaction().
+            database will be the calling instance. Note that DatabaseBeginTransactionResult()
+            will be called after begining a transaction and executing the optional lock
+            command, if given to BeginTransaction().
+        </dd>
+
+        <dt>void DatabaseEndTransactionResult(IDatabase * const database)</dt>
+        <dd>
+            Will be called after the execution if IDatabase::EndTransaction().
+            database will be the calling instance.
+        </dd>
+
+        <dt>void DatabasePrepareStatementResult(IDatabase * const database, class IPreparedStatement * statement)</dt>
+        <dd>
+            Will be called after the execution of IDatabase::PrepareStatement().
+            database will be the calling instance, statement the IPreparedStatement instance
+            the application can use.
+            Note that it will be the responsebility of the application to delete the object,
+            if no longer needed.
+        </dd>
+
+        <dt>virtual void DatabaseError(IDatabase * const database, db_error_t error)</dt>
+        <dd>
+            Will be called an error occures while executing a command.
+            database will be the calling instance, error the error number.
+            For now, it normaly will be DB_ERR_SQL_COMMAND_FAILED.
+            DatabaseError() will be called for that user, whose SQL command failed.
+            All other pending commands of that user will be discarded.
+            If an critical error occures during command execution, all pending commands
+            of all users will be discarded and the main user (that one that created
+            the IDatabase instance) will receive a DatabaseShutdown().
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+
+<pre>
+app::app(IIoMux * iomux)
+    : iomux(iomux)
+{
+    IDatabaseProvider * databaseProvider = CreatePostgreSQLDatabaseProvider();
+    this->database = databaseProvider->CreateDatabase(iomux, this, this);
+    delete databaseProvider;
+    this->database->Connect("127.0.0.1", "test_db", "user", "12345");
+}
+
+void app::DatabaseConnectComplete(IDatabase * const database)
+{
+    this->database->ExecSQL(this, 0, "select * from test_table where name=%s and id=%u", "Noname", 42);
+}
+
+void app::DatabaseExecSQLResult(IDatabase * const database, class IDataSet * dataset)
+{
+    if (dataset->Eot()) {
+        delete dataset;
+        this->database->Shutdown();
+    }
+    else {
+        printf("%u | %s\n", dataset->GetIntValue("id"), dataset->GetStringValue("name"));
+        dataset->FetchNextRow();
+    }
+}
+
+void app::DatabaseShutdown(IDatabase * const database, db_error_t reason)
+{
+    if (reason != DB_SHUTDOWN_NORMAL)
+        printf("An error occured, look at the log of the app\n");
+
+    delete this->database;
+    this->database = NULL;
+}
+</pre>
+
+</body>
+</html>

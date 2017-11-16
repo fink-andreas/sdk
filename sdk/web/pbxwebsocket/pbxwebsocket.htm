@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>pbxwebsocket</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>pbxwebsocket</h1>
+    
+    <h2>innovaphone.pbxwebsocket.Connection</h2>
+    <h3>Includes</h3>
+    <p>
+        The following files have to be included in the html file.
+    </p>
+    <ul>
+        <li>
+            <code>innovaphone.common.crypto.js</code>
+        </li>
+        <li>
+            <code>innovaphone.pbxwebsocket.Connection.js</code>
+        </li>
+    </ul>
+
+    <h3>Constructor</h3>
+    <dl>
+        <dt>new Connection(url, username, password)</dt>
+        <dd>
+            <dl>
+                <dt>url</dt>
+                <dd>
+                    The URL of the PBX websocket service (e.g. <code>wss://xxx/PBX0/WEBSOCKET/websocket</code>)
+                </dd>
+                <dt>username</dt>
+                <dd>
+                    The username of the PBX user object.
+                </dd>
+                <dt>password</dt>
+                <dd>
+                    The password of the PBX user object.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <h3>Methods</h3>
+    <dl>
+        <dt>function close()</dt>
+        <dd>
+            Disconnects from the PBX.
+        </dd>
+        <dt>function setAuthentication(username, clientNonce, digest)</dt>
+        <dd>
+            Sets the client parameters of the authentication and the calculated digest.
+            <dl>
+                <dt>username</dt>
+                <dd>
+                    The H323 id of the user object
+                </dd>
+                <dt>clientNonce</dt>
+                <dd>
+                    A random number
+                </dd>
+                <dt>digest</dt>
+                <dd>
+                    sha256("innovaphonePbxWebsocket:ClientAuth:" + realm + ":" + sessionId + ":" + username + ":" + password + ":" + clientNonce + ":" + serverNonce)
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function sendSubscribeEndpoint(name, number)</dt>
+        <dd>
+            Starts presence monitoring for a given endpoint specifyed by name <i>or</i> number.
+            <dl>
+                <dt>name</dt>
+                <dd>
+                    The URI or H.323 id
+                </dd>
+                <dt>number</dt>
+                <dd>
+                    The phone number
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function sendUnsubscribeEndpoint(name, number)</dt>
+        <dd>
+            Stops presence monitoring for a given endpoint specifyed by name <i>or</i> number.
+            <dl>
+                <dt>name</dt>
+                <dd>
+                    The URI or H.323 id
+                </dd>
+                <dt>number</dt>
+                <dd>
+                    The phone number
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <p>
+        The methods for WebRTC calls are not described here. Use innovaphone.pbxwebsocket.WebRtcEndpoint.js instead.
+    </p>
+
+    <h3>Callbacks</h3>
+    <dl>
+        <dt>function onauthenticate(realm, sessionId, serverNonce)</dt>
+        <dd>
+            This callback is used for authenting users when the web page shall not be aware of the user password. Set connection.onauthenticate to get a callback during login process. The login hash can then be calculated on the webserver and be given back using function setAuthentication.
+        </dd>
+    </dl>
+    <dl>
+        <dt>function onconnected(userInfo)</dt>
+        <dd>
+            Called when the connection has been successfully established.
+            <dl>
+                <dt>userInfo</dt>
+                <dd>
+                    An object containing informmation about the connected user.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function onerror(error)</dt>
+        <dd>
+            Called when the connection could not be established or an other error occurred.
+            <dl>
+                <dt>error</dt>
+                <dd>
+                    A string containing an error message.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>onclosed()</dt>
+        <dd>
+            Called if the connection was closed.
+        </dd>
+    </dl>
+    <dl>
+        <dt>function onendpointpresence(name, number, phoneStatus, imStatus, activity, note)</dt>
+        <dd>
+            Called if the presence of a subscribed endpoint has changed.
+            <dl>
+                <dt>name</dt>
+                <dd>
+                    The URI or H.323 id
+                </dd>
+                <dt>number</dt>
+                <dd>
+                    The phone number
+                </dd>
+                <dt>phoneStatus</dt>
+                <dd>
+                    Tells if a phone is registered, <code>open</code> or <code>closed</code>.
+                </dd>
+                <dt>imStatus</dt>
+                <dd>
+                    Tells if a chat client is registered, <code>open</code> or <code>closed</code>.
+                </dd>
+                <dt>activity</dt>
+                <dd>
+                    Presence activity <code>away</code>, <code>busy</code>, <code>lunch</code>, <code>vacation</code>, <code>busy</code>, <code>dnd</code>, <code>on-the-phone</code>
+                </dd>
+                <dt>note</dt>
+                <dd>
+                    Presence note
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <p>
+        The callbacks for WebRTC calls are not described here. Use innovaphone.pbxwebsocket.WebRtcEndpoint.js instead.
+    </p>
+
+    <h2>Example</h2>
+    <p>
+        The following example connects to the PBX and does presence monitoring for the user with the H.323 ID "target".
+    </p>
+<pre>   
+   &lt;script type="text/javascript" src="innovaphone.common.crypto.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.pbxwebsocket.Connection.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript"&gt;
+      
+       // dependencies
+       var Connection = innovaphone.pbxwebsocket.Connection;
+      
+       // private
+       var connection = null;
+       var config = {
+           url: "ws://192.168.0.1/PBX0/WEBSOCKET/websocket",
+           username: "user",
+           password: "password"
+       };
+      
+       // callbacks
+       function onConnected(userInfo) {
+           console.log("Connected: " + JSON.stringify(userInfo));
+           connection.sendSubscribeEndpoint("target", null);
+       }
+       
+       function onError(error) {
+           console.log("Error: " + error);
+       }
+       
+       function onClosed() {
+           console.log("Closed");
+       }
+       
+       function close() {
+           if (connection) connection.close();
+           connection = null;
+       }
+       
+       function onEndpointPresence(name, number, phoneStatus, imStatus, activity, note) {
+           console.log("EndpointPresence: activity=" + activity + " note=" + note);
+       }
+      
+       // main function
+       function start() {
+           if (connection) connection.close();
+           connection = new Connection(config.url, config.username, config.password);
+           connection.onconnected = onConnected;
+           connection.onerror = onError;
+           connection.onclosed = onClosed;
+           connection.onendpointpresence = onEndpointPresence;
+       }
+      
+   &lt;/script&gt;
+</pre>
+
+
+
+
+    <h2>innovaphone.pbxwebsocket.WebRtcEndpoint</h2>
+    <p>
+        This file contains a WebRTC endpoint implementation that can be used for adding WebRTC calls to a web page. For that the credentials of a user object on the PBX is needed. Visitors of the web page will use that user object for making phone calls.
+    </p><p>
+        <b>In some browsers like Chrome WebRTC only works on HTTPS pages. So it is mandatory to use HTTPS and WSS on your page.</b>
+    </p>
+
+    <h3>Includes</h3>
+    <p>
+        The following files have to be included in the html file in order to use the WebRTC endpoint.
+    </p>
+    <ul>
+        <li>
+            <code>innovaphone.common.crypto.js</code>
+        </li>
+        <li>
+            <code>innovaphone.pbxwebsocket.Connection.js</code>
+        </li>
+        <li>
+            <code>innovaphone.pbxwebsocket.ToneGenerator.js</code>
+        </li>
+        <li>
+            <code>innovaphone.pbxwebsocket.WebRtcEndpoint.js</code>
+        </li>
+    </ul>
+    <p>
+        If you want to use application sharing the following files must also be included:
+    </p>
+    <ul>
+        <li>
+            <code>innovaphone.applicationSharing.jpeg.js</code>
+        </li>
+        <li>
+            <code>innovaphone.applicationSharing.zlib.js</code>
+        </li>
+        <li>
+            <code>innovaphone.applicationSharing.png.js</code>
+        </li>
+        <li>
+            <code>innovaphone.applicationSharing.main.js</code>
+        </li>
+    </ul>
+    <p>
+        Additionally the MP3 files from sdk/web/audio containing the ring tones and ring back tones are needed on the web server in the same directory as the javascript files.
+    </p>
+
+    <h3>Compatibility check</h3>
+    <p>
+        You can test if the browser supports WebRTC by checking the bool <code>innovaphone.pbxwebsocket.WebRtc.supported</code>.
+    </p>
+
+    <h3>Constructor</h3>
+    <dl>
+        <dt>new WebRtcEndpoint(url, username, password, device, physicalLocation, regContext, onLog, onCall)</dt>
+        <dd>
+            <dl>
+                <dt>url</dt>
+                <dd>
+                    The URL of the PBX websocket service (e.g. <code>ws://10.0.0.1/PBX0/WEBSOCKET/websocket</code>)
+                </dd>
+                <dt>username</dt>
+                <dd>
+                    The username of the PBX user object.
+                </dd>
+                <dt>password</dt>
+                <dd>
+                    The password of the PBX user object.
+                </dd>
+                <dt>device</dt>
+                <dd>
+                    The device ID that shall be used for making calls.
+                </dd>
+                <dt>physicalLocation</dt>
+                <dd>
+                    The physical location of the user (optional).
+                </dd>
+                <dt>regContext</dt>
+                <dd>
+                    A numeric value that will be used for identifying the registration in the PBX (optional).
+                </dd>
+                <dt>logFunction</dt>
+                <dd>
+                    A callback function that is called for logging debug info (optional).
+                </dd>
+                <dt>onCall</dt>
+                <dd>
+                    A callback function that is called when calls are added, updated or removed. Applications that want to use call control have to specify this callback function. Applications that don't should give <code>null</code>. (optional)
+                </dd>
+                <dt>onAuthenticate</dt>
+                <dd>
+                    An optional callback function. If set it is called with the parameters (realm, sessionId, serverNonce). Applications should calculate the login hash unsing these parameters and the username and password and call setAuthentication.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <h3>Methods</h3>
+    <dl>
+        <dt>function close()</dt>
+        <dd>
+            Closes the WebRTC endpoint and disconnects from the PBX.
+        </dd>
+        <dt>function initCall(name, number, video, sharing)</dt>
+        <dd>
+            Starts a phone call. This is only possible if the application supplied an <code>onCall</code> callback to the constructor.
+            <dl>
+                <dt>name</dt>
+                <dd>
+                    The URI to be called (optional, supply name or number).
+                </dd>
+                <dt>number</dt>
+                <dd>
+                    The phone number to be called (optional, supply name or number).
+                </dd>
+                <dt>video</dt>
+                <dd>
+                    Set to <code>true</code> for starting a video call (optional).
+                </dd>
+                <dt>sharing</dt>
+                <dd>
+                    Set to <code>true</code> for starting an application sharing call (optional).
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function connectCall(id)</dt>
+        <dd>
+            Connects a call.
+            <dl>
+                <dt>id</dt>
+                <dd>
+                    The ID of the call.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function dtmfCall(id, digits)</dt>
+        <dd>
+            Sends dtmf digits to a connected call.
+            <dl>
+                <dt>id</dt>
+                <dd>
+                    The ID of the call.
+                </dd>
+                <dt>digits</dt>
+                <dd>
+                    A string containing DTMF digits (0-9,*,#,A,B,C,D).
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function clearCall(id)</dt>
+        <dd>
+            Terminates a call.
+            <dl>
+                <dt>id</dt>
+                <dd>
+                    The ID of the call (optional). If no ID is supplied, all calls are terminated.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function attachVideo(local, remote)</dt>
+        <dd>
+            Attaches HTML video elements to the WebRTC endpoints. The endpoint will use them to playback video. Applications can both attach before or during a video call. Also attaching multiple video elements for a single call is possible. The application should mute the video elements (<code>muted="muted"</code>) in order to avoid playback of audio.
+            <dl>
+                <dt>local</dt>
+                <dd>
+                    The HTML video element for playback of the local webcam image (optional, may be <code>null</code>).
+                </dd>
+                <dt>remote</dt>
+                <dd>
+                    The HTML video element for playback of the remote video image (optional, may be <code>null</code>).
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function detachVideo(local, remote)</dt>
+        <dd>
+            Detaches HTML video elements that have previously attached. This will stop the playback on the supplied elements.
+            <dl>
+                <dt>local</dt>
+                <dd>
+                    The HTML video element to be detached (optional, may be <code>null</code>).
+                </dd>
+                <dt>remote</dt>
+                <dd>
+                    The HTML video element to be detached (optional, may be <code>null</code>).
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function attachSharing(sharingDiv, createAppCallback, removeAppCallback, resizeCalback)</dt>
+        <dd>
+            Attaches a DIV element to the WebRTC endpoints. The endpoint will allocate inside this element a canvas object where the application sharing data will be displayed. This DIV element must have as style <b>position:relative</b>, otherwise the mouse will not be displayed correctly. Since more than one application could be shared, the javascript application has to provide a callback to be informed that a new application arrived and another callback to be informed that an application is not anymore shared. Both callbacks should received an <b>id</b> as argument. Another callback will be provided in case the shared application changes its resolution. It is also possible that the JS application receives data from different participants, for instance during a conference. That is why this sender_id is also needed.
+            <dl>
+                <dt>createAppCallback</dt>
+                <dd>
+                    createAppCallback(sender_id, id, name). This callback also receives the name of the new application.
+                </dd>
+                <dt>removeAppCallback</dt>
+                <dd>
+                    removeAppCallback(sender_id, id).
+                </dd>
+                <dt>resizeCallback</dt>
+                <dd>
+                    resizeCallback().
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function detachSharing()</dt>
+        <dd>
+            Detaches elements that were previously attached.
+        </dd>
+        <dt>function sharingEvent(type, data)</dt>
+        <dd>
+            The endpoint provides an interface to send events to the application sharing class.
+            <dl>
+                <dt>changeDisplaySender</dt>
+                <dd>
+                    This event is used to switch between the users which are sharing something. Useful in a conference. type is equal to <b>changeDisplaySender</b> and data should be the <b>id</b> of the sender. This <b>id</b> is the one provided in the create application callback.
+                </dd>
+                <dt>changeDisplayApp</dt>
+                <dd>
+                    This event is used to switch inside the canvas object between applications being shared. type is equal to <b>changeDisplayApp</b> and data should be the <b>id</b> of the application to be displayed. This <b>id</b> is the one provided in the create application callback.
+                </dd>
+                <dt>fitToElement</dt>
+                <dd>
+                    This event adjusts the application being shared to the size of the DIV element provided with the <b>attachSharing</b> function. type is equal to <b>fitToElement</b> and data should be <b>true</b> if the application should be adjusted to the canvas element or false otherwise (original size).
+                </dd>
+                <dt>requestControl</dt>
+                <dd>
+                    This event allows the client to request control (mouse, keyboard) over the shared applications. The sharing party still must accept this request before the client gets the control. type is equal to <b>requestControl</b> and data should be <b>null</b>.
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <dl>
+        <dt>function setAuthentication(username, clientNonce, digest)</dt>
+        <dd>
+            Sets the client parameters of the authentication and the calculated digest.
+            <dl>
+                <dt>username</dt>
+                <dd>
+                    The H323 id of the user object
+                </dd>
+                <dt>clientNonce</dt>
+                <dd>
+                    A random number
+                </dd>
+                <dt>digest</dt>
+                <dd>
+                    sha256("innovaphonePbxWebsocket:ClientAuth:" + realm + ":" + sessionId + ":" + username + ":" + password + ":" + clientNonce + ":" + serverNonce)
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <h3>Callbacks</h3>
+    <dl>
+        <dt>function onLog(text)</dt>
+        <dd>
+            Should write the supplied text to the log of the application.
+        </dd>
+        <dt>function onCall(event, call)</dt>
+        <dd>
+            Is called when the state of calls of this WebRTC endpoint changes.
+            <dl>
+                <dt>event</dt>
+                <dd>
+                    A string that can be <code>added</code>, <code>updated</code> and <code>removed</code>.
+                </dd>
+                <dt>call</dt>
+                <dd>
+                    The call object containing the current info about the call.
+                    <dl>
+                        <dt>id</dt>
+                        <dd>
+                            The numeric id of the call.
+                        </dd>
+                        <dt>dir</dt>
+                        <dd>
+                            The direction of the call (<code>in</code> or <code>out</code>).
+                        </dd>
+                        <dt>state</dt>
+                        <dd>
+                            The state of the call (<code>idle</code>, <code>calling</code>, <code>incomplete</code>, <code>complete</code>, <code>alerting</code>, <code>connected</code>, <code>disconnecting</code>, <code>disconnected</code>, <code>parked</code>).
+                        </dd>
+                        <dt>hold</dt>
+                        <dd>
+                            <code>true</code>, if the call is on hold (optional).
+                        </dd>
+                        <dt>name</dt>
+                        <dd>
+                            The URI of the remote party (optional).
+                        </dd>
+                        <dt>number</dt>
+                        <dd>
+                            The phone number of the remote party (optional).
+                        </dd>
+                        <dt>video</dt>
+                        <dd>
+                            <code>true</code>, if video is active (optional).
+                        </dd>
+                        <dt>sharing</dt>
+                        <dd>
+                            <code>true</code>, if application sharing is active (optional).
+                        </dd>
+                        <dt>cause</dt>
+                        <dd>
+                            The cause code (optional).
+                        </dd>
+                    </dl>
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+
+    <h3>Example</h3>
+    <pre>   
+   &lt;script type="text/javascript" src="innovaphone.common.crypto.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.pbxwebsocket.Connection.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.pbxwebsocket.ToneGenerator.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.applicationSharing.jpeg.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.applicationSharing.zlib.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.applicationSharing.png.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.applicationSharing.main.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript" src="innovaphone.pbxwebsocket.WebRtcEndpoint.js"&gt;&lt;/script&gt;
+   &lt;script type="text/javascript"&gt;
+       
+       // dependencies
+       var WebRtcEndpoint = innovaphone.pbxwebsocket.WebRtc.Endpoint;
+      
+       var endpoint = null;
+       var config = {
+           url: "wss://192.168.0.1/PBX0/WEBSOCKET/websocket",
+           username: "user",
+           password: "password",
+           device: "user-webrtc",
+           physicalLocation: null,
+           regContext: "0"
+       };
+      
+       function logFunction(text) {
+           console.log("WebRTC demo: " + text);
+       }
+      
+       function onCall(event, call) {
+           if (call.dir == "in") {
+               if (endpoint) endpoint.clearCall(call.id);
+           }
+           console.log("Call " + event + ": " + JSON.stringify(call));
+       }
+      
+       function initCall(name, number, video, sharing) {
+           if (endpoint) endpoint.initCall(name, number, video, sharing);
+       }
+      
+       function clearAllCalls() {
+           if (endpoint) endpoint.clearCall();
+       }
+      
+       function close() {
+           if (endpoint) {
+               endpoint.detachVideo(document.getElementById("video-local"), document.getElementById("video-remote"));
+               endpoint.detachSharing();
+               endpoint.close();
+           }
+           endpoint = null;
+       }
+      
+       function resizeCanvas() {
+       }
+      
+       function createNewApplication(sender_id, id, name) {
+           var new_app = document.createElement("input"); 
+           new_app.setAttribute("id", "appSharing_" + sender_id + "_" + id);
+           new_app.setAttribute("value", name);
+           new_app.setAttribute("type", "button");
+           new_app.onclick = function () { changeDisplayApp(id); };
+           getElementById("sharing-local").appendChild(new_app);
+       }
+      
+       function changeDisplayApp(id) {
+           var s_app_id = String(id);               // id == appSharing_x_y where x is the sender and y the application, both are numbers, 0, 1, 2, ..
+           var a_app_id = s_app_id.split("_");      // a_app_id is an array with three elements.
+           instanceConference.endpoint.sharingEvent('changeDisplaySender', a_app_id[1]);
+           instanceConference.endpoint.sharingEvent('changeDisplayApp', a_app_id[2]);
+       }
+      
+       function removeApplication(sender_id, id) {
+           var input_b = document.getElementById("appSharing_" + sender_id + "_" + id);
+           if(input_b) getElementById("sharing-local").removeChild(input_b);
+       }
+      
+       function start() {
+           if (endpoint) endpoint.close();
+           endpoint = new WebRtcEndpoint(config.url, config.username, config.password, config.device, config.physicalLocation, config.regContext, logFunction, onCall);
+           endpoint.attachVideo(document.getElementById("video-local"), document.getElementById("video-remote"));
+           endpoint.attachSharing(document.getElementById("sharing-local"), createNewApplication, removeApplication, resizeCanvas);
+       }
+   &lt;/script&gt;
+    </pre>
+
+</body>
+</html>

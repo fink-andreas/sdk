@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>httplib</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>httplib</h1>
+    <p>
+        The HTTPlib is a collection of classes to handle with HTTP Headers
+        (reading / creating them). They are used by the webserver, so normally there
+        is no need to use them as long as you don't use IWebserverPassthrough.
+        There it could become in handy using the HTTPlib classes to handle the HTTP header stuff.
+        After setting the version number and the HTTP result (or the HTTP request method),
+        the header is prepared to be send. You can set what ever field you whant to and
+        send that header directly by getting the buffer to the byte-stream and the size of it.
+        So there is no need for any other function to prepare a http header.
+        Just set the version, the request or result, what ever field you whant to set more
+        (it will always be a good idea to set at least the content length, even if
+        it will be 0) and send the header.
+    </p>
+
+    <h2> HTTPHeader </h2>
+    <p>
+        This class is only for creating an HTTP header.
+        To parse an HTTP Header and get the data of it, use HTTPParser.
+    </p>
+
+    <dl>
+        <dt>void SetHTTPVersion(int major, int minor)</dt>
+        <dd>
+            Sets the major and minor version of the HTTP protocol you whant to use.
+            You can call HTTPParser::GetMajorVersion() / HTTPParser::GetMinorVersion()
+            to set the same version for the response as had been used for the request.
+            This function has to be use before using any other function, or the header you're
+            going to build up will be incorrect.
+            However, if you need to build a HTTP header multiple times, you can reuse
+            a HTTPHeader instance, setting the version only once and reuse it by setting
+            the HTTP result code at first.
+        </dd>
+
+        <dt>SetHTTPResult(const http_result_t * result)</dt>
+        <dd>
+            Set's the result code for the HTTP header. result must be one of the HTTP_*
+            result constants.
+            This function will reset all other, previous set header data (except the HTTP version).
+            So by setting the Resutl code first (which must be done before setting other fields),
+            you can reuse an already existing HTTPHeader object. See below for a list of defined HTTP_* constants.
+        </dd>
+
+        <dt>void SetContentSize(size_t size)</dt>
+        <dd>
+            Use it to set the Content-Lenght field with the given length;
+        </dd>
+
+        <dt>void SetContentSize(size_t start, size_t end, size_t completeSize)</dt>
+        <dd>
+            Use it to set the Content-Range filed of the header. The start and end values are numbered from 0.
+			The range field will be encoded with the given complete size in the format "start-end/completeSize".
+        </dd>
+
+        <dt>void SetContentType(const char * contentType)</dt>
+        <dd>
+            Use it to set the content type. The type itself need to be set als string value (e. g. "text/html; charset=utf-8").
+        </dd>
+
+        <dt>void SetEncoding(http_encoding_t enc)</dt>
+        <dd>
+            Set the encoding field to the given value. The webserver / IWebserverPlugin uses
+            that to define, if there is none encoding (HTTP_ENCODING_NONE) or if the data
+            had been compressed using gzip (HTTP_ENCODING_GZIP).
+        </dd>
+
+        <dt>void SetETag(const char * etag)</dt>
+        <dd>
+            Set the etag field to the given value. The etag field will be used to support
+            browser side caching of data.
+        </dd>
+
+        <dt>void SetConnection(http_connection_t connection)</dt>
+        <dd>
+            Set the connection type (HTTP_CONNECTION_NONE, HTTP_CONNECTION_KEEP_ALIVE,
+            HTTP_CONNECTION_UPGRADE).
+        </dd>
+
+        <dt>void SetUpgrade(http_upgrade_t upgrade)</dt>
+        <dd>
+            If using connection type HTTP_CONNECTION_UPGRADE, this function will be used to
+            specify the type of upgrade (for now this class only supports HTTP_UPGRADE_WEBSOCKET).
+        </dd>
+
+        <dt>void SetWebsocketAcceptKey(const char * key)</dt>
+        <dd>
+            Used to set the key for accepting incoming websocket connections.
+        </dd>
+
+        <dt>void SetCustomField(const char * field)</dt>
+        <dd>
+        </dd>
+
+        <dt>void SetCustomField(const char * field, const char * value)</dt>
+        <dd>
+            Use theese functions to set a custom field, that is not yet supported
+            directly by the HTTPHeader class. You can use the function to set the field directly.
+            In that case make sure that the field has the format "<FieldName>: <Value>"
+            (with only one space between the : and the value and no space after the field name!).
+            Or you can use the function which takes a field and a vlaue to let HTTPHeader
+            build up the field correctly, so that you don't need to make some string
+            concatonation by your self.
+        </dd>
+
+        <dt>void SetDate()</dt>
+        <dd>
+            Set the date-time stamp header field.
+        </dd>
+
+        <dt>void SetRequest(http_request_method_t req, const char * resource)</dt>
+        <dd>
+            Set the request type when building up a request header. resource will be the requested
+            resource.
+            Like SetHTTPResult(), this function also resets every other already set fields
+            (except the HTTP version).
+        </dd>
+
+        <dt>const char * GetHeaderData()</dt>
+        <dd>
+            Returns the pointer to the header buffer.
+        </dd>
+
+        <dt>size_t GetHeaderSize()</dt>
+        <dd>
+            Returns the size of the header.
+        </dd>
+    </dl>
+
+    <h2> HTTPParser </h2>
+    <p>
+        This class will be used to parse an byte stream for a HTTP header and extract the
+        fields / data from the header.
+        Note that the byte stream must begin with a valid HTTP header, or an error will be returned.
+    </p>
+
+    <dl>
+        <dt>size_t ParseData(char * data, size_t len)</dt>
+        <dd>
+            Parsed the given data with the given length. You have to first call this function
+            and then call GetParseResult() to check the status of the parsing process.
+            The returned value is the number of bytes processed from the given data buffer.
+            This helps to figure out the start of the content sent with the header inside the
+            given buffer (if there is any).
+        </dd>
+
+        <dt>parseresult_t GetParseResult()</dt>
+        <dd>
+            returns the result of the parsing process. The function will return one of the following values:
+            <ul>
+                <li>HTTP_PARSE_DONE: Parsing had been finished succesfully. You can now call the other functions to get details of the received header.</li>
+                <li>HTTP_PARSE_NEED_DATA: The header in the given byte stream was not complete. In that case, call ParseData() again (with new received data) to continue parsing.</li>
+                <li>HTTP_PARSE_ERROR: An error occures during parsing. Noramly that means, that a correct header could not been found or that there was some error inside the header structure.</li>
+            </ul>
+        </dd>
+
+        <dt>http_encoding_t GetAcceptEncoding()</dt>
+        <dd>
+            Returns the encoding the other side will accept. For now, HTTPlib and the
+            classes only support the GZIP encoding (HTTP_ENCODING_GZIP).
+        </dd>
+
+        <dt>http_request_method_t GetRequestMethod()</dt>
+        <dd>
+            Return the request found inside the header. It could be one of the following values:
+            <ul>
+				<li>HTTP_NONE</li>
+				<li>HTTP_GET</li>
+				<li>HTTP_HEAD</li>
+				<li>HTTP_POST</li>
+				<li>HTTP_PUT</li>
+				<li>HTTP_CONNECT</li>
+				<li>HTTP_OPTIONS</li>
+				<li>HTTP_TRACE</li>
+				<li>HTTP_PROPFIND</li>
+				<li>HTTP_MKCOL</li>
+				<li>HTTP_COPY</li>
+				<li>HTTP_MOVE</li>
+				<li>HTTP_DELETE</li>
+            </ul>
+        </dd>
+
+        <dt>const char * GetRequestTarget()</dt>
+        <dd>
+            Returns the request target.
+        </dd>
+
+        <dt>char GetMajorVersion()</dt>
+        <dd>
+            Returns the major version of the received header.
+        </dd>
+
+        <dt>char GetMinorVersion()</dt>
+        <dd>
+            Returns the minor version of the received header.
+        </dd>
+
+        <dt>const HTTPHeaderField * GetHeaderField(const char * fieldName)</dt>
+        <dd>
+            Returns the HTTPHeaderField object for the field given in fieldName.
+            If the field could not be found, NULL will be returned. Doing that,
+            you have access to the raw data of the fields of the header.
+            So if you need a field that is not directly supported by HTTPParser,
+            this is the function for you to go.
+        </dd>
+
+        <dt>size_t GetContentLength()</dt>
+		<dd>Returns the length of the content sent with the header.
+        </dd>
+
+        <dt>bool IsConnectionType(http_connection_t ct)</dt>
+        <dd>
+            Returns true, if the given conection type is set inside one the header fields.
+            Or false, if not. ct can be one of the following values:
+            <ul>
+                <li>HTTP_CONNECTION_NONE: No special connection type had been given.</li>
+                <li>HTTP_CONNECTION_KEEP_ALIVE: The browser requests to keep the connection alive, so that he can reuse it.</li>
+                <li>HTTP_CONNECTION_UPGRADE: The browser requests a upgrade of the connection. Use GetUpgrade() tho get the type of the requested upgrade.</li>
+            </ul>
+        </dd>
+
+        <dt>bool IsChunkedTransfer()</dt>
+        <dd>
+            Returns true if the header filed "Transfer-Encoding" contains chunked.
+        </dd>
+
+        <dt>const char * GetCookie()</dt>
+        <dd>
+            Returns the value of the cookie header field.
+        </dd>
+
+        <dt>const char * GetETag()</dt>
+        <dd>
+            Returns the value of the etag header field.
+        </dd>
+
+        <dt>const char * GetContentType()</dt>
+        <dd>
+            Returns the content type declared by the header.
+            You have to parse the returning string by your self.
+            The HTTPlib doesn't have any kind of helper function for that.
+        </dd>
+
+        <dt>const char * GetHost()</dt>
+        <dd>
+            Returns the host reported by the header.
+        </dd>
+
+        <dt>HTTPLib::http_upgrade_t GetUpgrade()</dt>
+        <dd>
+            returns the upgrade type (if there is any). For now, the HTTPlib
+            only supports HTTP_UPGRADE_WEBSOCKET.
+        </dd>
+
+        <dt>HTTPRange * GetRange()</dt>
+        <dd>
+            Returns an HTTPRange object to acces the values given by the range header field. If there is no
+			range header filed, NULL will be returned. The returned object is the start of a linked list of ranges.
+			Have a look to the HTTPRange description for more details.
+        </dd>
+
+        <dt>http_encoding_t GetEncoding()</dt>
+		<dd>
+			Returns the value of the headers content-encoding field.
+        </dd>
+
+        <dt>const char * GetWebsocketKey()</dt>
+        <dd>
+            Returns the websocket key set.
+        </dd>
+
+        <dt>int GetWebsocketVersion()</dt>
+        <dd>
+            Returns the requested websocket version.
+        </dd>
+
+        <dt>const char * GetOrigin()</dt>
+        <dd>
+            Returns the value of the origin field.
+        </dd>
+
+        <dt>const http_result_t * GetHTTPResultCode()</dt>
+        <dd>
+            Returns the HTTP result code, if the header was a response header. Before calling GetHTTPResultCode(), make
+			sure that GetRequestMethod() returns HTTP_NONE and GetParseResult() is HTTP_PARSE_DONE. If an error occures
+			during parsing the header, HTTPParser will set the internal result code to a value that can be used so send
+			a correct answer to that error.
+        </dd>
+
+        <dt>size_t GetHeaderSize()</dt>
+        <dd>
+        </dd>
+
+        <dt>char * MakeHeaderCopy()</dt>
+        <dd>
+            Theese two functions are used to rebuild the header byte stream.
+            There are internally used by the webserver.
+            If you whant to use them, make sure that you release the buffer returned
+            from MakeHeaderCopy() after you no longer need it.
+        </dd>
+		
+		<dt>void GetFieldListCopy(byte * & buffer, size_t & bufferSize) const</dt>
+		<dd>
+			This function makes a copy of the header fileds. The function will malloc() a buffer and return the pointer
+			in the given varable buffer. The size of the buffer will be stored in bufferSize. That means, that the applicaiton
+			is responsible to call free() of the buffer when no longer used. This function will be used internally by
+			the Webserver and the IWebserverPlugin to pass the header fields for WebDAV requests.
+		</dd>
+
+	</dl>
+
+    <h2> HTTPHeaderField </h2>
+    <p>
+        Represents a HTTP header field and the value of it.
+        A field can have more than one values.
+        Note that values in one line seperated by ';' will be treated as one value.
+        You have to seperate them by yourself. Only if a field will apear multiple time,
+        there will be multiple values for that field.
+    </p>
+
+    <dl>
+        <dt>const char * GetValue(size_t idx)</dt>
+        <dd>
+            Returns the value of the field for the given index. The function will return  a pointer to the internal
+			buffer of the class. So make a copy of the value if you need to make changes, other ways the internal values
+			will be changed permanently.
+        </dd>
+
+        <dt>size_t GetValueCount()</dt>
+        <dd>
+            Returns the number of values for that field.
+        </dd>
+    </dl>
+
+	<h2> HTTPRange </h2>
+    <p>
+       Represents the values of ranges send with an HTTP header. An instance of HTTPRange will be returned by
+	   HTTPParser::GetRange(). The retunred instance is the start of a linked list. So never ever call delete of
+	   an HTTPRange object. HTTPParser itself will take care of releasing the objects when needed. The class itself
+	   has no functions. You have access directly to the fields of the class. The fields are numbered from 0.
+    </p>
+
+    <dl>
+        <dt>size_t start</dt>
+        <dd>
+            The start of the range. 
+        </dd>
+
+        <dt>size_t end</dt>
+        <dd>
+            The end of the range
+        </dd>
+
+        <dt>enum rangeType</dt>
+        <dd>
+            The type of the range. Depending on the type the values of start and end need to interpreted. rangeType
+			could be one of the following:
+			<ul>
+				<li>RANGE_NONE: only used internally for initialization.</li>
+				<li>RANGE_START_END: a range with start and end, with the values in the fields start and end.</li>
+				<li>RANGE_START_ONLY: only the start had been given. So the application should return everything from of the from the byte given in start to the end of the file. The value of end is undefined and should be ignored.</li>
+				<li>RANGE_LAST_BYTES: only the last bytes of a file should be retunred. The number of the bytes to return are set in start. The value of end is undefined and should be ignored.</li>
+			</ul>
+        </dd>
+    </dl>
+
+	<h2> struct http_result_t </h2>
+    <p>
+       This struct holds the HTTP result codes and their descriptions. This struct is used in the HTTP_* result code constants.
+	   The following (self explaining) constants are defined:
+			<ul>
+			    <li>static const http_result_t HTTP_100; // Continue</li>
+				<li>static const http_result_t HTTP_101; // Switching Protocols</li>
+				<li>static const http_result_t HTTP_200; // OK</li>
+				<li>static const http_result_t HTTP_201; // Created</li>
+				<li>static const http_result_t HTTP_202; // Accepted</li>
+				<li>static const http_result_t HTTP_203; // Non-Authoritative Information</li>
+				<li>static const http_result_t HTTP_204; // No Content</li>
+				<li>static const http_result_t HTTP_205; // Reset Content</li>
+				<li>static const http_result_t HTTP_206; // Partial Content</li>
+				<li>static const http_result_t HTTP_207; // Multi-Status</li>
+				<li>static const http_result_t HTTP_300; // Multiple Choices</li>
+				<li>static const http_result_t HTTP_301; // Moved Permanently</li>
+				<li>static const http_result_t HTTP_302; // Found</li>
+				<li>static const http_result_t HTTP_303; // See Other</li>
+				<li>static const http_result_t HTTP_304; // Not Modified</li>
+				<li>static const http_result_t HTTP_305; // Use Proxy</li>
+				<li>static const http_result_t HTTP_307; // Temporary Redirect</li>
+				<li>static const http_result_t HTTP_400; // Bad Request</li>
+				<li>static const http_result_t HTTP_401; // Unauthorized</li>
+				<li>static const http_result_t HTTP_402; // Payment Required</li>
+				<li>static const http_result_t HTTP_403; // Forbidden</li>
+				<li>static const http_result_t HTTP_404; // Not Found</li>
+				<li>static const http_result_t HTTP_405; // Method Not Allowed</li>
+				<li>static const http_result_t HTTP_406; // Not Acceptable</li>
+				<li>static const http_result_t HTTP_407; // Proxy Authentication Required</li>
+				<li>static const http_result_t HTTP_408; // Request Timeout</li>
+				<li>static const http_result_t HTTP_409; // Conflict</li>
+				<li>static const http_result_t HTTP_410; // Gone</li>
+				<li>static const http_result_t HTTP_411; // Length Required</li>
+				<li>static const http_result_t HTTP_412; // Precondition Failed</li>
+				<li>static const http_result_t HTTP_413; // Payload Too Large</li>
+				<li>static const http_result_t HTTP_414; // URI Too Long</li>
+				<li>static const http_result_t HTTP_415; // Unsupported Media Type</li>
+				<li>static const http_result_t HTTP_416; // Range Not Satisfiable</li>
+				<li>static const http_result_t HTTP_417; // Expectation Failed</li>
+				<li>static const http_result_t HTTP_423; // Locked</li>
+				<li>static const http_result_t HTTP_426; // Upgrade Required</li>
+				<li>static const http_result_t HTTP_500; // Internal Server Error</li>
+				<li>static const http_result_t HTTP_501; // Not Implemented</li>
+				<li>static const http_result_t HTTP_502; // Bad Gateway</li>
+				<li>static const http_result_t HTTP_503; // Service Unavailable</li>
+				<li>static const http_result_t HTTP_504; // Gateway Timeout</li>
+				<li>static const http_result_t HTTP_505; // HTTP Version Not Supported</li>
+				<li>static const http_result_t HTTP_507; // Insufficient Storage</li>
+		</ul>
+    </p>
+
+    <dl>
+        <dt>int code</dt>
+        <dd>
+            The result code as number.
+        </dd>
+
+        <dt>const char * description</dt>
+        <dd>
+            The description of the HTTP result code including the number (e. g. "200 OK").
+        </dd>
+
+        <dt>size_t descLen</dt>
+        <dd>
+            The length of the description.
+        </dd>
+    </dl>
+	
+</body>
+</html>

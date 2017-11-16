@@ -1,0 +1,57 @@
+
+-include $(IP_SRC)/web/applicationsharing/applicationsharing.mak
+-include $(IP_SRC)/web/appwebsocket/appwebsocket.mak
+-include $(IP_SRC)/web/audio/audio.mak
+-include $(IP_SRC)/web/common/common.mak
+-include $(IP_SRC)/web/fonts/fonts.mak
+-include $(IP_SRC)/web/lib/lib.mak
+-include $(IP_SRC)/web/lib1/lib1.mak
+-include $(IP_SRC)/web/mypbx/mypbx.mak
+-include $(IP_SRC)/web/pbxwebsocket/pbxwebsocket.mak
+-include $(IP_SRC)/web/phpsession/phpsession.mak
+-include $(IP_SRC)/web/styles/styles.mak
+-include $(IP_SRC)/web/ui.anchor/ui.anchor.mak
+-include $(IP_SRC)/web/ui.apptabs/ui.apptabs.mak
+-include $(IP_SRC)/web/ui.button/ui.button.mak
+-include $(IP_SRC)/web/ui.clipboard/ui.clipboard.mak
+-include $(IP_SRC)/web/ui.confirmationpopup/ui.confirmationpopup.mak
+-include $(IP_SRC)/web/ui.container/ui.container.mak
+-include $(IP_SRC)/web/ui.contentheader/ui.contentheader.mak
+-include $(IP_SRC)/web/ui.drag/ui.drag.mak
+-include $(IP_SRC)/web/ui.dropdown/ui.dropdown.mak
+-include $(IP_SRC)/web/ui.editor/ui.editor.mak
+-include $(IP_SRC)/web/ui.editpopup/ui.editpopup.mak
+-include $(IP_SRC)/web/ui.elementscontainer/ui.elementscontainer.mak
+-include $(IP_SRC)/web/ui.error/ui.error.mak
+-include $(IP_SRC)/web/ui.hider/ui.hider.mak
+-include $(IP_SRC)/web/ui.icon/ui.icon.mak
+-include $(IP_SRC)/web/ui.iframe/ui.iframe.mak
+-include $(IP_SRC)/web/ui.input/ui.input.mak
+-include $(IP_SRC)/web/ui.inputfieldcollection/ui.inputfieldcollection.mak
+-include $(IP_SRC)/web/ui.label/ui.label.mak
+-include $(IP_SRC)/web/ui.lang/ui.lang.mak
+-include $(IP_SRC)/web/ui.listview/ui.listview.mak
+-include $(IP_SRC)/web/ui.popup/ui.popup.mak
+-include $(IP_SRC)/web/ui.ribbon/ui.ribbon.mak
+-include $(IP_SRC)/web/ui.scrollbar/ui.scrollbar.mak
+-include $(IP_SRC)/web/ui.splitpanel/ui.splitpanel.mak
+-include $(IP_SRC)/web/ui.splitpanelvertical/ui.splitpanelvertical.mak
+-include $(IP_SRC)/web/ui.text/ui.text.mak
+-include $(IP_SRC)/web/ui.textarea/ui.textarea.mak
+-include $(IP_SRC)/web/ui.treeview/ui.treeview.mak
+-include $(IP_SRC)/web/ui.visibilityobserver/ui.visibilityobserver.mak
+-include $(IP_SRC)/web/ui.wizard/ui.wizard.mak
+
+-include $(IP_SRC)/web/ui1.editor/ui1.editor.mak
+-include $(IP_SRC)/web/ui1.file/ui1.file.mak
+-include $(IP_SRC)/web/ui1.lib/ui1.lib.mak
+-include $(IP_SRC)/web/ui1.player/ui1.player.mak
+-include $(IP_SRC)/web/ui1.popup/ui1.popup.mak
+-include $(IP_SRC)/web/ui1.scrolling/ui1.scrolling.mak
+-include $(IP_SRC)/web/ui1.svg/ui1.svg.mak
+
+-include $(IP_SRC)/web/ui1.text/ui1.text.mak
+
+-include $(IP_SRC)/web/widget/widget.mak
+
+-include $(IP_SRC)/web/js/js.mak

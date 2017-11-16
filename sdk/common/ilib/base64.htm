@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>base64</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>base64</h1>
+    <h2>dword decode_base64(const char * in, byte * out, int n)</h2>
+    <p>
+        Decodes a base64 string to binary data.
+        <dl>
+            <dt>const char * in</dt>
+            <dd>Character buffer containing the BASE64 encdoed data.</dd>
+
+            <dt>byte * out</dt>
+            <dd>The buffer where the decoded data should be written to. The application must make sure that the buffer is big enough to hold the decoded data.</dd>
+
+            <dt>int n</dt>
+            <dd>The number of bytes of the BASE64 string in the in buffer.</dd>
+
+            <dt>return value</dt>
+            <dd>The number of bytes written to the out buffer.</dd>
+        </dl>
+    </p>
+
+    <h2>dword encode_base64(const byte * in, char * out, int len)</h2>
+    <p>
+        Decodes a base64 string to binary data.
+        <dl>
+            <dt>const byte * in</dt>
+            <dd>A buffer containing the raw data to be encoded.</dd>
+
+            <dt>char * out</dt>
+            <dd>The buffer where the encoded BASE64 string should be written to. The application must make sure that the buffer is big enough to hold the BASE64 string and a terminating NULL byte.</dd>
+
+            <dt>int len</dt>
+            <dd>The number of bytes in the in buffer to be encoded.</dd>
+
+            <dt>return value</dt>
+            <dd>The number of bytes written to the out buffer.</dd>
+        </dl>
+    </p>
+
+</body>
+</html>

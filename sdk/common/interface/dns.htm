@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>dns</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>dns</h1>
+    <p>
+        IDns is a interface to make a DNS lookup.
+    </p>
+
+    <h2> class IDns </h2>
+    <dl>
+        <dt>static IDns * Create(class IIoMux * const iomux)</dt>
+        <dd>
+            Creates an instance of IDns. iomux has to be a iomux instance IDns can use. The returned instance needs to be deleted after it is no longer used. Note that the IDns uses a thread to make the DNS lookup to not block the application. Generally this won't be a problem for the application, because the result of the lookup will be send to the mainthread of the application (or at least to the thread of the given iomux) in an synchronized way.
+        </dd>
+
+        <dt>void GetHostByName(const char * host, class UDns * const user, class IInstanceLog * const log)</dt>
+        <dd>
+            Starts the DNS lookup of the given host. The result will be send to the given user.<br />
+            log is used to log AppInstance related logs depedent of the log flag LOG_DNS.
+        </dd>
+    </dl>
+
+    <h2> class UDns </h2>
+    <dl>
+        <dt>void DnsGetHostByNameResult(const char * addr, bool isIPv6)</dt>
+        <dd>
+            Returns the result of DNS lookup. addr is the address of the host given to GetHostByName(). If the address is an IPv6 address, the flag isIPv6 is true. If the lookup failed, addr is NULL. Each call to IDns::GetHostByName() will lead to a DnsGetHostByNameResult() call in the same order, GetHostByName() had been called.
+        </dd>
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+app::app(IIoMux * iomux)
+    : iomux(iomux)
+{
+    this->dns = IDns::Create(iomux);
+    this->dns->GetHostByName("google.de", this);
+}
+
+void app::DnsGetHostByNameResult(const char * addr, bool isIPv6)
+
+{
+    if (addr == NULL)
+        printf("DNS lookup of google.de failed\n");
+    else
+        printf("ip address of google.de = %s\n", addr);
+
+    delete this->dns;
+    this->dns = NULL;
+}
+    </pre>
+</body>
+</html>

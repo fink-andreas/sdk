@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>time</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>time</h1>
+
+    <h2> class ITime</h2>
+    <dl>
+        <dt>static ulong64 TimeStampMilliseconds()</dt>
+        <dd>
+            Returns an utc timestamp in milliseconds.
+        </dd>
+
+        <dt>static size_t GetTimeStamp(char * buf, unsigned sz)</dt>
+        <dd>
+            Returns localtime with this representation '''%Y-%m-%d %H:%M:%S''' inside
+            the buffer pointed by buf. sz is the size of the provided buffer.
+        </dd>
+
+        <dt>static void FormatTimeStampISO(char * buf, unsigned length, ulong64 timeMs);</dt>
+        <dd>
+            Formats the timestamp in milliseconds to ISO Format "%Y-%m-%dT%H:%M:%SZ" inside the buffer pointed by buf.
+            length is the size of the provided buffer.
+        </dd>
+
+        <dt>static void FormatTimeStampRFC1123(char * buf, unsigned length, ulong64 timeMs);</dt>
+        <dd>
+            Formats the timestamp in milliseconds to RFC1123 Format "Thu, 02 Mar 2017 07:36:51 GMT" inside the buffer pointed by buf.
+            length is the size of the provided buffer.
+        </dd>
+
+        <dt>static bool ParseTimeZoneString(const char * tz, timezone_info_t & ti_out, int * errPos = NULL)</dt>
+        <dd>
+            Parses the in tz given POSIX time zone string and stores the result in ti_out. If everything was fine,
+            true will be returned. If an error occures, the function will return false while errPos (if a pointer
+            had been given) will hold the position inside the tz string, where the parsing error occures. In that
+            case tha value of the ti_out structure is undefined. The ti_out structure holds all informations that
+            are necessary to localize a time value in that time zone. So the structure must passed to the other
+            functions until it hat been filled correctly with ParseTimeZoneString().
+        </dd>
+
+        <dt>static ulong64 TimeStampMilliseconds(timezone_info_t & ti)</dt>
+        <dd>
+            Returns the current time in milliseconds, already calculated to the time zone with the infos given in ti.
+        </dd>
+
+        <dt>static ulong64 UTCTimeToLocalTime(ulong64 timeMsUtc, timezone_info_t & ti)</dt>
+        <dd>
+            Return the given utc time (in milliseconds) in the local time by using the time zone informations given by ti.
+        </dd>
+
+        <dt>static void GetTimeStruct(ulong64 timeMs, struct time_tm * t)</dt>
+        <dd>
+            Fills the time_tm structure pointed to by t with the values of the in milliseconds given time. Internally, gmtime() is used,
+            so there will be no time zone calculation will be done.
+        </dd>
+
+        <dt>static void GetTimeStruct(ulong64 timeMs, struct time_tm * t, timezone_info_t & ti)</dt>
+        <dd>
+            The same as GetTimeStruct() above, with the difference, that the in milliseconds given time will at first calculated
+            to the time zone with the informations given in ti.
+            So actually it is the same as calling GetTimeStruct(UTCTimeToLocalTim(timeMs, ti), tm);
+        </dd>
+
+        <dt>static void FormatTimeStamp(char * buf, unsigned length, const char * formatStr, ulong64 timeMs)</dt>
+        <dd>
+            Formats the in milliseconds given time by using the given formatStr. The result will be placed in the given buffer buf.
+            The parameter length is the length of the buffer. For a list of place holders to use in formatStr, read
+            the strftime() documentation.
+        </dd>
+
+        <dt>static void FormatTimeStamp(char * buf, unsigned length, const char * formatStr, ulong64 timeMs, timezone_info_t & ti)</dt>
+        <dd>
+            The same as GetFormatedTimeStr() above, with the difference that the given time at first will be calculated to
+            the time zone with the informations given in ti. So actually it is the same as calling
+            GetFormatedTimeStr(buf, sizeof(buf), myFormatStr, UTCTimeToLocalTime(time, ti));
+        </dd>
+
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+ulong64 tTime = ITime::TimeStampMilliseconds();
+
+int pos;
+ITime::timezone_info_t ti;
+if (!ITime::ParseTimeZoneString("BRT+3", ti, &pos)) {
+    printf("Parsing the POSIX TimeZone string failed at pos %u\n", pos);
+    return;
+}
+
+char buf_utc[20];
+char buf_loc[20];
+ITime::FormatTimeStamp(buf_utc, sizeof(buf_utc), "%d/%m/%Y %I:%M %p", tTime);
+ITime::FormatTimeStamp(buf_loc, sizeof(buf_loc), "%d/%m/%Y %I:%M %p", tTime, ti);
+
+printf("Time in UTC: %s\n", buf_utc);
+printf("Time in Nordeast Brazilien Time: %s\n", buf_loc);
+    </pre>
+</body>
+</html>

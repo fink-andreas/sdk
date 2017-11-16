@@ -1,0 +1,652 @@
+﻿.ijs-text-light {
+    color: white;
+}
+
+.ijs-control-highlight {
+    background-color: #f57407;
+    box-shadow: inset 0px 5px 5px #fda93e;
+    border-top-color: #fed110;
+    border-bottom-color: #101517;
+}
+
+.ijs-control-background {
+    background-color: #222e32;
+}
+
+/* innovaphone.ui.Lib.js */
+
+.ijs-blocking {
+    background-image: url("styles.Loader.gif");
+}
+
+/* innovaphone.ui.AppTabs.js */
+
+.ijs-menu-bar {
+    background-image: url("styles.Background.png");
+    border-bottom-color: #929b9c;
+}
+
+.ijs-menu-selected {
+    color: #fdb901;
+    background-image: url("styles.GlowUpsideDown2.png");
+}
+
+.ijs-menu-normal {
+    color: white;
+    border-bottom-color: #929b9c;
+}
+
+.ijs-menu-normal:hover {
+    color: #cdeaf3;
+}
+
+/* innovaphone.ui.Ribbon.js */
+
+.ijs-menu-separator {
+    background-color: #1f2f36;
+    border-color: #1b2024;
+}
+
+.ijs-content {
+    background-color: grey;
+}
+
+.ijs-menu-group {
+    border-color: #929b9c;
+}
+
+.ijs-menu-group-footer {
+    background-color: rgba(0,0,0,0.1);
+    color: #8ea1a8;
+}
+
+.ijs-menu-button {
+    border-color: transparent;
+    color: #ffffff;
+}
+
+.ijs-no-touch .ijs-menu-button:hover {
+    color: #cdeaf3;
+    border-color: #1b2024;
+    box-shadow: inset 0px 23px 23px -23px rgba(255,255,255,0.2), 0px 1px 0px rgba(255,255,255,0.1), inset 0px 1px 0px rgba(255,255,255,0.1);
+}
+
+.ijs-sprite-25px[style],
+.ijs-menu-button .ijs-sprite-25px[style] {
+    background-position-x: -25px !important; 
+    --bgX: -25px !important;
+}
+
+.ijs-sprite-25px[style]:hover,
+.ijs-no-touch .ijs-menu-button:hover .ijs-sprite-25px[style] {
+    background-position-x: -50px !important; 
+    --bgX: -50px !important;
+}
+
+.ijs-no-touch .ijs-menu-button:active,
+.ijs-menu-button:active {
+    color: #fdb901;
+    border-color: #1b2024;
+    box-shadow: inset 0px 23px 23px -23px rgba(255,255,255,0.2), 0px 1px 0px rgba(255,255,255,0.1), inset 0px 1px 0px rgba(255,255,255,0.1);
+}
+
+.ijs-no-touch .ijs-sprite-25px[style]:active,
+.ijs-sprite-25px[style]:active,
+.ijs-no-touch .ijs-menu-button:active .ijs-sprite-25px[style],
+.ijs-menu-button:active .ijs-sprite-25px[style] {
+    background-position-x: -75px !important; 
+    --bgX: -75px !important;
+}
+
+.ijs-menu-button-disabled {
+    background-image: url("styles.Background.png");
+}
+
+/* innovaphone.ui.SplitPanel.js */
+
+.ijs-splitter {
+    border-color: #1b2024;
+    background-image: -webkit-linear-gradient(#1a272c 0%, #263941 100%); 
+    background-image: -moz-linear-gradient(#1a272c 0%, #263941 100%); 
+    background-image: -o-linear-gradient(#1a272c 0%, #263941 100%); 
+    background-image: linear-gradient(#1a272c 0%, #263941 100%);
+}
+
+.ijs-splitter-text {
+    color: #a6b6b6;
+}
+
+.ijs-panel-left {
+    background-image: url("styles.Background.png");
+    color: white;
+}
+
+.ijs-panel-right {
+    background-color: White;
+}
+
+/* innovaphone.ui.DropDown.js */
+
+.ijs-dropdown-activator {
+    border-color: #b0b0b0;
+    color: white;
+}
+
+.ijs-dropdown-activator-inverted
+{
+    color: Black;
+    border-color: #abadb3;
+}
+
+.ijs-no-touch .ijs-dropdown-activator:hover,
+.ijs-no-touch .ijs-dropdown-activator.ijs-hover,
+.ijs-dropdown-activator-active {
+    border-color: #7eb4ea;
+}
+
+.ijs-dropdown-activator-icon-outer {
+    border-left-color: transparent;
+}
+
+.ijs-no-touch .ijs-dropdown-activator:hover > .ijs-dropdown-activator-icon-outer,
+.ijs-no-touch .ijs-dropdown-activator.ijs-hover > .ijs-dropdown-activator-icon-outer,
+.ijs-dropdown-activator-active > .ijs-dropdown-activator-icon-outer {
+    background-image: -webkit-linear-gradient(top, #ffffff 0%, #cdeaf3 50%); 
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #cdeaf3 50%); 
+    background-image: -ms-linear-gradient(top, #ffffff 0%, #cdeaf3 50%);
+    background-image: -o-linear-gradient(top, #ffffff 0%, #cdeaf3 50%); 
+    background-image: linear-gradient(top, #ffffff 0%, #cdeaf3 50%);
+    border-left-color: #7eb4ea;
+}
+
+.ijs-dropdown-activator-icon {
+    background-image: url("styles.DropDown.png");
+    background-position: 0 -7px;
+    background-repeat: no-repeat;
+}
+
+.ijs-dropdown-activator-icon-inverted
+{
+    background-position: 0px 0px;
+}
+
+.ijs-no-touch .ijs-dropdown-activator:hover > .ijs-dropdown-activator-icon-outer > .ijs-dropdown-activator-icon,
+.ijs-no-touch .ijs-dropdown-activator.ijs-hover > .ijs-dropdown-activator-icon-outer > .ijs-dropdown-activator-icon,
+.ijs-dropdown-activator-active > .ijs-dropdown-activator-icon-outer > .ijs-dropdown-activator-icon {
+    background-position: -7px 0px;
+}
+
+.ijs-no-touch .ijs-dropdown-activator:hover > .ijs-dropdown-activator-icon-outer > .ijs-dropdown-activator-icon-inverted,
+.ijs-no-touch .ijs-dropdown-activator.ijs-hover > .ijs-dropdown-activator-icon-outer > .ijs-dropdown-activator-icon-inverted {
+    background-position: -7px 0px;
+}
+
+.ijs-dropdown-menu {
+    background-color: #354448;
+    border-color: #7eb3ea;
+}
+
+.ijs-dropdown-menu-inverted {
+    background-color: #ffffff;
+}
+
+.ijs-dropdown-menu-item {
+    color: White;
+}
+
+.ijs-dropdown-menu-item-inverted {
+    color: Black;
+}
+
+.ijs-dropdown-menu-item.ijs-hover {
+    background-image: url("styles.GlowMiddleHover.png");
+}
+
+/* innovaphone.ui.TreeView.js */
+
+.ijs-header {
+    background-image: url("styles.Background.png");
+    color: #fdb901;
+}
+
+.ijs-sub-header {
+    background-image: url("styles.Background.png");
+    color: white;
+}
+
+.ijs-expand {
+    background-image: url("styles.Arrow.png");
+}
+
+.ijs-expanded {
+    background-image: url("styles.ArrowActive.png");
+}
+
+.ijs-treeview-node {
+    color: white;
+}
+
+.ijs-sprite-20px[style],
+.ijs-treeview-node .ijs-sprite-20px[style] {
+    background-position-x: -20px !important; 
+    --bgX: -20px !important;
+}
+
+.ijs-no-touch .ijs-treeview-node:hover {
+    color: #cdeaf3;
+}
+
+.ijs-sprite-20px[style]:hover,
+.ijs-no-touch .ijs-treeview-node:hover .ijs-sprite-20px[style] {
+    background-position-x: -40px !important; 
+    --bgX: -40px !important;
+}
+
+.ijs-treeview-node:active, .ijs-treeview-node *:active {
+    color: #fdb901 !important;
+}
+
+.ijs-no-touch .ijs-sprite-20px[style]:active,
+.ijs-sprite-20px[style]:active,
+.ijs-no-touch .ijs-treeview-node:active .ijs-sprite-20px[style],
+.ijs-treeview-node:active .ijs-sprite-20px[style] {
+    background-position-x: -60px !important; 
+    --bgX: -60px !important;
+}
+
+.ijs-selected,
+.ijs-no-touch .ijs-selected:hover {
+    color: #fdb901;
+}
+
+.ijs-selected .ijs-sprite-20px[style],
+.ijs-no-touch .ijs-selected:hover .ijs-sprite-20px[style] {
+    background-position-x: -60px !important; 
+    --bgX: -60px !important;
+}
+
+/* innovaphone.ui.Popup.js */
+
+.ijs-popup-main {
+    background-color: white;
+    box-shadow: 0 0 10px black;
+}
+
+.ijs-close {
+    background-image: url("styles.Close.png");
+}
+
+/* innovaphone.ui.Hider.js */
+
+.ijs-hider-caption {
+    color: white;
+}
+
+.ijs-hider-separator {
+    background-image: url("styles.SeparatorMiddle.png");
+}
+
+.ijs-hider-hide {
+    background-image: url("styles.Hide.png");
+    border-color: transparent;
+}
+
+.ijs-no-touch .ijs-hider-hide:hover {
+    border-color: #1b2024;
+    border-radius: 4px;
+    box-shadow: 0 23px 23px -23px rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+}
+
+/* innovaphone.ui.ListView.js */
+.ijs-listview-outer-border {
+    border-color: #808080;
+}
+
+.ijs-listview-head {
+    background-color: #f0f0f0;
+}
+
+.ijs-listview-column-sizer {
+    border-right-color: #808080;
+}
+
+.ijs-listview-arrow {
+    background-image: url("styles.DropDown.png");    
+}
+
+.ijs-listview-row-hover {
+    background-color: #cdeaf3;
+}
+
+.ijs-listview-row-selected {
+    background-color: #82CAE2;
+}
+
+/* innovaphone.ui.Error.js */
+.ijs-error-img {
+    background-image: url("styles.Error.png");
+}
+
+.ijs-error-text {
+    color: red;
+}
+
+/* innnovaphone.ui.ConfirmationPopup.js */
+.ijs-confirmation-popup-img {
+    background-image: url("styles.Confirmation.png");
+}
+
+/* innnovaphone.ui.Button.js */
+.ijs-button {
+    background-image: linear-gradient(-90deg, rgba(225, 225, 225, 0.65) 0%, #e1e1e1 100%);
+    border-color: #808080;
+}
+
+/* innovaphone.ui.Input.js */
+.ijs-no-touch .ijs-input-clear:hover {
+    background-color: #cdeaf3;
+}
+
+/* innovaphone.ui.ContentHeader.js */
+.ijs-content-header {
+    color: #feba01;
+    background-color: #1a272d;
+}
+
+/* sysadmin login */
+
+.ijs-sysadmin-login-background {
+    background-image: url("styles.Background.png");
+}
+
+.ijs-sysadmin-login-screen {
+    background-color: white;
+}
+
+.ijs-sysadmin-login-text {
+    color: #fdb901;
+}
+
+.ijs-element-container-border {
+    border-color: #808080; 
+}
+
+.ijs-container-border {
+    border-color: #808080; 
+}
+
+.ijs-anchor {
+}
+
+/* innovaphone.ui.BubbleContainer.js */
+.ijs-bubble-container {
+    background-color: white;
+    border-color: black;
+    box-shadow: 5px 5px 5px #888888;
+}
+
+ /*innovaphone.ui.accordion*/
+
+ button.ijs-accordion-head {
+    background-image: url("styles.Background.png");
+    border-bottom-color: #929b9c;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    display:block;
+    
+    text-align: left;
+    transition: 0.5s;
+    border: 2px solid;
+    width:calc(100% - 10px);
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right:5px;
+    outline:0;
+}
+ button.ijs-accordion-head:after {
+    content: '\02795';
+
+    color: white;
+    background-color: black;
+    float: right;
+    margin-left: 5px;
+
+}
+ button.ijs-accordion-head.focus{
+     outline:0;
+ }
+
+button.ijs-accordion-head.active:after {
+    content: "\2796";
+}
+
+
+
+button.ijs-accordion-head.active{
+    border-bottom:none;
+    border-left: 2px solid white;
+    border-top: 2px solid white;
+    border-right: 2px solid white;
+    background-image: url("styles.Background.png");
+    color: #fdb901;
+}
+
+
+button.ijs-accordion-head:hover {
+    background-color: white;
+}
+
+div.ijs-accordion-panel {
+
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.5s ease-in-out;
+    opacity: 0;
+    margin-left: 5px;
+    margin-right:5px;
+    border-left: 2px solid white;
+    
+    border-right: 2px solid white;
+}
+
+div.ijs-accordion-panel.show {
+    opacity: 1;
+    max-height: 500px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    border-right: 2px solid white;
+    
+    margin-left: 5px;
+    margin-right:5px;
+    background-image: url("styles.Background.png");
+    border-bottom-color: #929b9c;
+}
+
+div.ijs-accordion-panel.show:before {
+  border-top: 2px solid white;
+  content: '';
+  display: block;
+  width: 50%;
+  margin-left:25%;
+  background-image: url("styles.Background.png");
+  border-bottom-color: #929b9c;
+}
+
+div.ijs-autocomplete-suggestions {
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 1px solid black;
+    position: absolute;   
+    background-color:white;
+}
+
+div.ijs-autocomplete-suggestions div {
+    cursor: default;
+    padding: 0px 3px;
+    background-color:white;
+}
+
+div.ijs-autocomplete-suggestions div.current {
+    background-color: #3366cc;
+    color: white;
+}
+
+.ijs-dragList[draggable] {
+    user-select: none;
+}
+
+li.ijs-dragList {
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+    border: 2px solid #000;
+    border-radius: 15px;
+    list-style-type: none;
+    margin: 2px;
+    padding: 2px;
+    max-width:100%;
+    height: 20px;
+    word-break:break-all;
+    visibility: visible;
+}
+
+.ijs-dragList-deleteItem {
+    font-weight: bold;
+    color: black;
+    float: right;
+    margin-left: 5px;
+    display:inline-block;
+}
+
+ul.ijs-dragList {
+    margin: auto;
+    text-align: center;
+    width:auto;
+    display: inline-block;
+}
+
+
+/* Time-Input */
+.ijs-date-time-focus {
+    background: #cdeaf3;
+}
+
+.ijs-timefield-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+/**** Calendar *****/
+
+/* Calendar grid day cells styles*/
+
+.ijs-cal-day-cell-none {
+	border-color: transparent;
+	background: transparent;
+}
+
+.ijs-cal-day-cell-selected {
+	border-color: #579fba;
+	background: transparent;
+}
+
+.ijs-cal-day-cell-hover {
+	border-color: #e3e3e3;
+	background: #e3e3e3;
+}
+
+.ijs-cal-day-cell-cur-day {
+	border-color: #82c8e2;
+	background: #82c8e2;
+}
+
+.ijs-cal-day-cell-cur-day-selected {
+	border-color: #579fba;
+	background: #82c8e2;
+}
+
+.ijs-cal-day-cell-cur-day-hover {
+	border-color: #579fba;
+	background: #e3e3e3;
+}
+
+/* Calendar grid day cells styles - small */
+
+.ijs-cal-day-cell-selected-small {
+    border-color: #579fba;
+    background: #93e2ff;
+}
+
+.ijs-cal-day-cell-hover-small {
+	border-color: #909090;
+}
+
+.ijs-cal-day-cell-cur-day-small {
+	border-color: #82c8e2;
+	background: #82c8e2;
+}
+
+.ijs-cal-day-cell-cur-day-selected-small {
+	border-color: #579fba;
+	background: #82c8e2;
+}
+
+.ijs-cal-day-cell-cur-day-hover-small {
+	border-color: #579fba;
+	background: #e3e3e3;
+}
+
+/* Calendar colors  */
+.ijs-cal {
+	background-color: #ffffff;
+}
+
+.ijs-cal-font-color-sunday {
+	color: #ff5454;
+}
+
+.ijs-cal-font-color-disabled {
+	color: #8b8b8b;
+}
+
+.ijs-cal-month-sel-cur-month {
+    color: #579fba;
+}
+
+/* The calendars buttons */
+.ijs-button-flat {
+	background: #82c8e2;
+	-webkit-box-shadow: inset 0 -2px #579fba;
+	box-shadow: inset 0 -2px #579fba;
+	-webkit-transition: background 0.1s linear;
+	-moz-transition: background 0.1s linear;
+	-ms-transition: background 0.1s linear;
+	-o-transition: background 0.1s linear;
+	transition: background 0.1s linear;
+}
+
+.ijs-button-flat:hover {
+	border: 1px solid #909090 !important;
+	background: #93e2ff;
+}
+
+.ijs-button-flat-down {
+	background: #82c8e2;
+	-webkit-box-shadow: inset 0 0px;
+	box-shadow: inset 0 0px;
+}
+
+/* innovaphone.ui.ProgressBar.js */
+
+.ijs-progress-bar {
+    background-color: limegreen;
+}
+
+.ijs-statistics-row-selected {
+    background-color: #82CAE2;
+}
+

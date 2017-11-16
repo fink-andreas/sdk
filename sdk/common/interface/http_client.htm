@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>dbfiles</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>http_client</h1>
+    <p>
+        IHTTPClient is simple HTTP client. For now the client only supports basic functionality (GET, POST)as well as NTLM authentication for the connection.
+    </p>
+
+    <h2> class IHTTPClient </h2>
+    <dl>
+        <dt> static IHTTPClient * Create(class IIoMux * const iomux,
+                                class ISocketProvider * const tcpSocketProvider,
+                                class ISocketProvider * const tlsSocketProvider,
+                                class UHTTPClient * const user,
+                                class IInstanceLog * const log);</dt>
+        <dd>
+            Creates an ITTHClient instance. iomux has to be a iomux instance of the application. The two socket provider
+			will be used to create a normal connection (tcpSocketProvider) or a connection that uses TLS enctyption (tlsSocketProvider). user must be an UHTTPClient instance. The returned instance needs to be deleted after it is no longer used. 
+            log is used to log dependent of the log flag LOG_HTTP_CLIENT.
+        </dd>
+
+        <dt>void Connect(const char * address,
+                         const char * user = NULL,
+                         const char * pwd = NULL,
+                         int authMethods = HTTP_AUTH_ALL)</dt>
+        <dd>
+            Establishes a connection to the given address (which can be an IPv4 or IPv6 address as well as a URI). The values
+			user and pwd will be used to authenticate with the server, if neccessary. The kind of supported authentications
+			will given to authMethods as an combined list (HTTP_AUTH_NTLM | HTTP_AUTH_DIGEST | HTTP_AUTH_BASIC or HTTP_AUTH_ALL for all). 
+            After the connection hat been established, HTTPClientConnectComplete() of the user will be called. There you need to set
+			everything you need to send a request. If the connection failes, the http client will call HTTPClientShutdown() of the user.
+            If address is an URI, it may directly contain user and pwd, e.g. http://user:pwd@test.test.com . If user and pwd are not
+            given otherwise, these values are then used for authentication.
+        </dd>
+
+        <dt>void SetRequestType(http_request_type_t reqType, const char * resourceName, size_t contentLength = 0)</dt>
+        <dd>
+			Befor sending the request, the application first needs to send the type of the request as well as the resourceName
+			it whants to access. For now, only the request types HTTP_GET, HTTP_PUT and HTTP_POST are supported.<br />
+            If reqType is not HTTP_GET and you do not know the final content length, set contentLength to HTTP_CLIENT_CHUNKED_TRANSFER for a chunked transfer.
+        </dd>
+
+        <dt>void SetCustomHeaderField(const char * field, const char * value)</dt>
+        <dd>
+			If there is need to set an additional header field, SetCustomHeaderField() needs to be called. field will
+			be the name of the field, value the value to set.
+        </dd>
+
+        <dt>void Send(const byte * data = NULL, size_t size = 0, bool last = false)</dt>
+        <dd>
+			Will send the request to the server the IHTTPClient is connected with. The application first hast to
+			call SetRequestType() (and eventually SetCustomHeaderField()), before calling Send(). Send() at first will
+			prepare the HTTP header. After that, the header will be send. If additional data has been given to Send(),
+			it will be send too. If there is need for an authentication, IHTTPClient will authenticate and send the data
+			again. The user will receive a HTTPClientSendResult() afterwards or a HTTPClientRequestComplete() if it was
+            the last Send() call (which is e.g. always the case for HTTP_GET).
+        </dd>
+		
+        <dt>void Recv(byte * buffer, size_t size)</dt>
+        <dd>
+			Call this function with a valid buffer and the size of the buffer to receive a requested file by using
+			HTTP_GET with SetRequestType(). When the data arrives, HTTPClientRecvResult() of the user will be called.
+			This function will always make a partitial read. That means, that a HTTPClientRecvResult() will be called with
+			after 1 - size bytes had been read.
+        </dd>
+
+        <dt>void Shutdown()</dt>
+        <dd>
+			Makes a shutdown of the HTTP client. After done, HTTPClientConnectComplete() of the user will be called.
+        </dd>
+		
+        <dt>http_result_t GetHTTPResult()</dt>
+        <dd>
+			Returns the result of the last request. The return value will be one of the following constants:
+			 <ul>
+                <li>HTTP_RESULT_OK: The request was successful.</li>
+                <li>HTTP_RESULT_NOT_FOUND: The given resource could not be found.</li>
+                <li>HTTP_RESULT_BAD_REQUEST: The server reports a bad request (e. G. some malformed header field).</li>
+            </ul>
+        </dd>
+
+        <dt>size_t GetContentLength(bool & chunked)</dt>
+        <dd>
+            Returns the value of the HTTP Content-Length header. chunked is true for chunked transfers.
+        </dd>
+		
+	</dl>
+	
+    <h2> class UHTTPClient </h2>
+    <dl>
+        <dt>void HTTPClientConnectComplete(IHTTPClient * const httpClient)</dt>
+        <dd>
+            Will be called after the connection to the server had been successfully established. Here is the right place
+			to setup up the request type (by calling SetRequestType()) and send the request. httpClient is the calling
+			instance.
+        </dd>
+		
+        <dt>void HTTPClientShutdown(IHTTPClient * const httpClient, http_shutdown_reason_t reason)</dt>
+        <dd>
+            Will be called after the HTTP client had been closed. httpClient will be the calling instace, reason the
+			reason of the shutdown, which will be one of the following constants:
+			 <ul>
+                <li>HTTP_SHUTDOWN_NORMAL: a normal shutdown initiated by the application itself by calling IHTTPClient::Shutdown().</li>
+                <li>HTTP_SHUTDOWN_BY_PEER: The other side of the connection has initiated the shutdown.</li>
+                <li>HTTP_SOCKET_LOST: The socket had been lost.</li>
+                <li>HTTP_ADDRESS_INVALID: The address given to IHTTPClient::Connect() was invalid.</li>
+                <li>HTTP_SOCKET_ERROR: An socket error occured.</li>
+                <li>HTTP_CONNECT_FAILED: Creating the connection failed.</li>
+                <li>HTTP_BYTE_STREAM_BROKEN: There was an error inside the byte stream while receiving data or authenticating.</li>
+                <li>HTTP_UNHANDLED_HTTP_RESULT: An not expected HTTP result had been returned by the server.</li>
+                <li>HTTP_FAILURE: En error had been found in the response http header, sent by the server.</li>
+                <li>HTTP_AUTHENTICATION_FAILED: The authentication failed (e. G. because of wrong username / password or an unsupported authentication method).</li>
+            </ul>			
+        </dd>
+
+        <dt>void HTTPClientSendResult(IHTTPClient * const httpClient)</dt>
+        <dd>
+            Will be called after the Send() had been completed. httpClient is the calling instance.<br />
+            HTTPClientSendResult is not called for the <b>last</b> Send() call, instead HTTPClientRequestComplete is called!
+        </dd>
+		
+        <dt>void HTTPClientRequestComplete(IHTTPClient * const httpClient)</dt>
+        <dd>
+            Will be called if the HTTP request has been successfully completed.
+        </dd>		
+
+        <dt>void HTTPClientRecvResult(IHTTPClient * const httpClient, byte * buffer, size_t len, bool transferComplete)</dt>
+        <dd>
+            Will be called after the application called IHTTPClient::Recv() and data had been received. httpClient is the
+			calling instance, buffer the buffer containing the received data. len the size of the data. transferComplete
+			will be true, if there is no more data to receive. If transferComplete is false, the application should make
+			an other Recv() call.
+        </dd>		
+    </dl>
+
+    <h2> Code Example </h2>
+    <pre>
+app::app(IIoMux * iomux)
+    : iomux(iomux)
+{
+    this->httpClient = IHTTPClient::Create(iomux, aTcpSocketProvider, aTlsSocketProvider, this);
+    this->httpClient->Connect("google.de");
+}
+
+void app::HTTPClientConnectComplete(IHTTPClient * const httpClient)
+{
+    this->httpClient->SetRequestType(HTTP_GET, "/index.html");
+    this->httpClient->Send();
+}
+
+void app::HTTPClientSendResult(IHTTPClient * const httpClient)
+{
+    // for GET we can simply ignore the send result and wait for HTTPClientRequestComplete
+}
+
+void app::HTTPClientRequestComplete(IHTTPClient * const httpClient)
+{
+    this->httpClient->Recv((byte *)malloc(1024), 1024);
+}
+
+void app::HTTPClientRecvResult(IHTTPClient * const httpClient, byte * buffer, size_t len, bool transferComplete)
+{
+    printf("%.*s", len, (char *)buffer);
+    if (transferComplete) {
+        free(buffer);
+        this->httpClient->Shutdown();
+    }
+    else
+        this->httpClient->Recv(buffer, 1024);
+}
+
+void app::HTTPClientShutdown(IHTTPClient * const httpClient, http_shutdown_reason_t reason)
+{
+    delete this->httpClient;
+}
+</pre>
+</body>
+</html>

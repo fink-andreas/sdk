@@ -1,0 +1,18 @@
+
+dt {
+    font-weight:bold;
+}
+
+pre, dl {
+    margin: 20px;
+}
+
+body {
+    overflow:scroll;
+    font-size: 14px;
+}
+
+div.fixme {
+    border:1px solid grey;
+    background-color:#ffa080;
+}

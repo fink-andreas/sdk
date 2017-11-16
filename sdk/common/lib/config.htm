@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>config</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>config</h1>
+    <h2>Overview</h2>
+    <p>
+        The config library supports Apps to store configuration options in a config database table and provides an
+        interface to receive config update as JSON messages and an interface to read the config as JSON message.
+		table inside the apps database.
+        The config lib has a ConfigContext class (there should be a derived class
+		of ConfigContext in the application) as well as a set of Config* classes (like ConfigString,
+		ConfigInteger, ...). To enable the communication with an JavaScript app, the ConfigContext or a derived class
+		need to be registered to an JsonApiContext instance wich need to be passed to an AppWebSocket instance. <br />
+        <br />
+        The config library can also handle so called <i>unmanaged</i> config items. These items are not sent or updated
+        through JSON messages but maintained soley within the C++ app code.
+    </p>
+    <h2>Tutorial</h2>
+    <h3>Step1: Add ConfigContext as base class to your App Instance class</h3>
+    <p>
+<pre>
+class &lt;Your App Name&gt;M</> : public AppInstance, ... , public JsonApiContext, public ConfigContext
+</pre>
+        ConfigContext uses the JSON API framework, so JsonApiContext is needed as base class as well
+    </p>
+    <h3>Step2: Add code to register the config library to the JSON Api framework</h3>
+    <p>
+        Inside the App Instance constructor add
+<pre>
+RegisterJsonApi(this);
+</pre>
+    </p>
+    <h3>Step3: Add code to initialize the config database table</h3>
+    <p>
+        After the database connection is established, create the task, which initializes the config
+        table
+<pre>
+void &lt;Your App Name&gt;::DatabaseConnectComplete(IDatabase * const database)
+{
+    currentTask = CreateInitTask(database);
+    currentTask->Start(&taskConfigInit);
+}
+</pre>
+        This requires a UTaskTemplate class to be defined in you App Instance class and the
+        handler function for the command completion:
+<pre>
+void ConfigInitComplete(class ITask * task);
+class UTaskTemplate&lt;&lt;Your App Name&gt;, class ITask&gt; taskConfigInit;
+</pre>
+        Within ConfigInitComplete the initialization is continued
+    </p>
+    <h3>Step4: Add classes for your config items as members to your App Instance class</h3>
+    <p>
+        For each of your configuration parameters add a memder, like
+<pre>
+    class ConfigDword &lt;Your dword parameter&gt;;
+    class ConfigBool &lt;Your bool parameter&gt;;
+    ...
+</pre>
+        These need to be initialized with the constructor of the App Instance class
+<pre>
+&lt;Your dword parameter&gt;(this, "&lt;dword parameter name&gt;", 5),
+&lt;Your bool parameter&gt;(this, "&lt;bool parameter name&gt;", false, true)
+    ...
+</pre>
+    </p>
+    <h2>ConfigContext(class IDatabase * database, class IInstanceLog * log)</h2>
+    <p>
+        Contructor function. The passed database is the one used to read and write the config and
+		log needs to be the logging instance to use.
+    </p>
+	<dl>
+		<dt>ITask * CreateInitTask()</dt>
+		<dd>
+			Will return an insatnce of an task taht initializes the configuration. The app need to delete that
+			instance after it no longer will be used. The task need to be executed after all config objects had
+			been created.
+		</dd>
+		<dt>virtual void ConfigChanged()</dt>
+		<dd>
+			This function should be overwritten. It will be called if at least one of the config items had been
+			changed.
+		</dd>
+        <dt>virtual void ConfigChangedUnmanaged()</dt>
+        <dd>
+            This function should be overwritten. It will be called if unmanaged items have been changed and successfully written
+            to the database.
+        </dd>
+		<dt>virtual bool CanReadConfig(IJsonApiConnection * const connection)</dt>
+		<dd>
+			This function should be overwritten. The ConfigContext will call this function to determine, if the given
+			connection has the right to read the configuration.
+		</dd>
+		<dt>virtual bool CanWriteConfig(IJsonApiConnection * const connection)</dt>
+		<dd>
+			This function should be overwritten. The ConfigContext will call this function to determine, if the given
+			connection has the right to write the configuration.
+		</dd>
+        <dt>class ITask * UpdateUnmanagedItems()</dt>
+        <dd>
+            Call this function to write unmanaged config items to the database. A reference to ITask is returned.<br />
+            Call the Start() function to actually start the update and wait for TaskComplete/TaskFailed.
+        </dd>
+        <dt>class ITask * WriteItemValue(ConfigItem * item, const char * value, bool notify)</dt>
+        <dd>
+            Call this function to write a config item to the database. A reference to ITask is returned.<br />
+            Call the Start() function to actually start the update and wait for TaskComplete/TaskFailed.
+            If notify is true, a JSON will be sent to all connections on apiContextList.<br />
+            <code>{"api":"Config","mt":"ConfigUpdate"}</code>
+        </dd>
+        
+	</dl>
+	
+	<h2>ConfigItem</h2>
+	<p>
+		This is the base class of each config item. Generally there is no need to use this class inside the application
+		(with exception of the GetName() function maybe), as long as there is no need to create a new ConfigItem derived
+		class.		
+	</p>
+	<dl>
+		<dt>ConfigItem(ConfigContext * context, const char * name)</dt>
+		<dd>
+			The constructor of the class. The instance of the object will be added to the list of configuration objects
+			of the ConfigContext given in context. The name of the config object need to be given in name. This name will
+			be used to access the item by JSON messages as well as to save the item to the database.
+		</dd>
+		<dt>const char * GetName()</dt>
+		<dd>
+			Returns the name given to the constrcutor.
+		</dd>
+	</dl>
+	
+	<h2>List of config items</h2>
+	<p>
+		The configuration values will be represented by config items. The usage of that items is nearly the same for each items,
+		with differences because of the data type the item holds. For each item a default value will be given. While the item
+		only holds the default value, it won't be written to the data base. The config library supports the following config items:
+		<ul>
+			<li><b>ConfigChoice</b>: holds a list of options to select as well as the selected value (as string and as index inside this list).</li>
+			<li><b>ConfigBool</b>: holds the value as boolean type.</li>
+			<li><b>ConfigInt</b>: holds the value as integer type.</li>
+			<li><b>ConfigDword</b>: holds the value as dword (unsigned int) type.</li>
+			<li><b>ConfigLong64</b>: holds the value as long64 type.</li>
+			<li><b>ConfigUlong64</b>: holds the value as ulong64 (unsinged) type.</li>
+			<li><b>ConfigString</b>: holds the value as string type.</li>
+		</ul>
+		The following descriptions will use the ConfigString item as example (differences to other items will be explained). Note that
+		the type of the default value given to the constructor (variables defVal) depends on the ConfigItem, as well as the return type
+		of Value() does.<br />
+        Each constructor has an umanaged boolean value. Set this value to true if the ConfigItem shouldn't be handled within the JSON messages.
+		<dl>
+			<dt>Constructor ConfigString(ConfigContext * context, const char * name, const char * defVal, bool unmanaged = false)</dt>
+			<dd>
+				The constructor of the item. The ConfigContext the item will be registered to will be passed in context,
+				the name of the item in name. The default value will be passed in defVal.
+				NOTE: ConfigChoice has an additional parameter: const char ** options. This needs to be an array of strings
+				terminated by NULL.<br />
+                If <i>unmanaged</i> is true, the ConfigItem won't be handled by JSON messages and needs to be written to the database with
+                ConfigContext::UpdateUnmanagedItems.
+			</dd>
+			<dt>const char * Value()</dt>
+			<dd>
+				Returns the value of the config item. NOTE: For ConfigChoice Value() returns the string value of the selected
+				choice which is one of the strings passed with the options parameter to the constructor.
+			</dd>
+			<dt>int ValueIdx() (only ConfigChoice)</dt>
+			<dd>
+				Retuns the index of the selected itemsinside the options array given to the constructor of ConfigChoice.
+				This value will be written to the database as well as send using the JSON message. The value is zero based.
+			</dd>
+            <dt>void SetValue(type value)</dt>
+            <dd>
+                Use this function for unmanaged ConfigItems to set a new value. 
+            </dd>
+            <dt>void SetValueIdx(type value) (only ConfigChoice)</dt>
+            <dd>
+                Retuns the index of the selected itemsinside the options array given to the constructor of ConfigChoice.
+                This value will be written to the database as well as send using the JSON message. The value is zero based.
+            </dd>
+		</dl>
+	</p>
+	
+	<h2>JSON API</h2>
+	<p>
+		The config library uses JSON messages to communicate with an JavsScript App using a websocket connection. This messages
+		will be used to read and write the configuration. To transfer config items, a ConfigItem object will be used (see blow).
+		Each message has the api keyword with the value "Config".
+	</p>
+	<dl>
+		<dt>Read config</dt>
+		<dd>
+			{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"api": "Config",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"mt": "ReadConfig"<br>
+			}<br>
+			<br>
+			This message will be sent to the config lib to read the the configuration.
+		</dd>
+		<dt>Read config result</dt>
+		<dd>
+			{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"api": "Config",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"mt": "ReadConfigResult",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"result": "AccessDenied",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"ConfigItems": ConfigItemObject<br>
+			}<br>
+			<br>
+			If the connection has no right to read the config, the ReadConfigResult message will have the result field with
+			"AccessDenied". Else, it will have a ConfigItems object. See below for description of that object.
+		</dd>
+		<dt>Write config</dt>
+		<dd>
+			{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"api": "Config",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"mt": "WriteConfig",<br>
+				"ConfigItems": ConfigItemsObject<br>
+			}<br>
+			<br>
+			Write the in ConfigItems given configuration items to the applications database. As response, the config library
+			will send a WriteConfigResult message.
+		</dd>
+		<dt>Write config result</dt>
+		<dd>
+			{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"api": "Config",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"mt": "ReadConfigResult",<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"result": "ok",<br>
+			}<br>
+			<br>
+			Will be send after the config had been written. The value of result will be "ok" or an error (e. g. "AccessDenied"). If
+			the result field is missing, it should be treated in the same way as result with "ok".
+		</dd>
+		<dt>ConfigItemsObject</dt>
+		<dd>
+			The ConfigItems object holds the items defined by the application as well as the values of the items. The
+			items are identified by their names. Format will be "name": "value" (e. G. for ConfigBool with the name "private"
+			and a value true it will be "private": true). The data type of the items insied the JSON message depends of the data
+			type of the items itself. So numbers will be send as numbers, strings as strings, etc.<br>
+			<br>
+			ConfigChoice items will be represented in an additional object. The objects name is the one from the ConfigChoice item,
+			the fields of the object are "options", with a string-list of options and value which holds the index of the selected
+			option (zero based). So if there is a ConfiChoice with the name "Capitals", the values "Berlin, London, Brasília" and the
+			last City is the selected item, the object will look like:<br><br>
+			{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"Captials": {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"options": ["Berlin", "London", Brasília"],<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"value": 2<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+			}<br>
+			<br>
+			Note that for writing a config, the options list don't need to be send.
+			<br><br>
+			<b><u>Example:</u></b>
+			Let's assume there is the following config setup in the application:
+			<ul>
+				<li>ConfigBool: name = "private", value = false</li>
+				<li>ConfigInt: name = "age", value = 35</li>
+				<li>ConfigChoice: name = "civilStatus", options = "Single, Married, Divorced", value = 1</li>
+				<li>ConfigString: name = "firstName", value = "Max"</li>
+			</ul>
+			<br>
+			With this config, the config items object will look like:
+			<br>
+			{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"private": false,<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"age": 35,<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"civilStatus": {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"options": ["Single", "Married", "Divorced"],<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"value": 1<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"firstName": "Max"<br>
+			}<br>
+		</dd>
+	</dl>
+</body>
+</html>

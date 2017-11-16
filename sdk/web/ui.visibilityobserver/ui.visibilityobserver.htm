@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.visibilityobserver</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.VisibilityObserver.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.visibilityobserver</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var observer = new innovaphone.ui.VisibilityObserver();
+
+observer.observePage(function(visible) {
+    log("page visible: " + visible);
+});
+
+observer.observeElement(document.getElementById("code"), function(visible) {
+    log("element visible: " + visible);
+}, function() {
+    log("element removed");
+});
+
+function log(message) {
+    var div = document.createElement("div");
+    div.innerText = message;
+    out.appendChild(div);
+}
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey"></div>
+    </div>
+
+    <h2>innovaphone.ui.VisibiltyObserver()</h2>
+    <p>
+        This class can be used to get notifications when elements or the page become visible or invisible to the user.
+    </p>
+    <p>
+        <dl>
+            <dt>observePage(function onvisibilitychange(visible))</dt>
+            <dd>
+                Registers a callback that will be called when the page becomes visible or invisible. Returns a subscription object, that can be used as a reference for unsubscribing.
+            </dd>
+
+            <dt>unobservePage(subscription)</dt>
+            <dd>
+                Call this function to unsubscribe from page visibility changes.
+            </dd>
+
+            <dt>observeElement(element, function onvisibilitychange(visible), function onremove())</dt>
+            <dd>
+                Subscribes for visibility changes of an individual DOM element. The caller will also be notified if the element was removed from the page. Returns a subscription object, that can be used as a reference for unsubscribing.
+            </dd>
+
+            <dt>unobserveElement(subscription)</dt>
+            <dd>
+                Call this function to unsubscribe from visibility changes for an individual DOM element.
+            </dd>
+
+            <dt>dispose()</dt>
+            <dd>
+                Disposes the VisibilityObserver and stops any callbacks to the application.
+            </dd>
+        </dl>
+    </p>
+</body>
+</html>

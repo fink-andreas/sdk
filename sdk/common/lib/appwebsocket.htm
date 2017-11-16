@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>appwebsocket</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>appwebsocket</h1>
+    
+    <h2>Overview</h2>
+    <h3>General</h3>
+    <p>
+        The appwebsocket library contains a class AppWebsocket, which can be used as base class
+        for a session object allocated for incoming websocket connections. This class handles the
+        authentication protocol using the myPBX authentication. It relates to the
+        innovaphone.appwebsocket.js library on the client side. There are member functions
+        for sending and receiving messages.
+    </p>
+    <h3>Protocol</h3>
+    <p>
+        JSON messages are used on this interface. There are some common properties, which are defined
+        by the this library already appart from these the application is free to define its own
+        protocol. Nevertheless there are some recommendation of how to define such an interface.
+        <br/>
+        <a href="websocket_json.htm">Websocket/JSON Protocol</a>
+    </p>
+    <h3>APIs</h3>
+    <p>
+        The library uses the mechanism defined by <a href="../interface/json_api.htm">json_api.h</a>
+        to plug-in code to implement a specific API, which is addressed by the "api" property. Any App
+        may use or provide APIs. These are documented in the context of these Apps. There are also
+        libraries using this API mechanism (e.g. <a href="../interface/replication.htm">Replication</a>).
+    </p>
+    <p>
+        The innovaphone PBX provides a set of APIs: <a href="pbx_apis.htm">PBX APIs</a>
+    </p>
+    
+    <h2>Tuturial</h2>
+
+    <h2>AppWebsocket(IWebserverPlugin * plugin, class IInstanceLog * const log)</h2>
+    <p>
+        Contructor function. To be called with the IWebserverPlugin * passed in the
+        WebserverWebsocketListenResult function.
+        log is used to log dependent of the log flag LOG_APP_WEBSOCKET.
+    </p>
+    <h2>virtual char * AppWebsocketPassword()</h2>
+    <p>
+        Called by the library to read the shared secret, which is part of the App instance
+        configuration.
+    </p>
+    <h2>virtual char * AppWebsocketPassword(const char * domain)</h2>
+    <p>
+        Called by the library to read another domain dependent shared secret, if the first shared secret failed.<br />
+        Returns NULL by default which prevents another digest calculation by default.
+    </p>
+    <h2>virtual bool AppWebsocketConnectComplete()</h2>
+    <p>
+        Will be called after the connection / authentication process had been completed and with that the websocket
+        connection had been established. The application should return true to indicate, that it is ready
+        to receive messages. If false is returned, a call to AppWebsocketMessageComplete() is needed
+        to receive messages.
+        The default implementation is just an empty function, which returns true
+    </p>
+    <h2>virtual void AppWebsocketMessage(class json_io & msg, word base, const char * mt, const char * src)</h2>
+    <p>
+        Called by the library on received messages. The message is json decoded.
+    </p>
+    <dl>
+        <dt>class json_io & msg, word base</dt>
+        <dd>
+            The message as JSON data structure. base indicates the location of message inside the
+            JSON structure
+        </dd>
+        <dt>const char * mt</dt>
+        <dd>
+            The message type, which is also part of the message as "mt" member.
+        </dd>
+        <dt>const char * src</dt>
+        <dd>
+            The "src" member of the message. This should be sent back with any response. It is
+            used on the Javascript side to route the message to the object, which sent the request.
+        </dd>
+    </dl>
+    <h2>void AppWebsocketMessageComplete()</h2>
+    <p>
+        Function to be called to acknowledge the last message. Unless this function is called no
+        further message is received.
+    </p>
+    <h2>void AppWebsocketMessageSend(class json_io & msg, char * buffer)</h2>
+    <p>
+        Function which can be called to send a message. buffer should be a buffer big enough to
+        hold the complete message. It is used only during the call to this function.
+    </p>
+    <h2>virtual void AppWebsocketSendResult(class IWebsocket * websocket)</h2>
+    <p>
+        Called by the library when the message is sent. The App should not send further messages
+        unless this call is received, if the App wants to have flow control for bulk data. If flow
+        control on application level is done, this function needs not to be implemented.
+    </p>
+    <h2>void AppWebsocketClose()</h2>
+    <p>
+        Can be called to request closing of the websocket connection
+    </p>
+    <h2>virtual void AppWebsocketClosed()</h2>
+    <p>
+        Called when the websocket connection is closed. It can be used to delete the App session
+        (e.g. delete this).
+    </p>
+</body>
+</html>

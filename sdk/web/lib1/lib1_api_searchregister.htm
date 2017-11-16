@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>com.innovaphone.searchregister (App API)</title>
+    <link rel="stylesheet" href="../lib1/innovaphone.lib1.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>com.innovaphone.searchregister (App API)</h1>
+    <p>
+        This API provides an interface for searching into the Register DB.
+    </p>
+
+    <h2>API model</h2>
+    <h3>Service info</h3>
+    <p>
+        The API doesn't define any service info.
+    </p>
+    <h3>Provider model</h3>
+    <p>
+        The API doesn't define a provider model.
+    </p>
+
+    <h2>API messages</h2>
+    <p>
+        All messages are JSON objects that have a mandatory attribute "mt" that specifies the message type.
+    </p>
+    <h3>Requests</h3>
+    <dl>
+        <dt>Search</dt>
+        <dd>Starts a search for a given pattern.</dd>
+        <dd>
+            <dl>
+                <dt>search</dt>
+                <dd>The pattern to be searched.</dd>
+                <dd>If the pattern contains does not contain *, an <b>exact</b> search will be returned</dd>
+                <dd>If the pattern contains contains *: </br>
+                - at the beginning (*doe) the search will return entries that <b>end</b> by the given patten</br>
+                - at the end (John*) the search will return entries that <b>start</b> by the given patten</br>
+                - at the beginning and the end (*doe*) the search will return entries that <b>contain</b> the given patten
+                </dd>
+            </dl>
+        </dd>
+        <dd>Example: <code>{ mt: "Search", search: "jdoe" }</code></dd>
+        <dd>Example: <code>{ mt: "Search", search: "*profile*" }</code></dd>
+    </dl>
+    <h3>Responses</h3>
+    <dl>
+        <dt>SearchInfo</dt>
+        <dd>Zero or more SearchInfo are returned for each <b>Search</b> request. One SearchInfo contains the following fields:</dd>
+        <dd>
+            <dl>
+                <dt>id</dt>
+                <dt>username</dt>
+                <dt>firstname</dt>
+                <dt>lastname</dt>
+                <dt>cn</dt>
+                <dt>email</dt>
+                <dt>date</dt>
+                <dt>template</dt>
+                <dt>node</dt>
+                <dt>loc</dt>
+                <dt>appsmy</dt>
+            </dl>
+        </dd>
+        <dd>
+            Example: <pre>
+    {
+        mt: "SearchInfo",
+        id:"1",
+        username:"jdoe",
+        firstname:"John",
+        lastname:"Doe",
+        cn:"John Doe",
+        email:"jdoe@example.com",
+        date:"2017/01/01 12:00",
+        template:"config-standard",
+        node:"root",
+        loc:"master",
+        appsmy:"register,profile"
+    }</pre>
+        </dd>
+
+        <dt>SearchResult</dt>
+        <dd>One single SearchResult is returned for each <b>Search</b> request (after all SearchInfo)</dd>
+        <dd>
+            <dl></dl>
+        </dd>
+        <dd>Example: <code>{ mt: "SearchResult" }</code></dd>
+    </dl>
+</body>
+</html>

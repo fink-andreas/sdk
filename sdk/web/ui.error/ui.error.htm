@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.error</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.elementscontainer/innovaphone.ui.ElementsContainer.js" type="text/javascript"></script>
+    <script src="../ui.popup/innovaphone.ui.Popup.js" type="text/javascript"></script>
+    <script src="../ui.drag/innovaphone.ui.Drag.js" type="text/javascript"></script>
+    <script src="../ui.button/innovaphone.ui.Button.js" type="text/javascript"></script>
+    <script src="../ui.text/innovaphone.ui.Text.js" type="text/javascript"></script>
+    <script src="../ui.input/innovaphone.ui.Input.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.ScrollBar.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.Error.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.error</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+innovaphone.ui.Error.showError("Here was something wrong", 0x134566);
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2>innovaphone.ui.Error</h2>
+    <p>
+        A singleton class with "static" functions:
+    </p>
+    <dl>
+        <dt>showError(errorMsg, errorCode)</dt>
+        <dd>
+            opens a popup with the error message and code
+        </dd>
+    </dl>
+</body>
+</html>

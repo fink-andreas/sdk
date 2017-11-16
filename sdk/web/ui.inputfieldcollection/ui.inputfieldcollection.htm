@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.inputfieldcollection</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.Scrollbar.js" type="text/javascript"></script>
+    <script src="../ui.icon/innovaphone.ui.Icon.js" type="text/javascript"></script>
+    <script src="../ui.input/innovaphone.ui.Input.js" type="text/javascript"></script>
+    <script src="../ui.anchor/innovaphone.ui.Anchor.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.InputFieldCollection.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.inputfieldcollection</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+            out.innerHTML= "";
+            var existingData = ["https://www.innovaphone.com",
+                                "https://communote.innovaphone.com/microblog/global/portal/home"
+                               ];
+            var iconPath = "../../projects/icons/";
+            var inputFieldCollection = 
+                new innovaphone.ui.InputFieldCollection(
+                    null,                       // container
+                    500,                        // container width 
+                    195,                        // container height 
+                    "url",                      // input type
+                    "URLs",                     // header
+                    existingData,               // existing data
+                    iconPath +
+                      "project-view-icons.png", // icon sprite
+                    0,                          // x-pos add icon
+                    -20,                        // y-pos add icon
+                    0,                          // x-pos trash icon
+                    -200,                       // y-pos trash icon 
+                    20,                         // icon width
+                    20,                         // icon height
+                    true                        // scrollbar
+                );
+            out.appendChild(inputFieldCollection.container);
+            inputFieldCollection.resize();
+
+            var existingData2 = ["data 1",
+                                 "data 2"
+                                ];
+            var inputFieldCollection2 =
+                new innovaphone.ui.InputFieldCollection(
+                    null,                       // container
+                    500,                        // container width
+                    195,                        // container height
+                    "text",                     // input type
+                    "Data",                     // header
+                    existingData2,              // existing data
+                    iconPath +
+                      "project-view-icons.png", // icon sprite
+                    0,                          // x-pos add icon
+                    -20,                        // y-pos add icon
+                    0,                          // x-pos trash icon
+                    -200,                       // y-pos trash icon
+                    20,                         // icon width
+                    20,                         // icon height
+                    true                        // scrollbar
+                );
+            out.appendChild(inputFieldCollection2.container);
+            inputFieldCollection2.resize();
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <ul>
+        <li>Controls a collection of input fields of the same type.</li>
+        <li>Provides an input field to add new element, click on the add icon generates additional Input fields.</li>
+        <li>Existing elements may be deleted via click on the delete icon</li>
+        <li>On request a scrollbar is provided which must be resized one-time</li>
+        <li>If the popup is provided, the popup scrollbar is resized as soon as elements are added or deleted</li>
+        <li>If a callback function is provided, the callback function is executed during generation of existing elements</li>
+        <li>Existing elements of type "url" or "file" (parameter inputfieldType) are generated as anchors (innovaphone.ui.Anchor)</li>
+        <li>Elements: associative array containing the existing elements
+    </ul>
+    <h2>Arguments</h2>
+    <dl>
+        <dt>container</dt><dd>if omitted, div is allocated</dd>
+        <dt>width</dt><dd>container width</dd>
+        <dt>heigth</dt><dd>container height</dd>
+        <dt>inputfieldType</dt><dd>type of input field which has to be provided</dd>
+        <dt>[header]</dt><dd>input field collection header</dd>
+        <dt>[elements]</dt><dd>existing elements</dd>
+        <dt>iconUrl</dt><dd>url of icon sprite</dd>
+        <dt>addIconPosX</dt><dd>x-position of add icon</dd>
+        <dt>addIconPosY</dt><dd>y-position of add icon</dd>
+        <dt>delIconPosX</dt><dd>x-position of trash icon</dd>
+        <dt>delIconPosY</dt><dd>y-position of trash icon</dd>
+        <dt>iconWidth</dt><dd>icon width</dd>
+        <dt>iconHeight</dt><dd>icon height</dd>
+        <dt>[scrollbar]</dt><dd>boolean - own container scrollbar, default false </dd>
+        <dt>[popup]</dt><dd>popup to be resized</dd>
+        <dt>[callbackFunction]</dt><dd>called when generating existing elements</dd>
+        <dt>[left, top]</dt><dd>If set, the element is positioned absolute</dd>
+        <dt>[parent]</dt><dd>If set, the element is appended as child</dd>
+    </dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>Container</dt><dd></dd>
+        <dt>resize()</dt><dd>resizes container scrollbar / popup scrollbar</dd>
+        <dt>getNewValues()</dt><dd>returns array containing the added values</dd>
+        <dt>getNewFiles()</dt><dd>returns array containing all added files</dd>
+        <dt>getDeletedElements()</dt><dd>returns associative array containing the deleted key - value pairs</dd>
+        <dt>getDeletedElementKeys()</dt><dd>returns array of the deleted element keys</dd>
+        <dt>getDeletedElementValues()</dt><dd>returns array of the deleted element values</dd>
+    </dl>
+</body>
+</html>

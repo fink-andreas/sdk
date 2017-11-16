@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>widget</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <h1>widget</h1>
+    <h2>Requirements</h2>
+    <ul>
+        <li>innovaphone PBX Version 12r1 or higher, the myPBX Toolbox JavaSpripts are included</li>
+        <li>A port license with UC and WebRTC channel license</li>
+        <li>Access to your own Web server, preferably with PHP support</li>
+        <li>Encrypted connection to the Web server and the PBX with a valid SSL certificate</li>
+        <li>Consent of employees whose picture and Presence information is to be displayed on the Web</li>
+    </ul>
+
+    <h2>innovaphone PBX configuration</h2>
+    <ul>
+        <li>Create a new user on the PBX</li>
+        <ul>
+            <li>Select the name so that it can be recognised again</li>
+            <li>Telephone number is not necessary, as the user will not be called</li>
+            <li>Assign and remember a secure password</li>
+            <li>Don't forget the licenses, the WebRTC channel license is a dynamic license and is not tied to specific users.</li>
+        </ul>
+        <li>Create filters and assign to the new users</li>
+        <ul>
+            <li>The trunk line for external calls should be blocked</li>
+            <li>Any number of black or white lists can be additionally defined</li>
+        </ul>
+    </ul>
+
+    <h2>WebRTC license on the PBX</h2>
+    <ul>
+        <li>is a "floating license", i.e. one license is used per connection</li>
+        <li>number of licenses should not exceed the max.  number of inbound connections.</li>
+        <li>can be seen in the PBX configuration under "PBX - Config - General"</li>
+        <li>once licenses have been imported, they have to be assigned to the PBX - on the same configuration page, slightly higher</li>
+    </ul>
+
+    <h2>Installation on the Web server</h2>
+    <ul>
+        <li>Store the JavaScript, CSS, PHP, and other files on the Web server</li>
+        <li>You can place the files anywhere, but...</li>
+        <li>… if possible leave the files together, because a parameter in the configuration refers to this directory</li>
+        <li>PHP file in a directory that is accessible externally, such as "root"</li>
+        <li>Create and store images (photos, avatar) for internal subscribers</li>
+        <li>Extend HTML page with JavaScript</li>
+        <li>For business card view: Create a container for positioning</li>
+        <li>Adjust to corporate design</li>
+        <li>Test and share</li>
+    </ul>
+
+    <h2>Directory structure</h2>
+    <code>
+        /js/*.css<br>
+        /js/*.js<br>
+        /js/*.mp3<br>
+        /js/*.svg<br>
+        /img/avatar*.png<br>
+        /WebRtcAuth.php<br>
+        /index.html<br>
+    </code>
+    <p>If the path js/ is changed, the value pathPrefix can be adjusted under parameters.</p>
+
+    <h2>Initialization</h2>
+    <p>File: index.html<br>
+    Include required CSS files in the header<br>
+    js files to be loaded preferably at the end of the HTML</p>
+    <code>
+    var parameters = {<br>
+        &nbsp;&nbsp;&nbsp;urlPbx: "wss://pbx.example.com/PBX0/WEBSOCKET/websocket",<br>
+        &nbsp;&nbsp;&nbsp;urlAuth: "https://www.example.com/WebRtcAuth.php",<br>
+        &nbsp;&nbsp;&nbsp;pathPrefix: "js/",<br>
+        &nbsp;&nbsp;&nbsp;companyName: 'Example AG',<br>
+        &nbsp;&nbsp;&nbsp;companyStreet: 'Str. 99',<br>
+        &nbsp;&nbsp;&nbsp;companyCity: '1234 City',<br>
+        &nbsp;&nbsp;&nbsp;companyTel: '0321/ 4444- 0',<br>
+        &nbsp;&nbsp;&nbsp;companyTrunk: '0321 / 4444',<br>
+        &nbsp;&nbsp;&nbsp;companyFax: '0321 / 4444- 9',<br>
+        &nbsp;&nbsp;&nbsp;companyEmail: 'info@example.com',<br>
+        &nbsp;&nbsp;&nbsp;supporters: [<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name: 'Dummy 1', shortcut: 'd1', phone: '210', img: 'img/avatar1.jpg', 'email': 'dummy1@innovaphone.com', department: 'Development'},<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name: 'Dummy 2', shortcut: 'd2', phone: '211', img: 'img/avatar2.jpg', 'email': 'dummy2@innovaphone.com', department: 'Sales'}<br>
+            &nbsp;&nbsp;&nbsp;]<br>
+    };<br>
+    new innovaphone.widget.SideBarWidget(parameters);<br>
+    new innovaphone.widget.CardWidget(parameters);<br>     
+</code>
+
+    <h3>Parameter</h3>
+    <p><u>urlPBX</u>: Secure Websocket connection to the PBX, adapt domain name, no IP address, SSL certificate on domain name<br>
+    <u>urlAuth</u>:  Adjust the authentication connection, domain name <br>
+    <u>pathPrefix</u>: Directory in which the files are stored - with / at the end<br>
+    <u>companyName, street, city</u>: is only displayed<br>
+    <u>companyTel, fax</u>: is displayed in the SidebarWidget<br>
+    <u>companyEmail</u>: is displayed in the SidebarWidget with link<br>
+    <u>companyTrunk</u>: is displayed in the business card widget together with supporters.phone<br>
+    <u>supporters:</u><br>
+    &nbsp;&nbsp;&nbsp;name:  is displayed<br>
+    &nbsp;&nbsp;&nbsp;shortcut: is used for authentication to the PBX<br>
+    &nbsp;&nbsp;&nbsp;phone: Internal telephone extension number is dialled<br>
+    &nbsp;&nbsp;&nbsp;img: Link to avatar-image, 240 x 240 pixels, .png or .jpg<br>
+    &nbsp;&nbsp;&nbsp;email: is linked with the button<br>
+    &nbsp;&nbsp;&nbsp;Department: is only displayed
+    </p>
+
+    <h3>Translations (optional)</h3>
+    <code>
+    translations: {<br>
+    &nbsp;&nbsp;&nbsp;available: 'Available',<br>
+    &nbsp;&nbsp;&nbsp;unavailable: 'Not available',<br>
+    &nbsp;&nbsp;&nbsp;call: "Call",<br>
+    &nbsp;&nbsp;&nbsp;VideoCall: "Video call",<br>
+    &nbsp;&nbsp;&nbsp;Email "E-Mail",<br>
+    &nbsp;&nbsp;&nbsp;confirm: "The connection is cut off if you leave this Website. Please right click with the option open link in new tab."<br>
+    &nbsp;&nbsp;&nbsp;unsupported: "This browser does not support WebRTC"<br>
+    }<br>
+    </code>
+    <p>The text in inverted commas can be modified and translated. If there are no translations in place, English texts are shown.<br>
+    Please note: When making changes to parameters, a comma must be placed after the closing ] from supporters.
+    </p>
+
+    <h2>Positioning the business cards</h2>
+    <code>&lt;!-- CONTAINER WITH SUPPORTERS --&gt;<br>
+    &lt;div id="supporters-card-container"&gt;<br>
+    &lt;/div&gt;
+    </code>
+    <p>An empty DIV-container is inserted in HTML code where the business card is to be displayed.<br>
+    Responsive web design is used to display the business cards.<br>
+    The number of business cards that appear side by side is determined by the amount of space the browser has.<br>
+    This also works for Web designs that have a fixed width.</p>
+
+    <h2>Authentication with WebRtcAuth.php</h2>
+    <code>
+    &lt;?php<br>
+    &nbsp;&nbsp;&nbsp;// customer edit<br>
+    &nbsp;&nbsp;&nbsp;$username= "extern-web";<br>
+    &nbsp;&nbsp;&nbsp;$password= "pwd";<br>
+    &nbsp;&nbsp;&nbsp;$realm= "innovaphone.com";<br>
+    &nbsp;&nbsp;&nbsp;...
+    </code>
+    <p>The variables $username and $password in WebRtcAuth.php must correspond to the specifications in the innovaphone PBX.<br>
+    The variable $realm  must correspond to the system name of the innovaphone PBX.</p>
+    <p>The information remains protected if the WebRtcAuth.php file source code cannot be seen externally.<br>
+    Both the PBX and the JavaScript generate the same hash for authentication.<br>
+    The next authentication uses another new hash, so that the process can not be resolved.</p>
+
+    <h2>Troubleshooting</h2>
+    <ul>
+        <li>Use Firefox with the Firebug extension</li>
+        <li>Open console and reload this page</li>
+        <li>Take account of the error messages displayed</li>
+        <li>Let more logging be shown on the console by re-activating the commented log-function in the... widget.*.js file.<br>
+        <code>function logFunction(text) {<br>
+        &nbsp;&nbsp;&nbsp;//console.log("WebRTC demo: " + text);<br>
+        }</code></li>
+    </ul>
+
+
+</body>
+</html>

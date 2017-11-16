@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.timefield</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.ScrollBar.js" type="text/javascript"></script>
+    <script src="../ui.listview/innovaphone.ui.ListView.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.TimeField.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.timefield</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+label = document.createElement("div");
+label.innerHTML = "Select or insert a time value:";
+out.appendChild(label);
+timeField = new innovaphone.ui.TimeField(5, 25, out);
+timeField.setTime(new Date());
+timeField.setOnTimeChanged(function(newTime, obj) {
+    label.innerHTML = "Given time = " + newTime.toTimeString();
+});</textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2> innovaphone.ui.TimeField(left, top, parent) </h2>
+
+    <ul>
+        Creates a input field for time input. The input field also has a dropdown list to select a time in steps of 30 minutes.
+		Because of the nature of the control, it has a fixed size with heigh 20px and a width of 54px. The user also can input the
+		time using the keyboard. With tab, right arrow, dot (.) or colon (:) the user can jump from the hour field to the minute field. With shift+tab or right arrow, the user can go back from the minute to the hour filed.<br>
+		Using the down arrow or space key, the drop down field will be displayed (as well as a click to the drop down arrow does).
+		The time selected in the drop down field will be the time that is nearest to the current time of the field.
+    </ul>
+	<h2>Requirements</h2>
+	<dl>
+		If you whant to use the time field, you also need to include the following controls:
+		<ul>
+			<li>innovaphone.ui.ScrollBar.js</li>
+			<li>innovaphone.ui.ListView.js</li>
+		</ul>
+	</dl>
+	<h2>Arguments</h2>
+	<dl>
+		<dt>left</dt>
+		<dd>
+			The left position of the control inside the container where it will be added to.
+		</dd>
+		
+		<dt>top</dt>
+		<dd>
+			The top position of the control inside the container where it will be added to.
+		</dd>
+		
+		<dt>parent</dt>
+		<dd>
+			The parent where the control will be added to. If null is given as parent, the control
+			needs to be added manually by using the container member of the control. 
+		</dd>
+	</dl>
+	
+    <h2>Members</h2>
+    <dl>
+        <dt>container</dt>
+		<dd>
+			Returns the container of the control. This can be used to add the controls to other html containers.
+        </dd>
+    </dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>setTime(theTime)</dt>
+        <dd>
+            Set the given time to be displayd in the time field. The parameter theTime needs to be a JavaScript Date object.
+			From that object only the hour and minute field will be used. The value set with setTime() will be returned by
+			getTime() if not changed by the user.
+        </dd>
+
+		<dt>getTime()</dt>
+		<dd>
+			Returns the current time the time field displays. The function will return a javascript Date object. Seconds and
+			milliseconds of the object will be 0, while the date values are the date of the current day. Hours and minutes of
+			the object will be set to the values the field.
+		</dd>
+
+		<dt>setOnTimeChanged(fnc, obj)</dt>
+		<dd>
+			Use this function to set a callback function that will be called each time the user changes the value of the
+			time field. The function given in fnc will have to parameters: the first is a JavaScript Date objectm the second
+			parameter is the value of obj. With this, the same callback function can be given for different instances of
+			a time field.<br>
+			The Date object given to the callback function will have the date of the current day. Seconds and milliseconds
+			will be zero, while hours and minutes will have the value of the time field.
+		</dd>
+		
+		<dt>isEnabled()</dt>
+		<dd>
+			Returns true, if the field is enabled, else false. If the field is disabled, the user can not change the time
+			value of the field.
+		</dd>
+
+		<dt>setEnabled(newIsEnabled)</dt>
+		<dd>
+			Will enabled (newIsEnabled = true) or disable (newIsEnabled = false) the control.
+		</dd>
+</body>
+</html>

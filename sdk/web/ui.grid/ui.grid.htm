@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.grid</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.container/innovaphone.ui.Container.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.Grid.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.grid</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">ROWS = 5;
+COLUMNS = 8;
+
+txtField = new Array(ROWS * COLUMNS);
+
+grid = new innovaphone.ui.Grid(5, 5, 35, 25, 5, 8, out);
+
+grid.setOnMouseEnter(function(idx, obj) {
+    txtField[idx].style.color = "red";
+}, null);
+
+grid.setOnMouseLeave(function(idx, obj) {
+    txtField[idx].style.color = "black";
+}, null);
+
+grid.setOnClick(function(idx, obj) {
+    alert("Clicked on field " + txtField[idx].innerHTML);
+}, null);
+
+for (i = 0; i < ROWS * COLUMNS; i++) {
+    tmp = document.createElement("div");
+    tmp.style.position = "absolute";
+    tmp.style.top = "5px";
+    tmp.style.left = "5px";
+    tmp.innerHTML = i;
+
+    txtField[i] = tmp;
+    grid.cells[i].container.appendChild(tmp);
+}</textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2> innovaphone.ui.Grid(left, top, cellWidth, cellHeight, rows, columns, parent) </h2>
+
+    <ul>
+        Creates a grid of ui.containers. The size of the grid will depends on rows and columns as well
+		as the sizes of the cells. There need to be added 1 pixel for each cell to the width and the height
+		because of the border.
+    </ul>
+	<h2>Requirements</h2>
+	<dl>
+		If you whant to use the time field, you also need to include the following controls:
+		<ul>
+			<li>innovaphone.ui.Container.js</li>
+		</ul>
+	</dl>
+	<h2>Arguments</h2>
+	<dl>
+		<dt>left</dt>
+		<dd>
+			The left position of the control inside the container where it will be added to.
+		</dd>
+		
+		<dt>top</dt>
+		<dd>
+			The top position of the control inside the container where it will be added to.
+		</dd>
+
+		<dt>cellWidth</dt>
+		<dd>
+			The width of a cell. The width of the grid will be cellWidth * columns + (1 pixel per colum because of the cell border).
+		</dd>
+
+		<dt>cellHeight</dt>
+		<dd>
+			The height of a cell. The height of the grid will be cellHeight * rows + (1 pixel per row because of the cell border).
+		</dd>
+
+		<dt>rows</dt>
+		<dd>
+			The number of rows.
+		</dd>
+
+		<dt>columns</dt>
+		<dd>
+			The number of columns.
+		</dd>
+		
+		<dt>parent</dt>
+		<dd>
+			The parent where the control will be added to. If null is given as parent, the control
+			needs to be added manually by using the container member of the control. 
+		</dd>
+	</dl>
+	
+    <h2>Members</h2>
+    <dl>
+        <dt>container</dt>
+		<dd>
+			Returns the container of the control. This can be used to add the controls to other html containers.
+        </dd>
+
+        <dt>rows</dt>
+		<dd>
+			The number of rows of the grid.
+        </dd>
+
+        <dt>columns</dt>
+		<dd>
+			The number of columns of the grid.
+        </dd>
+
+        <dt>cells</dt>
+		<dd>
+			The array of the ui.container instances. Each cell as a own ui.container instance. The array is one dimensional, so
+			you have to calculate to get the cell you whant to.
+        </dd>
+	</dl>
+	
+    <h2>Functions</h2>
+    <dl>
+        <dt>setCellEnabled(idx, enabled)</dt>
+        <dd>
+            Enables or disabled (depending on the value of enabled) the cell at the given index idx. A disabled cell will not
+			raise a callback (see below).
+        </dd>
+
+		<dt>setOnClick(onClick, obj)</dt>
+		<dd>
+			Sets a callback function that will be called if the users clicks on a cell. The function has the following parameters:<br>
+			<b></i>onClick(idx, obj)</i></b><br>
+			The index of the clicked cell will be passed by idx. As the second parameter the value given to obj will be passed.
+		</dd>
+
+		<dt>setOnMouseEnter(onMouseEnter, obj)</dt>
+		<dd>
+			Sets a callback function that will be called if the users enters in an area of a cell with the mouse. The function has the following parameters:<br>
+			<b></i>onMouseEnter(idx, obj)</i></b><br>
+			The index of the cell will be passed by idx. As the second parameter the value given to obj will be passed.
+		</dd>
+
+		<dt>setOnMouseLeave(onMouseLeave, obj)</dt>
+		<dd>
+			Sets a callback function that will be called if the users leaves in an area of a cell with the mouse. The function has the following parameters:<br>
+			<b></i>onMouseLeave(idx, obj)</i></b><br>
+			The index of the cell will be passed by idx. As the second parameter the value given to obj will be passed.
+		</dd>
+
+		
+		<dt>disableCellBoder()</dt>
+		<dd>
+			As default, each cell will have an own border. Calling this function will remove the border of the cells.
+		</dd>
+</body>
+</html>

@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="arm-debug|Win32">
+      <Configuration>arm-debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="arm-visual-gdb|Win32">
+      <Configuration>arm-visual-gdb</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="arm|Win32">
+      <Configuration>arm</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="i386-debug|Win32">
+      <Configuration>i386-debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="i386-visual-gdb|Win32">
+      <Configuration>i386-visual-gdb</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="i386|Win32">
+      <Configuration>i386</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sdksample.mak" />
+    <None Include="sdksample\apps\apps.mak" />
+    <None Include="sdksample\apps\lang\helloworldlang.de.js" />
+    <None Include="sdksample\apps\lang\helloworldlang.en.js" />
+    <None Include="sdksample\apps\lang\lang.mak" />
+    <None Include="sdksample\apps\lang\pbx-presencelang.de.js" />
+    <None Include="sdksample\apps\lang\pbx-presencelang.en.js" />
+    <None Include="sdksample\apps\pbx-presence.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="sdksample\apps\sdksample.helloworld.js" />
+    <None Include="sdksample\apps\helloworld.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="sdksample\apps\sdksample.pbx.presence.js" />
+    <None Include="sdksample\apps\styles\sdksample.css" />
+    <None Include="sdksample\apps\styles\styles.mak" />
+    <None Include="sdksample\sdksample.mak" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sdksample\helloworldsession.cpp" />
+    <ClCompile Include="sdksample-main.cpp" />
+    <ClCompile Include="sdksample\pbxsession.cpp" />
+    <ClCompile Include="sdksample\sdksample.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sdksample\helloworldsession.h" />
+    <ClInclude Include="sdksample\pbxsession.h" />
+    <ClInclude Include="sdksample\sdksample.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="sdksample\apps\helloworld.png" />
+    <Image Include="sdksample\apps\pbx-presence.png" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5BF52B16-E34C-4637-933D-5B8F5B2EF7C7}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+    <SccProjectName>sdksample</SccProjectName>
+    <SccAuxPath>https://vault.innovaphone.com/VaultService</SccAuxPath>
+    <SccLocalPath>5~cee3f1c3-6458-4830-96fb-728c05908862</SccLocalPath>
+    <SccProvider>SourceGear Vault Visual Studio 2005 Client:{1EA47954-8515-402d-82D9-B5C332120A8D}</SccProvider>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='arm|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='arm-visual-gdb|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='arm-debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386-visual-gdb|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386-debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='arm|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='arm-visual-gdb|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='arm-debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='i386|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='i386-visual-gdb|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='i386-debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeOutput>
+    </NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\arm-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\armel\usr\include;$(T)\app-platform-libs\10003\armel\usr\include\postgresql;$(T)\arm-7.1.0-linux-gnu\lib\gcc\arm-linux-gnueabi\7.1.0\include;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0\arm-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>make -j5 -f builder.mak arm</NMakeBuildCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='arm|Win32'">
+    <NMakeOutput>
+    </NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\arm-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\armel\usr\include;$(T)\app-platform-libs\10003\armel\usr\include\postgresql;$(T)\arm-7.1.0-linux-gnu\lib\gcc\arm-linux-gnueabi\7.1.0\include;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0\arm-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>make -j5 -f sdksample.mak arm</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make -f sdksample.mak clean-arm</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='arm-visual-gdb|Win32'">
+    <NMakeOutput>$(ProjectDir)sdksample-arm-visual-gdb.vgdbsettings</NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\arm-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\armel\usr\include;$(T)\app-platform-libs\10003\armel\usr\include\postgresql;$(T)\arm-7.1.0-linux-gnu\lib\gcc\arm-linux-gnueabi\7.1.0\include;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0\arm-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_arm-debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='arm-debug|Win32'">
+    <NMakeOutput>
+    </NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\arm-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\armel\usr\include;$(T)\app-platform-libs\10003\armel\usr\include\postgresql;$(T)\arm-7.1.0-linux-gnu\lib\gcc\arm-linux-gnueabi\7.1.0\include;$(T)\arm-7.1.0-linux-gnu\arm-linux-gnueabi\include\c++\7.1.0\arm-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>make -j5 -f sdksample.mak arm DEBUG=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make -f sdksample.mak clean-arm DEBUG=1</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386|Win32'">
+    <NMakeOutput>
+    </NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\i486-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\i486-7.1.0-linux-gnu\i486-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\i486\usr\include;$(T)\app-platform-libs\10003\i486\usr\include\postgresql;$(T)\i486-7.1.0-linux-gnu\lib\gcc\i486-linux-gnueabi\7.1.0\include;$(T)\i486-7.1.0-linux-gnu\i486-linux-gnueabi\include\c++\7.1.0\i486-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>make -j5 -f sdksample.mak i386</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make -f sdksample.mak clean-i386</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386-visual-gdb|Win32'">
+    <NMakeOutput>$(ProjectDir)sdksample-i386-visual-gdb.vgdbsettings</NMakeOutput>
+    <NMakePreprocessorDefinitions>__VisualGDB_CFG_i386_debug;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\i486-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\i486-7.1.0-linux-gnu\i486-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\i486\usr\include;$(T)\app-platform-libs\10003\i486\usr\include\postgresql;$(T)\i486-7.1.0-linux-gnu\lib\gcc\i486-linux-gnueabi\7.1.0\include;$(T)\i486-7.1.0-linux-gnu\i486-linux-gnueabi\include\c++\7.1.0\i486-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /build "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
+    <NMakeForcedIncludes>$(ProjectDir)\gcc_i386-debug.h;$(VISUALGDB_DIR)\gcc_compat.h;$(NMakeForcedIncludes)</NMakeForcedIncludes>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='i386-debug|Win32'">
+    <NMakeOutput>
+    </NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <ExecutablePath>$(T)\app-platform-buildtls;$(T)\i486-7.1.0-linux-gnu\bin</ExecutablePath>
+    <IncludePath>sdk;.;common\lap;$(T)\i486-7.1.0-linux-gnu\i486-linux-gnueabi\include\c++\7.1.0;$(T)\app-platform-libs\10003\i486\usr\include;$(T)\app-platform-libs\10003\i486\usr\include\postgresql;$(T)\i486-7.1.0-linux-gnu\lib\gcc\i486-linux-gnueabi\7.1.0\include;$(T)\i486-7.1.0-linux-gnu\i486-linux-gnueabi\include\c++\7.1.0\i486-linux-gnueabi</IncludePath>
+    <NMakeBuildCommandLine>make -j5 -f sdksample.mak i386 DEBUG=1</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make -f sdksample.mak clean-i386 DEBUG=1</NMakeCleanCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeOutput>sdksample.exe</NMakeOutput>
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

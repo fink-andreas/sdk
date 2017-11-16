@@ -1,0 +1,55 @@
+﻿@font-face {
+    font-family: "titillium";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    src: url('../fonts/titilliumweb-regular.ttf') format('truetype');
+}
+
+html
+{
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    border-width: 0px;
+}
+
+body
+{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    font-family: titillium;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+ul, ol, dl, p
+{
+    margin: 0px;
+}
+
+div, button
+{
+    /*no font-size here, as this overrides inherited font-size values of other divs, which are defined by javascript*/
+    font-family: titillium;
+}
+
+::-ms-clear
+{
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+textarea
+{
+    font-family: inherit;
+    font-size: inherit;
+}

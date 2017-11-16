@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.scrollbar</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+
+    <script src="../ui.container/innovaphone.ui.Container.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.Scrollbar.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.scrollbar</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var element = document.createElement("div");
+element.setAttribute('style', 'position:absolute; top:20px; bottom:20px; left:20px; right:100px; background-color:black; color:white');
+out.appendChild(element);
+
+scrollbar = new innovaphone.ui.ScrollBar(element);
+
+var content = document.createElement("div");
+content.setAttribute('style', 'position:relative; width:100%; font-size:24px');
+content.innerHTML = "Line1=======================================" +
+                    "<br/>Line2<br/>Line3<br/>Line4<br/>Line5<br/>" +
+                    "Line6<br/>Line7<br/>Line8<br/>Line9<br/>" +
+                    "Line10<br/>Line11<br/>Line12<br/>Line13<br/>" +
+                    "Line14<br/>";
+scrollbar.getContent().appendChild(content);
+scrollbar.resize();
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2> innovaphone.ui.ScrollBar(container) </h2>
+    <dl>
+        <dt>getContent()</dt>
+        <dd>
+            returns the content node of the scrollbar
+        </dd>
+
+        <dt>appendContent(element)</dt>
+        <dd>
+            appends the element to the content node
+        </dd>
+
+        <dt>removeContent(element)</dt>
+        <dd>
+            removes the element from the content node
+        </dd>
+
+        <dt>clearContent()</dt>
+        <dd>
+            removes all elements from the content node
+        </dd>
+
+        <dt>insertContentBefore(element, refelement)</dt>
+        <dd>
+            insert element before refelement
+        </dd>
+
+        <dt>resize()</dt>
+        <dd>
+            resizes the scrollbar to fit to the content
+        </dd>
+
+        <dt>scrollToBottom()</dt>
+        <dd>
+            scrolls to the bottom 
+        </dd>
+
+        <dt>scrollIntoView(element)</dt>
+        <dd>
+            scrolls until the element is inside the view
+        </dd>
+
+        <dt>setWidth(width)</dt>
+        <dd>
+            sets the width of the scrollbar content. This might be neccessary if the content does not have a fixed width.
+        </dd>
+
+        <dt>setMaxHeight(height)</dt>
+        <dd>
+            sets the maximum height of the scrollbar content. This might be neccessary if you can't determine the height.
+        </dd>
+        <dt>setOnScroll(function)</dt>
+        <dd>
+            Set a onScroll event handler. The onScroll handler is called with the scrollTop value as argument
+        </dd>
+    </dl>
+
+</body>
+</html>

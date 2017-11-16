@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>tempfiles</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>Temporary files</h1>
+    <p>
+        Interface for asyncronous reading and writing of files in an &lt;app-instance&gt;.temp folder. The file
+        to be read/written is identified by a ulong64 id, which is converted to a filename with
+        _sprintf(name, "%llu", id).
+    </p>
+    <p>
+        Note: Currently the implementation is blocking, but could be changed to non-blocking without change
+        to the app.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>class ITempFilesProvider * CreateTempFilesProvider(class IIoMux * iomux)</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Function to allocate the TempFilesProvider Resource, to be called from the app-main, so that the read
+        Fileprovider could be replaced by a unit-test implementation
+    </p>
+    <h2>class ITempFiles * ITempFilesProvider::CreateTempFiles(class IInstanceLog * const log, const char * serviceId, const char * path)</h2>
+    <p>
+        Allocate the TempFilesProvider for a given instance. <br/>
+        serviceId should be AppService->GetAppServiceId(),  path should be the same as the dbName, it is used
+        to create the actual path on the system for the files in the form /apps/&lt;serviceId&gt;/&lt;dbName&gt;.temp, which
+        is a folder created by the taskmanager for the app.
+        log is used to log dependent of the log flag LOG_FILES.
+    </p>
+    <!-- ---------------------------------------------------------------------- -->
+    <hr/><h2>ITempFiles</h2>
+    <!-- ---------------------------------------------------------------------- -->
+    <p>
+        Interface class to initiate the read and write operations. IFilesWrite, IFilesRead and IFilesDel are defined in files.htm
+    </p>
+    <dl>
+        <dt>class IFilesWrite * Write(class UTask * user)</dt>
+        <dd>
+            Initiates a write operation. The allocated IFilesWrite class is derived from ITask, so the ITask/UTask
+            mechanisms are used for progress and completion
+        </dd>
+    </dl>
+    <dl>
+        <dt>class IFilesRead * Read(class UTask * user, ulong64 id, unsigned length)</dt>
+        <dd>
+            Initiates a read operation. The allocated IFilesRead class is derived from ITask, so the ITask/UTask
+            mechanisms are used for progress and completion. <b>length</b> is the length of the initial block,
+            to be read. This block is available at the first TaskProgress callback.
+        </dd>
+    </dl>
+    <dl>
+        <dt>class IFilesDel * Del(class UTask * user, ulong64 id)</dt>
+        <dd>
+            Initiates a delete operation. The allocated IFilesDel class is derived from ITask, so the ITask/UTask
+            mechanisms are used for completion.
+        </dd>
+    </dl>
+</body>

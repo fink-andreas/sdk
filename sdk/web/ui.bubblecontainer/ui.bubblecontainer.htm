@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.bubblecontainer</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.BubbleContainer.js" type="text/javascript"></script>
+	
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="fixme">@msm Check me (sample is missing)!</div>
+    <h1>ui.bubblecontainer</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+bc1 = new innovaphone.ui.BubbleContainer(10, 10, 150, 100, out);
+bc1.setArrow(15, 50, "top");
+
+bc2 = new innovaphone.ui.BubbleContainer(170, 10, 150, 100, out);
+bc2.setArrow(15, 25, "left");
+
+bc3 = new innovaphone.ui.BubbleContainer(10, 120, 150, 100, out);
+bc3.setArrow(20, 60, "right");
+
+bc4 = new innovaphone.ui.BubbleContainer(170, 120, 150, 100, out);
+bc4.setArrow(12, 50, "bottom");
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2>innovaphone.ui.BubbleContainer(left, top, width, height, parent)</h2>
+    <p>
+        Creates an empty container that have the look & feel of a bubble (realized with multible div elements).
+    </p>
+    <dl>
+        <dt>left, top</dt>
+        <dd>
+            Must be given. The div is created with absolute position on these coordinates.
+        </dd>
+        <dt>width, height</dt>
+        <dd>
+            Must be given - speciies the widht and the hight of the container. Be aware that this won't be neccessary the size, that will
+			be available for content. The size will be changed if showing the arrow of the bubble (see setArrow()).
+        </dd>
+    </dl>
+	<h2>Members</h2>
+		<dt>container</dt>
+			<dd>
+				The container of the control the application can use. This is not the container of the control itself. It
+				is inner container where the cilds controls will be placed. On the other hand, it is guaranteed that if
+				the arrow size or position will be changed, all child controls will be replaced, too.
+			</dd>
+		<dl>
+	</dl>
+    <h2>Functions</h2>
+    <dl>
+        <dt>setArrow(arrowSize, arrowPosPercent, arrowDir)</dt>
+        <dd>
+            Set & displays the arrow of the bubble. You must call this after creating the bubble container, or no arrow will be
+			shown. The size	of the arrow will be given in arrowSize. The position in arrowPosPercent (this value is in percent,
+			means 50 will center the arrow at the side of the box). To tell the container where to place the arrow, pass
+			"left", "right", "buttom" or "top" as parameter of arrowDir. Note that the arrow will placed inside the area of
+			the control itself. That means, that the size available for child controls will be reduced by the size the arrow
+			uses.
+        </dd>
+        <dt>setOnMouseEnter(mouseEnterFnc, obj)</dt>
+        <dd>
+            Set the function to be called when the mouse enters the area of the bubble container, including the area of the arrow. Use obj
+			to pass an additional object to your callback function. Internally the control uses the DOM mouseOver message to realize that callback.
+        </dd>
+        <dt>setOnMouseLeave(mouseLeaveFnc, obj)</dt>
+        <dd>
+            Set the function to be called when the mouse leaves the area of the bubble container, including the area of the arrow. Use obj
+			to pass an additional object to your callback function. Internally the control uses the DOM mouseOut message to realize that callback.
+        </dd>
+        <dt>hide()</dt>
+        <dd>
+            Hides the container including all added child elements.
+        </dd>
+        <dt>show()</dt>
+        <dd>
+            Shows the container including all added child elements.
+        </dd>
+        <dt>isVissible()</dt>
+        <dd>
+            Returns true, if the container is visible, else false.
+        </dd>
+    </dl>
+</body>
+</html>

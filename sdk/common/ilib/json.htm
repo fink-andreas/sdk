@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>dbfiles</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>json</h1>
+    <h2> Overview </h2>
+    <p>
+        The class <code>json_io</code> contains a descriptor list that represents structured data that can be encoded to or decoded from JSON strings.
+    </p>
+    <h3> Data types </h3>
+    <ul>
+        <li>
+            Primitive data types
+        </li>
+    </ul>
+    <dl>
+        <dd>
+            <ul>
+                <li>
+                    string
+                </li>
+                <li>
+                    integer
+                </li>
+                <li>
+                    unsigned
+                </li>
+                <li>
+                    boolean
+                </li>
+                <li>
+                    null
+                </li>
+            </ul>
+        </dd>
+    </dl>
+    <ul>
+        <li>
+            Structured data types
+        </li>
+    </ul>
+    <dl>
+        <dd>
+            <ul>
+                <li>
+                    Objects
+                </li>
+            </ul>
+            <dl>
+                <dd>
+                    The elements of an object have names. They are accessed using the name.
+                </dd>
+                <dd>
+                    <code>{"a":1, "b":2, "c":3}</code>
+                </dd>
+            </dl>
+            <ul>
+                <li>
+                    Arrays
+                </li>
+            </ul>
+            <dl>
+                <dd>
+                    The elements of an array don't have names. They are accessed using an enumeration.
+                </dd>
+                <dd>
+                    <code>[1, 2, 3]</code>
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <h3> Elements </h3>
+    <ul>
+        <li>
+            Each element in the descriptor list has a unique numeric ID.
+        </li>
+        <li>
+            The ID <code>JSON_ID_ROOT (0xffff)</code> represents the root element. It can contain no or a single element. Typically the root contains an object that holds all the data.
+        </li>
+    </ul>
+    <h2> Writing JSON data </h2>
+    <p>
+        The following functions put an element into the JSON structure.
+    </p>
+    <ul>
+        <li>
+            <code>word add_object(word base, const char * name)</code> - Puts an object into the structure. Returns the ID to be used as <code>base</code> for the child elements.
+        </li>
+        <li>
+            <code>word add_array(word base, const char * name)</code> - Puts an array into the structure. Returns the ID to be used as <code>base</code> for the child elements.
+        </li>
+        <li>
+            <code>void add_string(word base, const char * name, const char * value, word len=0xffff)</code>
+        </li>
+        <li>
+            <code>void add_int(word base, const char * name, int c, char * &amp; tmp)</code>
+        </li>
+        <li>
+            <code>void add_unsigned(word base, const char * name, dword c, char * &amp; tmp)</code>
+        </li>
+        <li>
+            <code>void add_ip(word base, const char * name, const IPaddr &amp; a, char * &amp; tmp)</code>
+        </li>
+        <li>
+            <code>void add_printf(word base, const char * name, char * &amp; tmp, const char * format, ...)</code>
+        </li>
+        <li>
+            <code>void add_hexstring(word base, const char * name, byte * hex, word hex_len, char * &amp; tmp)</code>
+        </li>
+        <li>
+            <code>void add_bool(word base, const char * name, bool value)</code>
+        </li>
+        <li>
+            <code>void add_null(word base, const char * name)</code>
+        </li>
+        <li>
+            <code>void add_json_data(word base, class packet * data, const char * name=0)</code>
+        </li>
+    </ul>
+    <p>
+        Parameters:
+    </p>
+    <ul>
+        <li>
+            <code>base</code> - The ID of the base element. It must be <code>JSON_ID_ROOT (0xffff)</code> or the ID of an object or an array.
+        </li>
+        <li>
+            <code>name</code> - A name is needed for the elements of an object. For other elements the name is ignored and might be <code>0</code>.
+        </li>
+        <li>
+            <code>tmp</code> - A reference to a buffer pointer from the application to store content data.
+        </li>
+        <li>
+            <code>data</code> - A class packet which contains a JSON string
+        </li>
+    </ul>
+    <p>
+        The following functions can be used for encoding.
+    </p>
+    <dl>
+        <dt>word encode()</dt>
+        <dd>
+            encodes the descriptor list to a JSON string inside the buffer given with the constructor.
+        </dd>
+        <dt>class packet * encode_to_packet(class packet * data=0)</dt>
+        <dd>
+            encodes the descriptor list and returns the JSON string in a packet.
+        </dd>
+        <dt>void write(word current, char * & p, word incomplete = 0xffff)</dt>
+        <dd>
+            Encode the element (use 0 for complete data)identified by current to the buffer p.
+            This function is called by encode.
+            The incomplete argument can be used to write only the incomplete data so that new received
+            data can be appended to the buffer an decoding started again. The incomplete argument
+            should be the handle of the descriptor of the array, with potential incomplete elements.
+        </dd>
+    </dl>
+    <p>
+        Example:
+    </p>
+<pre> {
+   "a"&nbsp;: "hallo",
+   "b"&nbsp;: true,
+   "c"&nbsp;: [ "eins", "zwei", 3 ],
+   "d"&nbsp;: { "e"&nbsp;: -2 }
+ }
+</pre>
+<pre> 
+char temp[128];
+char * t = temp;
+class json_io json(0);
+word base = json.add_object(JSON_ID_ROOT,0);
+json.add_string(base, "a", "hallo");
+json.add_bool(base, "b", true);
+word c = json.add_array(base, "c");
+json.add_string(c, 0, "eins");
+json.add_string(c, 0, "zwei");
+json.add_unsigned(c, 0, 3, t);
+word d = json.add_object(base, "d");
+json.add_int(d, "e", -2, t);
+class packet * result = json.encode_to_packet();
+</pre>
+    <h2> Reading JSON data </h2>
+    <p>
+        Functions for decoding:
+    </p>
+    <ul>
+        <li>
+            <code>bool decode()</code> - decodes the JSON string in the buffer given with the constructor.
+        </li>
+    </ul>
+    <p>
+        Elements inside objects can be accessed by name using the following functions.
+    </p>
+    <ul>
+        <li>
+            <code>word get_object(word base, const char * name)</code> - returns the ID of the object, or <code>JSON_ID_NONE (0xffff)</code> if it doesn't exist.
+        </li>
+        <li>
+            <code>word get_array(word base, const char * name)</code> - returns the ID of the array, or <code>JSON_ID_NONE (0xffff)</code> if it doesn't exist.
+        </li>
+        <li>
+            <code>const char * get_string(word base, const char * name)</code>
+        </li>
+        <li>
+            <code>int get_int(word base, const char * name, bool * present=0)</code>
+        </li>
+        <li>
+            <code>dword get_unsigned(word base, const char * name, bool * present=0)</code>
+        </li>
+        <li>
+            <code>IPaddr get_ip(word base, const char * name, bool * present=0)</code>
+        </li>
+        <li>
+            <code>bool get_bool(word base, const char * name, bool * present=0)</code>
+        </li>
+    </ul>
+    <p>
+        Parameters:
+    </p>
+    <ul>
+        <li>
+            <code>base</code> - The ID of the base element. It must be <code>JSON_ID_ROOT (0xffff)</code> for the root element or the ID of an object or an array.
+        </li>
+        <li>
+            <code>name</code> - The name of the element.
+        </li>
+        <li>
+            <code>present</code> - If given by the caller, the boolean is set to true, if the element was found, or to false, if the element was not found.
+        </li>
+    </ul>
+    <p>
+        Elements inside arrays or inside the root element are enumerated using the following functions.
+    </p>
+    <ul>
+        <li>
+            <code>word get_object(word base, word &amp; last)</code>
+        </li>
+        <li>
+            <code>word get_array(word base, word &amp; last)</code>
+        </li>
+        <li>
+            <code>const char * get_string(word base, word &amp; last)</code>
+        </li>
+        <li>
+            <code>int get_int(word base, word &amp; last, bool * present=0)</code>
+        </li>
+        <li>
+            <code>dword get_unsigned(word base, word &amp; last, bool * present=0)</code>
+        </li>
+        <li>
+            <code>IPaddr get_ip(word base, word &amp; last, bool * present=0)</code>
+        </li>
+        <li>
+            <code>bool get_bool(word base, word &amp; last, bool * present=0)</code>
+        </li>
+    </ul>
+    <p>
+        Parameters:
+    </p>
+    <ul>
+        <li>
+            <code>base</code> - The ID of the base element. It must be <code>JSON_ID_ROOT (0xffff)</code> or the ID of an object or an array.
+        </li>
+        <li>
+            <code>last</code> - A reference to a word counter that shall be initialized with <code>0</code> for the first call. It is set to <code>JSON_ID_NONE (0xffff)</code>, if there are no more elements inside the base.
+        </li>
+        <li>
+            <code>present</code> - If given by the caller, the boolean is set to true, if the element was found, or to false, if the element was not found.
+        </li>
+    </ul>
+    <p>
+        Example:
+    </p>
+<pre> {
+   "a"&nbsp;: "hallo",
+   "b"&nbsp;: true,
+   "c"&nbsp;: [ "eins", "zwei", 3 ],
+   "d"&nbsp;: { "e"&nbsp;: -2 }
+ }
+</pre>
+<pre> class json_io json(in);
+ json.decode();
+ word root_last = 0;
+ word base = json.get_object(JSON_ID_ROOT, root_last);
+ const char * a = json.get_string(base, "a");
+ bool b = json.get_bool(base, "b");
+ word c = json.get_array(base, "c");
+ word c_last = 0;
+ const char * c1 = json.get_string(c, c_last);
+ const char * c2 = json.get_string(c, c_last);
+ dword c3 = json.get_unsigned(c, c_last);
+ word d = json.get_object(base, "d");
+ dword e = json.get_int(d, "e");
+</pre>
+    <h2> Other Functions </h2>
+    <h3> word to_url(word base, char * b, word l, const char * prefix = 0, bool cont = false) </h3>
+    <p>
+        Writes a json data structure as URL arguments
+    </p>
+    <dl>
+        <dt>base</dt>
+        <dd>
+            handle of the sub data structure to be written. 0xffff if the complete data structure is to be written
+        </dd>
+        <dt>b,l</dt>
+        <dd>
+            Output buffer and length of output buffer
+        </dd>
+        <dd>
+            prefix: Prefix to be used for the single elements. For elements nested within arrays or objects another prefix of the name of the array/object is added. The prefixes are sepearted by '.'
+        </dd>
+        <dt>cont</dt>
+        <dd>
+            true indicates that the arguments are to be added to other arguments. This means a '&amp;' is put at the beginning
+        </dd>
+    </dl>
+    <p>
+        Example:
+    </p>
+<pre> {
+   "a"&nbsp;: "hallo",
+   "b"&nbsp;: true,
+   "c"&nbsp;: [ "eins", "zwei", 3 ],
+   "d"&nbsp;: { "e"&nbsp;: -2 }
+ }
+</pre>
+    <p>
+        Is written to
+    </p>
+<pre>a=hallo&amp;b=true&amp;c=eins&amp;c=zwei&amp;c=3&amp;d.e=-2
+</pre>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.treeview</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../ui.scrollbar/innovaphone.ui.ScrollBar.js" type="text/javascript"></script>
+    <script src="../ui.text/innovaphone.ui.Text.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.TreeView.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            out.style.backgroundColor = "black";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.treeview</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var treeView = new innovaphone.ui.TreeView(out, "testtreeview");
+var anotherElement1 = new innovaphone.ui.Text("Text Node 1");
+var anotherElement2 = new innovaphone.ui.Text("Text Node 2");
+var node1 = treeView.root.addNode(anotherElement1.container, true, 1);
+var node2 = treeView.root.addNode(anotherElement2.container, true, 2);
+var tree = node2.createTree();
+var node3 = tree.addNode("stringNode", true, 3);
+// whole tree is created now, so sort it and load last opened tree nodes from local storage
+treeView.root.sort(innovaphone.ui.TreeView.sortTypes.text);
+treeView.root.openFromLocalStorage();
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2> innovaphone.ui.TreeView(container, storageId) </h2>
+
+    <p>
+        The TreeView has one or more nodes and each node may contain another subtree.<br>
+        It can be build statically or dynamically (a subtree is created on expanding a node and not before).<br>
+    </p>
+    <p>
+        The TreeView class itself exposes the following properties/functions:
+    </p>
+    <dl>
+        <dt>root</dt>
+        <dd>
+            the root tree of class <b>Tree</b>, which is always created
+        </dd>
+        <dt>resize()</dt>
+        <dd>
+            resizes the inner scrollbar. If openFromLocalStorage is not called, this method should be called after adding all nodes!
+        </dd>
+        <dt>getSelectedNode()</dt>
+        <dd>
+            returns the currently selected node of class <b>Node</b> or <b>null</b>
+        </dd>
+    </dl>
+    <p>
+        Call resize or openFromLocalStorage after you have added all nodes!
+    </p>
+
+
+    <h3>class Tree</h3>
+    <p>
+        The <b>Tree</b> class handles the nodes in one tree.
+</p>
+    <dl>
+        <dt>getContainer()</dt>
+        <dd>
+            return the container (div) which contains the nodes
+        </dd>
+
+        <dt>addNode(element, selectable, id)</dt>
+        <dd>
+            adds a node and returns an object of class '''Node'''
+            <dl>
+                <dt>element</dt>
+                <dd>
+                    can be a simple string or a DOMDocument element
+                </dd>
+                <dt>[selectable]</dt>
+                <dd>
+                    boolean, set true if the element can be selected
+                </dd>
+                <dt>[id]</dt>
+                <dd>
+                    a unique ID over the whole tree (including subtress) which can be used to reopen the tree after reloading the web page
+                </dd>
+            </dl>
+        <dt>openFromLocalStorage(storageIds, async)</dt>
+        <dd>
+            after creating the whole tree as far as possible this function must be called to reopen the tree as it has been on the last visit of the web site.
+            <dl>
+                <dt>[storageIds]</dt>
+                <dd>
+                    can be omitted, but might be used to force the opening of certain items.
+                </dd>
+                <dt>[async]</dt>
+                <dd>
+                    boolean
+                </dd>
+            </dl>
+        </dd>
+        <dt>clear()</dt>
+        <dd>
+            removes all nodes recursively
+        </dd>
+
+        <dt>sort(sortType, ascending)</dt>
+        <dd>
+            sorts the tree
+            <dl>
+                <dt>sortType</dt>
+                <dd>
+                    a value of <b>innovaphone.ui.TreeView.sortTypes</b> (numeric or text)
+                </dd>
+                <dt>[ascending]</dt>
+                <dd>
+                    boolean true or false
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>findNode(id)</dt>
+        <dd>
+            returns an instance of Node or null
+        </dd>
+
+        <dt>removeNode(id)</dt>
+        <dd>
+            removes the node and returns an instance of Node or null
+        </dd>
+
+        <dt>selectNode(node)</dt>
+        <dd>
+            selects a node
+            <dl>
+                <dt>node</dt>
+                <dd>
+                    an instance of Node
+                </dd>
+            </dl>
+        </dd>
+        <dt>getNodes()</dt>
+        <dd>
+            returns an array of nodes
+        </dd>
+
+        <dt>parentNode</dt>
+        <dd>
+            returns the parentNode
+        </dd>
+    </dl>
+
+    <h3>class Node</h3>
+    <dl>
+        <dt>createTree</dt>
+        <dd>
+            creates a subtree for this node and returns an object of class '''Tree'''
+        </dd>
+
+        <dt>setOnClick(funcOnClick)</dt>
+        <dd>
+            sets a function which is called if the node is clicked, the node is given as parameter
+        </dd>
+
+        <dt>setOnExpand(funcOnExpand)</dt>
+        <dd>
+            sets a function which is called if the nodes subtree is expanded (used for dynamic TreeViews), the node is given as parameter
+        </dd>
+
+        <dt>setOnDeselect(funcOnDeselect)</dt>
+        <dd>
+            sets a function which is called if the node is deselected, , the node is given as parameter
+        </dd>
+    </dl>
+
+    <p>
+        The following functions/members are implicitly called by the TreeView class itself, but might be usefull from outside too:
+    </p>
+
+    <h3>Members</h3>
+    <dl>
+        <dt>parentNode</dt>
+        <dd>
+            the parentNode, which might be null
+        </dd>
+        <dt>container</dt>
+        <dd>
+            the container
+        </dd>
+        <dt>content</dt>
+        <dd>
+            the content container, which is a child of container
+        </dd>
+    </dl>
+    <h3>Functions</h3>
+    <dl>
+        <dt>toggle()</dt>
+        <dd>
+            expands/collapses the subtree
+        </dd>
+        <dt>expand()</dt>
+        <dd>
+            expands the subtree
+        </dd>
+        <dt>collapse()</dt>
+        <dd>
+            collapses the subtree
+        </dd>
+        <dt>deselect()</dt>
+        <dd>
+            deselects the node
+        </dd>
+        <dt>select()</dt>
+        <dd>
+            selects the node
+        </dd>
+        <dt>getSubTree()</dt>
+        <dd>
+            returns the subTree of class '''Tree'''
+        </dd>
+        <dt>isSelected()</dt>
+        <dd>
+            true if the current node is selected
+        </dd>
+        <dt>isExpanded()</dt>
+        <dd>
+            true if the current node is expanded
+        </dd>
+        <dt>updateContent(element)</dt>
+        <dd>
+            updates the visible content of a node
+        </dd>
+        <dt>increaseMarginLeft(marginLeftPlus)</dt>
+        <dd>
+            to increase the left margins (to influence the indention)
+        </dd>
+        <dt>increaseMarginTop(marginLeftTop)</dt>
+        <dd>
+            to increase the top margins (to influence the indention)
+        </dd>
+    </dl>
+    <h3>object innovaphone.ui.TreeView.sortTypes</h3>
+    <p>this object contains the available sortTypes</p>
+    <dl>
+        <dt>innovaphone.ui.TreeView.sortTypes.text</dt>
+        <dt>innovaphone.ui.TreeView.sortTypes.numeric</dt>
+    </dl>
+</body>
+</html>

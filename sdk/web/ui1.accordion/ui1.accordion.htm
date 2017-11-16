@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        div.ijs-accordion-head {
+    background-color:aquamarine;
+    border-bottom-color: #929b9c;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    
+    text-align: left;
+    transition: 0.5s;
+    border: 2px solid black;
+
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right:5px;
+    
+}
+div.ijs-accordion-head:after {
+    content: '\02795';
+
+    color: white;
+    background-color: black;
+    float: right;
+    margin-left: 5px;
+
+}
+div.ijs-accordion-head.focus{
+     outline:0;
+ }
+
+div.ijs-accordion-head.active:after {
+    content: "\2796";
+}
+
+
+
+div.ijs-accordion-head.active{
+    border-bottom:none;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+    background-color:aquamarine;
+    color: #fdb901;
+}
+
+div.ijs-accordion-head:hover {
+    background-color:aquamarine;
+}
+
+div.ijs-accordion-panel {
+
+    background-color:aquamarine;
+    transition: 0.5s ease-in-out;
+    margin-left: 5px;
+    margin-right:5px;
+    border-left: 2px solid black;    
+    border-right: 2px solid black;
+}
+
+div.ijs-accordion-panel.show {
+
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    border-right: 2px solid black;
+    
+    margin-left: 5px;
+    margin-right:5px;
+    background-color:aquamarine;
+    border-bottom-color: #929b9c;
+}
+
+div.ijs-accordion-panel.show:before {
+  border-top: 2px solid black;
+  content: '';
+  display: block;
+  width: 50%;
+  margin-left:25%;
+  background-color:aquamarine;
+  border-bottom-color: #929b9c;
+}
+    </style>
+    <title>ui.accordion</title>
+    <link rel="stylesheet" href="../lib1/innovaphone.lib1.css" type="text/css"/>
+
+
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="../lib1/innovaphone.lib1.js" type="text/javascript"></script>
+    <script src="../ui1.lib/innovaphone.ui1.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui1.accordion.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+
+
+        }
+
+
+    </script>
+</head>
+
+<body style="overflow:scroll">
+    <h1>ui.accordion</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+var accordionNoStyle = new innovaphone.ui1.Accordion("width:300px; height:200px","", "");
+out.appendChild(accordionNoStyle.container);
+
+
+
+var section1 = new innovaphone.ui1.Div("", "Test section1 <br /> lorem ipsum", "");
+var section2 = new innovaphone.ui1.Div("", "Test section2 <br /> lorem ipsum <br> more text", "");
+
+
+accordionNoStyle.addSection("Title 1 no Style", section1);
+accordionNoStyle.addSection("Title 2 no style", section2);
+
+
+var accordion = new innovaphone.ui1.Accordion("position:absolute; left:50px; top:150px; width:300px; height:200px","ijs-accordion-head", "ijs-accordion-panel");
+out.appendChild(accordion.container);
+
+var section1NoStyle = new innovaphone.ui1.Div("", "Test section1 <br /> lorem ipsum", "");
+var section2NoStyle = new innovaphone.ui1.Div("", "Test section2 <br /> lorem ipsum <br> more text", "");
+accordion.addSection("Title 1", section1NoStyle);
+accordion.addSection("Title 2", section2NoStyle);
+var toRemove = accordion.addSection("Title 3");
+accordion.removeSection(toRemove);
+function selectionChanged() {
+    var selected = accordion.getExpandedSection();
+    if(selected!=null)
+        alert(selected.title.container.innerText);
+}
+accordion.setOnChangeSection(selectionChanged);
+
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+
+    <h1>innovaphone.ui.Accordion(container, left, top, accWidth, accHeight)</h1>
+    <p>Creates an Accordion display</p>
+
+    <h2>Arguments</h2>
+    <dl>
+        <dt>container</dt>
+        <dd>container for the accordion</dd>
+        <dt>left</dt>
+        <dd>left position relative to the container</dd>
+        <dt>top</dt>
+        <dd>top position relative to the container</dd>
+
+        <dt>accWidth</dt>
+        <dd>the maximum width of the container</dd>
+
+        <dt>accHeight</dt>
+        <dd>the maximum height of the container</dd>
+
+    </dl>
+
+    <h2>Functions</h2>
+    <dl>
+        <dt>addSection(name, container)</dt>
+        <dd>Add a new accordion section with the title "name" and content from container</dd>
+        <dt>removeSection(name)</dt>
+        <dd>Remove the section with the title "name" from the accordion</dd>
+        <dt>setOnChangeSection(onChange)</dt>
+        <dd>Add listener for handling the changing the accordion section</dd>
+        <dt>getExpandedSection</dt>
+        <dd>Returns the name of the expanded section</dd>
+        <dt>getExpandedMaxHeight</dt>
+        <dd>Returns the maximum height of the expanded section body</dd>
+    </dl>
+
+
+</body>
+</html>

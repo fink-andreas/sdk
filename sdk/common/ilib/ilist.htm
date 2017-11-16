@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ilist</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>ilist</h1>
+    <p>
+        The ilist is a template library modeled after the STL list. Instead of allocating a
+        container for the elements, it uses base classes for the elements. This way much less
+        alloc an free operations are needed, which saves a lot of cpu time and memory. Also
+        when iterating thru the list one indirection less is needed. It uses the istd namespace.
+    </p>
+    <hr/>
+    <h2>template &lt;class T&gt; class list</h2>
+    <p>
+        The list itself consisting of a head and tail pointer.
+    </p>
+    <h3>T * front()</h3>
+    <p>
+        returns front (head) of list.
+    </p>
+    <h3> T * back()</h3>
+    <p>
+        returns back (tail) of list.
+    </p>
+    <h3>void push_front(T * e)</h3>
+    <p>
+        Add an element to the front (head) of the list.
+    </p>
+    <h3>void push_back(T * e)</h3>
+    <p>
+        Add an element to the back (tail) of the list.
+    </p>
+    <h3>T * pop_front()</h3>
+    <p>
+        Remove an element from the front (head) of the list.
+    </p>
+    <h3>T * pop_back()</h3>
+    <p>
+        Remove an element from the back (tail) of the list.
+    </p>
+    <h3>void insertBefore(T * e, T * before)</h3>
+    <p>
+        Insert the element e before the element identified by 'before' in the list.
+    </p>
+    <h3>void insertBehind(T * e, T * before)</h3>
+    <p>
+        Insert the element e behind the element identified by 'behind' in the list.
+    </p>
+    <h3>void swap(T * a, T * b)</h3>
+    <p>
+        Swaps the values of the two given listElement objects. The swap function of listElement must be overwritten, also the pointers
+        a and b passed to swap must point to a valid object.
+    </p>
+    <h3>void sort(T * start = NULL, T * end = NULL)</h3>
+    <p>
+        Sorts the list by using quicksort. The sort will be done between start and end. If start is NULL, the start of the list will be used, and
+        if end is NULL, the end of the list. So by calling sort() withouth parameters, the sorting will be done for the whole list. During sorting,
+        the function will call listElement::compare() and listElement::swap(). So both of them must be implemented to not end up with an assertion.
+    </p>
+    <hr/>
+    <h2> template &lt;class T&gt; class listElement</h2>
+    <p>
+        Used as a base class for elements. This contains the forward and backward linking
+        pointer and a pointer to the list itself.
+    </p>
+    <p>
+        The destructor of a list element removes the element from the list.
+    </p>
+    <h3>T * goNext()</h3>
+    <p>
+        Returns the next element in the list.
+    </p>
+    <h3>T * goPrev()</h3>
+    <p>
+        Returns the previous element in the list.
+    </p>
+    <h3>void remove()</h3>
+    <p>
+        Removes the element from the list.
+    </p>
+    <h3>list<T> * getList()</h3>
+    <p>
+        Returns the list, in which this element is linked.
+    </p>
+
+    <h3>int compare(T * e)</h3>
+    <p>
+        Will be called from list::sort() to know how to handle the item and the one passed to compare. The function need to return a value less than 0, if
+        this is < e, zero if this is equal to e or a value greater than 0 if this is > e. If you don't whant to call list::sort, there is no need to override
+        this function.
+    </p>
+
+    <h3>void swap(T * with)</h3>
+    <p>
+        Will be called from list::sort() or list::swap() to swap the instance of the listElement object with the one passed. The implementation of the function
+        is responsible to switch all fields of this and with. If you don't whant to call list::sort() or list::swap(), there is no need to override this function.
+    </p>
+
+
+    <hr/>
+    <h2>Sample</h2>
+    <pre>
+    // use the ilist base class
+class sample : public istd::listElement&lt;sample&gt; {
+
+}
+ ...
+    // defining the list
+istd::list&lt;sample&gt; samples;
+ ...
+    // iterating thru the list
+for(class sample * s = samples.front(); s; s=s->goNext()) {
+    ...
+}
+
+    </pre>
+</body>
+</html>

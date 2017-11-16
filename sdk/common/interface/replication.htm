@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>replication</title>
+    <link rel="stylesheet" href="../../web/lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>replication</h1>
+    <p>
+        Interfaces used for replication of tables from a server or table provider to a client. On the
+        client side the table will be written into a local database. On the server side the table could
+        be anything.
+        The replication relies on a underlying websocket connection which provides JsonApi for message
+        exchange.
+    </p>
+    <hr/>
+    <h2>replicate</h2>
+    <p>
+        Client side library to instantiate a replication, which covers the following features:
+        <ul>
+            <li>
+                Exchange of information, which columns of the table are requested by the client
+                and which of these can provided by the server
+            </li>
+            <li>
+                Full replication each time the websocket connection is established
+            </li>
+            <li>
+                Dynamic updates of the client when the connection is up
+            </li>
+            <li>
+                Updates from client sent to the server
+            </li>
+            <li>
+                Conflict resolution for simultaneous changes when connection is down
+            </li>
+        </ul>
+    </p>
+    <h3>interface</h3>
+    <p>
+        The interface is defined by the following classes:
+    </p>
+    <p><pre>
+class IReplicator : public UJsonApiContext {
+public:
+    virtual ~IReplicator() {};
+    virtual void AddColumn(const char * remote, const char * local, enum ReplicationType type, bool update) = 0;
+    virtual void Initialize(const char * row) = 0;
+    virtual void Added(ulong64 id) = 0;
+    virtual void Deleted(ulong64 id) = 0;
+    virtual void DeletedConfirm(ulong64 id) = 0;
+    virtual void Updated(ulong64 id, ulong64 mask) = 0;
+
+    static class IReplicator * createReplicator(class UReplicator * user, const char * remote, class IDatabase * database, const char * local, bool add, bool del);
+};
+
+class UReplicator {
+public:
+    virtual void ReplicatorInitialized() = 0;
+    virtual void ReplicatorAdded(ulong64 id) = 0;
+    virtual void ReplicatorDeleted(ulong64 id) = 0;
+    virtual void ReplicatorDeletedConfirm(ulong64 id) = 0;
+    virtual void ReplicatorUpdated(ulong64 id, ulong64 mask) = 0;
+};
+    </pre></p>
+    <dl>
+        <dt>static class IReplicator * createReplicator(class UReplicator * user, const char * remote, class IDatabase * database, const char * local, bool add, bool del)</dt>
+        <dd>
+            Static function to instantiate a replication. This is typically done, when the App is initialized.
+            <dl>
+                <dt>user</dt>
+                <dd>User class. Used for status callbacks</dd>
+                <dt>remote</dt>
+                <dd>The name of the table on the remote side</dd>
+                <dt>database</dt>
+                <dd>Local database connection</dd>
+                <dt>local</dt>
+                <dd>Name of the local database table</dd>
+                <dt>add, del</dt>
+                <dd>Set true to request local add/delete of rows</dd>
+            </dl>
+        </dd>
+        <dt>void AddColumn(const char * remote, const char * local, enum ReplicationType type)</dt>
+        <dd>
+            Add a column to the table
+            <dl>
+                <dt>remote</dt>
+                <dd>The name of the column on the server side</dd>
+                <dt>local</dt>
+                <dd>The name of the local database column</dd>
+                <dt>type</dt>
+                <dd>The datatype</dd>
+                <dt>update</dt>
+                <dd>true, if the client whished to update this column</dd>
+            </dl>
+        </dd>
+        <dt>Initialize(const char * row)</dt>
+        <dd>
+            Initialize the replication. To be called when all columns are added and a database
+            connection exists. <b>row</b> is a sql expression for the type referencing a row
+            in the local database table.
+            Example: 'BIGINT REFERENCES objects(id) ON DELETE CASCADE NOT NULL'
+        </dd>
+        <dt>Added(ulong64 id)</dt>
+        <dd>
+            Should be called, when a local row was added, so the replication can be done.
+        </dd>
+        <dt>Deleted(ulong64 id)</dt>
+        <dd>
+            Should be called before a local row is deleted, so that replication can be done.
+        </dd>
+        <dt>DeletedConfirm(ulong64 id)</dt>
+        <dd>
+            Confirm the local deletion. The row is then locally deleted by the replication.
+        </dd>
+        <dt>Updated(ulong64 id, ulong64 mask)</dt>
+        <dd>
+            Should be called if a row was updated locally. mask indicate the changed columns
+        </dd>
+        <dt>UReplicator</dt>
+        <dd>
+            User class used for status callbacks
+            <dl>
+                <dt>ReplicatorInitialized()</dt>
+                <dd>
+                    Indicate that replicator initialization is complete
+                </dd>
+                <dt>ReplicatorAdded(ulong64 id)</dt>
+                <dd>
+                    Indicates that a row was added to the table. id is the local primary key of the row
+                </dd>
+                <dt>ReplicatorDeleted(ulong64 id)</dt>
+                <dd>
+                    Indicates that a row was deleted on the remote table. The delete is executed locally
+                    only after a call to DeleteConfirm()
+                </dd>
+                <dt>ReplicatorUpdated(ulong64 id, ulong64 mask)</dt>
+                <dd>
+                    Indicates that a row was updated. id identifies the row. mask indicates which columns
+                    were updated. bit0 refers to the first column added, bit1 to the second, ...
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <hr/>
+    <h2>Replication Protocol, Messages</h2>
+    <p>
+        Json messages are used for the replication. Which use the member 'mt' as message type.
+    </p>
+    <h3>ReplicateStart</h3>
+    <p>
+        Sent from client to server to start the replication. The client uses this message to indicate
+        to the server, which columns are of interest.
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+        <dt>add</dt>
+        <dd>Indicates that the client is able to add rows</dd>
+        <dt>del</dt>
+        <dd>Indicates that the client is able to delete rows</dd>
+        <dt>columns:[{name:<i>name</i>, update:<i>true/false</i>}, ...]</dt>
+        <dd>Array of columns, with name and information if update is wanted</dd>
+    </dl>
+    <h3>ReplicateStartResult</h3>
+    <p>
+        Sent from the server to the client in response to ReplicateStart. The server indicates the
+        actual columns available.
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+        <dt>add</dt>
+        <dd>Indicates that the client is allowed to add rows</dd>
+        <dt>del</dt>
+        <dd>Indicates that the client is allowed to delete rows</dd>
+        <dt>columns:{<i>name</i>:{update:<i>true/false</i>}, ...}</dt>
+        <dd>
+            Array of supported columns. with update the server indicates if this column can be
+            updated by the client
+        </dd>
+    </dl>
+    <h3>ReplicateNext</h3>
+    <p>
+        Sent from client to server to request the next row for the initial full replication. The
+        server keeps track what the last row was and selects the next one.
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+    </dl>
+    <h3>ReplicateNextResult</h3>
+    <p>
+        Sent from server to client in response to ReplicateNext. It there is a next row, a member
+        values contains the content of the row
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+        <dt>columns:[{name:<i>name</i>, value:<i>value</i>, offline:<i>timestamp</i>}, ...]</dt>
+        <dd>
+            An array of objects for all columns of a row. The first object always
+            contains the primary key of the table.
+        </dd>
+    </dl>
+    <h3>ReplicateAdd</h3>
+    <p>
+        Sent from server or client in response to add a row
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+    </dl>
+    <h3>ReplicateDel</h3>
+    <p>
+        Sent from server or client in response to add a row
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+    </dl>
+    <h3>ReplicateUpdate</h3>
+    <p>
+        Sent from server or client to update values of a row when the connection is online
+    </p>
+    <dl>
+        <dt>api</dt>
+        <dd>Name of the table on the server side</dd>
+        <dt>columns:[{name:<i>name</i>, value:<i>value</i>}, ...]</dt>
+        <dd>
+            An array of objects for all updated columns of the given row. The first object always
+            contains the primary key of the table.
+        </dd>
+    </dl>
+    <hr/>
+    <h2>Replication Protocol, Procedures</h2>
+    <dl>
+        <dt>Start of replication</dt>
+        <dd>
+            The client start the Replication by sending a ReplicateStart messages. In this message
+            the client announces the columns in which it is interessted in, with the information, if
+            the client wants to update this columns. The server responds with ReplicateStartResult
+            and provides the information which column is available and which can be updated.
+        </dd>
+        <dt>Initial full replication</dt>
+        <dd>
+            With ReplicateNext, ReplicateNextResult the client gets all rows of the table and updates
+            the local database.
+        </dd>
+        <dt>Conflict resolution during initial full replication</dt>
+        <dd>
+            Client and Server keep a table for all updates done when offline. This table contains the id
+            of the changed row, the name of the changed column and the timestamp of the change.<br/>
+            The update timestamp is sent with the value to the client, if a change was done offline.<br/>
+            On the replicator client, by default the value received from the server is used, except there
+            was an offline update on the client with a timestamp later then any received from the server.<br/>
+            If the client verion is used, an update is sent from the client to the server to update the value.
+        </dd>
+        <dt>Deletion of rows when offline</dt>
+        <dd>
+            Any row deleted on the server during offline, is not present on the initial full replication
+            and will then be deleted on the client as well.<br/>
+            Any deletion of rows on the client side must be safed in the list of offline changes, so that
+            it can be done on the server when the replication is online again.
+        </dd>
+        <dt>Adding of rows when offline</dt>
+        <dd>
+            A row added on the server side during offline, will be added on the client during initial
+            replication.<br/>
+            For a row added on the client side this adding has to be safed as change, so that the row
+            is added on the server side as well.
+        </dd>
+        <dt>Updates when online</dt>
+        <dd>
+            When online either side is sending a ReplicateUpdate message containing changed columns of
+            a single row. The other side responds with ReplicateUpdateResult.
+        </dd>
+        <dt>Conflict resolution during online update</dt>
+        <dd>
+            A conflict occurs when server and client are sending a ReplicateUpdate message containing
+            identical columns at the same time, meaning the ReplicateUpdate is received from the other
+            side before the ReplicateUpdateResult.<br/>
+            In this case the server keeps the value of the column and the client changes it back to the
+            server version. No need for any further messages.
+        </dd>
+    </dl>
+</body>
+</html>

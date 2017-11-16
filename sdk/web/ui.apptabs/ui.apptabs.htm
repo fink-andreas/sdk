@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>ui.apptabs</title>
+    <link rel="stylesheet" href="../lib/innovaphone.lib.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib/innovaphone.doc.css" type="text/css" />
+    <script src="../lib/innovaphone.lib.js" type="text/javascript"></script>
+    <script src="innovaphone.ui.AppTabs.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        function Try() {
+            var out = document.getElementById('out');
+            out.innerText = "";
+            eval(document.getElementById('code').value);
+        }
+    </script>
+</head>
+
+<body>
+    <h1>ui.apptabs</h1>
+    <button onclick="Try()">Try</button>
+    <div style="position:relative; height:420px">
+        <textarea id="code" style="position: absolute; left: 0px; top: 0px; width: 600px; height: 400px; border: 1px solid grey; font-family: Lucida Console">
+out.innerHTML = "";
+var a = new innovaphone.ui.AppTabs(out, "devices");
+a.addApp("App1", function (container) { });
+a.addApp("App2", function (container) { });
+var logo = document.createElement("div");
+logo.style.position = "absolute";
+logo.style.top = "11px";
+logo.style.left = "0px";
+logo.style.bottom = "0px";
+logo.style.right = "0px";
+logo.style.backgroundColor = "red";
+a.addRight(logo);
+a.show();
+        </textarea>
+        <div id="out" style="position:absolute; left:610px; top:0px; width:600px; height:400px; border:1px solid grey">
+
+        </div>
+    </div>
+    <h2>innovaphone.ui.AppTabs(container, storageId, obj)</h2>
+    <p>
+    Adds tabs to the left and/or right of the page.
+    </p>
+    <dl>
+        <dt>container</dt>
+        <dd>
+        </dd>
+        <dt>[storageId]</dt>
+        <dd>if given, stores the active tab inside the localstorage</dd>
+        <dt>[obj]</dt>
+        <dd>
+            Object stored in the tab. Passed as argument in oninit
+        </dd>
+
+        <dt>addApp(name, onInit)</dt>
+        <dd>
+            adds an application tab to the left
+        </dd>
+
+        <dt>addRight(element)</dt>
+        <dd>
+            adds an element to the right
+        </dd>
+
+        <dt>show()</dt>
+        <dd>
+            shows the last active (localStorage) tab
+        </dd>
+
+        <dt>focus(text)</dt>
+        <dd>
+            Shows the Tab identified by text
+        </dd>
+    </dl>
+</body>
+</html>

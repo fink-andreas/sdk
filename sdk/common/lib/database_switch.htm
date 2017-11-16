@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>database_switch</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>database_switch</h1>
+    <p>
+        The database switch can be used if one needs multiple UDatabase user instances
+        which work within the same logical database transaction, as one database
+        transaction just processes requests from the same UDatabase user.
+    </p>
+    <p>
+        This implementation stores the UDatabase user from the application inside a queue
+        and always uses the own UDatabase pointer.
+    </p>
+    <dl>
+        <dt>DatabaseSwitch(class IDatabase * database)</dt>
+        <dd>
+            initializes a DatabaseSwitch instance for the given IDatabase instance.
+            <dl>
+                <dt>methods</dt>
+                <dd>
+                    provides the same methods as IDatabase
+                </dd>
+            </dl>
+        </dd>
+    </dl>
+    <p>
+        <dl>
+            <dt>Example:</dt>
+                <dd>
+                    <code type="cpp">
+                        <pre>
+class IDatabase * database = databaseProvider->CreateDatabase(iomux, this, this);
+class IDatabase * databaseSwitch = new DatabaseSwitch(database); 
+databaseSwitch->BeginTransaction(databaseUserA);    // databaseUserA gets the BeginTransactionResult callback
+databaseSwitch->ExecSQL(databaseUserB, "...");      // databaseUserB gets the ExecSQLResult callback
+databaseSwitch->ExecSQL(databaseUserC, "...");      // databaseUserC gets the ExecSQLResult callback
+databaseSwitch->EndTransaction(databaseUserA);      // databaseUserA gets the EndTransactionResult callback
+                    </pre>
+                </code>
+            </dd>
+        </dl>
+    </p>
+</body>
+</html>

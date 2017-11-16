@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>com.innovaphone.client (App API)</title>
+    <link rel="stylesheet" href="../lib1/innovaphone.lib1.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>com.innovaphone.client (App API)</h1>
+    <p>
+        This API is used for communicating with the client. It provides the following functionality for apps:
+        <ul>
+            <li>Manage app links on the home screen and the start bar.</li>
+            <li>Notifying the client, if profile pictures need to be reloaded.</li>
+        </ul>
+    </p>
+    <p>
+        There is only a single provider for this API that is the client. The corresponding provider name is "@client".
+    </p>
+
+    <h2>API model</h2>
+    <h3>Service info</h3>
+    <p>
+        The API doesn't define any service info.
+    </p>
+    <h3>Provider model</h3>
+    <p>
+        The provider model contains the app links for each app that are currently attached to home and start.
+    </p>
+    <p>
+        <dl>
+            <dt>home</dt>
+            <dd>An object containing the app links that are attached to home for each app.</dd>
+            <dt>start</dt>
+            <dd>An object containing the app links that are attached to start for each app.</dd>
+        </dl>
+    </p>
+    <h3>Example</h3>
+<pre>
+{
+  "@client": {
+    "title": "innovaphone App Client",
+    "url": "http:\/\/pbx.example.com\/PBX0\/APPCLIENT\/13XXXX\/appclient.htm",
+    "info": { },
+    "model": {
+      "home": {
+        "phone": [ ],
+        "contacts": [
+          "id=3#s=john.doe&d=John%20Doe",
+          "id=4#s=joe.bloggs&d=Joe%20Bloggs"
+        ]
+      },
+      "start": {
+        "phone": [ ],
+        "contacts": [ 
+          "id=5",
+          "id=6"
+        ]
+      }
+    }
+  }
+}
+</pre>
+
+    <h2>API messages</h2>
+    <p>
+        All messages are JSON objects that have a mandatory attribute "mt" that specifies the message type.
+    </p>
+    <h3>Requests</h3>
+    <dl>
+        <dt>UpdateProfile</dt>
+        <dd>Tells the client that the profile picture of the user has changed and shall be reloaded.</dd>
+        <dd>Example: <code>{ mt: "UpdateProfile" }</code></dd>
+        <dt>SetAttachedToHome</dt>
+        <dd>Attaches or detaches an app link to the home screen. Apps can only attach links to itself.</dd>
+        <dd>
+            <dl>
+                <dt>reference</dt>
+                <dd>The app parameters and client parameters of the app link without leading "?".</dd>
+                <dt>attached</dt>
+                <dd>true if the app link shall be attached.</dd>
+                <dd>false if the app link shall be deatached.</dd>
+            </dl>
+        </dd>
+        <dd>Example: <code>{ mt: "SetAttachedToHome", reference: "id=13#s=doe&d=John%20Doe", attached: true }</code></dd>
+        <dt>SetAttachedToStart</dt>
+        <dd>Attaches or detaches an app link to the start bar. Apps can only attach links to itself.</dd>
+        <dd>
+            <dl>
+                <dt>reference</dt>
+                <dd>The app parameters and client parameters of the app link without leading "?".</dd>
+                <dt>attached</dt>
+                <dd>true if the app link shall be attached.</dd>
+                <dd>false if the app link shall be deatached.</dd>
+            </dl>
+        </dd>
+        <dd>Example: <code>{ mt: "SetAttachedToStart", reference: "id=11", attached: true }</code></dd>
+        <dt>ShowStatusInfo</dt>
+        <dd>
+            Opens an HTML page in the client as a status information. It is only shown, while the originating app is in the background.
+            When the originating app is closed, the client closes all related status informations.
+        </dd>
+        <dd>
+            <dl>
+                <dt>url</dt>
+                <dd>The URL of the HTML page that shall be shown.</dd>
+                <dt>id</dt>
+                <dd>An id that must be unique for the app that created the notification.</dd>
+            </dl>
+        </dd>
+        <dd>Example: <code>{ mt: "ShowStatusInfo", url: "https://apps.example.com/phone/activecall.htm?app=phone&call=4", id: "4" }</code></dd>
+        <dt>CloseStatusInfo</dt>
+        <dd>
+            Closes a status information that has been opened using <code>ShowStatusInfo</code>.
+        </dd>
+        <dd>
+            <dl>
+                <dt>id</dt>
+                <dd>The id that has been used to create the notification.</dd>
+                <dd>If no id is given, the client will close all status informations of the app.</dd>
+            </dl>
+        </dd>
+        <dd>Example: <code>{ mt: "CloseStatusInfo", id: "4" }</code></dd>
+    </dl>
+    <h3>Responses</h3>
+    <p>
+        The API doesn't define any response messages.
+    </p>
+
+    <h2>Concepts</h2>
+    <h3>App links</h3>
+    <p>
+        The URI format for app links consists of
+        <dl>
+            <dt>app name</dt>
+            <dd>The name of app as defined in the app object in the PBX. The client will open this app, when the app link is clicked by the user.</dd>
+            <dt>app parameters (optional)</dt>
+            <dd>A search string (?) with the parameters that are passed to the app.</dd>
+            <dt>client parameters (optional)</dt>
+            <dd>
+                A fragment identifier (#) with parameters for the client. Currently the following parameters are defined:
+                <dl>
+                    <dt>d</dt>
+                    <dd>The display name that shall be shown on the app tile or in the tooltip of the app icon. If no display name is given, the client will show the name of the app.</dd>
+                    <dt>s</dt>
+                    <dd>A SIP URI for presence monitoring. The presence will be shown on the app tile on the home screen.</dd>
+                </dl>
+            </dd>
+        </dl>
+    </p>
+    <p>
+        Example: <code>contacts?id=13#s=doe&d=John%20Doe</code>
+    </p>
+</body>
+</html>

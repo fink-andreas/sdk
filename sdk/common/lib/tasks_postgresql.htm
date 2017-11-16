@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>tasks postgresql</title>
+    <link rel="stylesheet" href="../../web/lib/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>tasks_postgresql</h1>
+    <p>
+        This task can be used to ininitalize a table. Columns and constraints can be added too.
+    <p/>
+
+    <dl>
+        <dt>class TaskPostgreSQLInitTable(class IDatabase * database, const char * tableName)</dt>
+        <dd>
+            one task for one table
+            <dl>
+                <dt>void AddColumn(const char * name, const char * type)<dt>
+                <dd>
+                    adds a column '''name''' with the given '''type''', e.g. '''BIGINT REFERENCES domains(id) PRIMARY KEY NOT NULL'''
+                </dd>
+                <dt>void AddConstraint(const char * name, const char * type)</dt>
+                <dd>
+                    adds a constraint '''name''' with the given value, e.g. '''PRIMARY KEY (domain_id, user_id)'''
+                </dd>
+                <dt>void AddIndex(const char * name, const char * value, bool unique)</dt>
+                <dd>
+                    creates an index '''name''' with the given value. '''value''' could be a column or a combination of columns ("col1,col2,..", create index over several columns). The data in the column(s) will be unique depending on the '''unique''' parameter
+                </dd>
+                <dt>void Start(class UTask * user)</dt>
+                <dd>
+                    starts the task
+                </dd>
+            </dl>
+        </dd>
+
+        <dt>class TaskPostgreSQLInitEnum(class IDatabase * database, const char * enumName)</dt>
+        <dd>
+            one task for one enum
+            <dl>
+                <dt>void AddValue(const char * name)
+                <dt>
+                <dd>
+                    adds a value '''name''' to the enum.
+                </dd>
+                <dt>void Start(class UTask * user)</dt>
+                <dd>
+                    starts the task
+                </dd>
+            </dl>
+        </dd>    </dl>
+
+    <pre>
+#include "platform/platform.h"
+#include "common/interface/database.h"
+#include "common/interface/task.h"
+#include "common/lib/tasks_postgresql.h"
+#include "sysadmin_tables.h"
+
+TaskDatabaseInit::TaskDatabaseInit(IDatabase * database) :
+initEnum(database, "demo_type"),
+initDomains(database, "domains"),
+initLocations(database, "locations"),
+{
+    // enums
+    initEnum.AddValue("DEMO_TYPE_1");
+    initEnum.AddValue("DEMO_TYPE_2");
+    initEnum.AddValue("DEMO_TYPE_3");
+
+    // domains
+    initDomains.AddColumn("id", "BIGSERIAL PRIMARY KEY NOT NULL");
+    initDomains.AddColumn("name", "VARCHAR(32) UNIQUE NOT NULL");
+    initDomains.AddColum("enum_demo", "demo_type"); // Type of the field = name of the enum
+    initDomains.AddIndex("domains_index_name", "name", false);
+
+    // locations
+    initLocations.AddColumn("id", "BIGSERIAL PRIMARY KEY NOT NULL");
+    initLocations.AddColumn("domain_id", "BIGINT REFERENCES domains(id)");
+    initLocations.AddColumn("name", "VARCHAR(32) NOT NULL");
+    initLocations.AddConstraint("locations_unique_name", "UNIQUE (domain_id, name)");
+    initLocations.AddIndex("locations_index_name", "domain_id, name", true);  // index on several columns
+}
+
+TaskDatabaseInit::~TaskDatabaseInit()
+{
+}
+
+void TaskDatabaseInit::Start(class UTask * user)
+{
+    this->user = user;
+    initEnums.Start(this);
+}
+
+void TaskDatabaseInit::TaskComplete(class ITask * const task)
+{
+    if (task == &initEnum) initDomains.Start(this);
+    else if (task == &initDomains) initLocations.Start(this);
+    else if (task == &initLocations) user->TaskComplete(this);
+    else ASSERT(false, "TaskDatabaseInit::TaskComplete");
+}
+
+void TaskDatabaseInit::TaskFailed(class ITask * const task)
+{
+    user->TaskFailed(this);
+}
+    </pre>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>com.innovaphone.avatar (App API)</title>
+    <link rel="stylesheet" href="../lib1/innovaphone.lib1.css" type="text/css" />
+    <link rel="stylesheet" href="../styles/innovaphone.Styles.css" type="text/css" />
+    <link rel="stylesheet" href="../lib1/innovaphone.doc.css" type="text/css" />
+</head>
+
+<body>
+    <h1>com.innovaphone.avatar (App API)</h1>
+    <p>
+        This API is used for managing profile images. For this, the com.innovaphone.avatar library is used.
+    </p>
+    <p>
+        <dl>
+            <dd>To access the API: <br/><code>var avatar = new innovaphone.Avatar(start);</code></dd>
+            <dd>
+                To get an URL: <br/><code>avatar.url(user, size);</code>
+                <dl>
+                    <dt>user</dt>
+                    <dd>The username from the user which profile picture is requested.</dd>
+                    <dt>size</dt>
+                    <dd>The size of the picture in pixels (for example, 64).</dd>
+                </dl>
+            </dd>
+        </dl>
+    </p>
+
+    <h2>API model</h2>
+    <h3>Service info</h3>
+    <p>
+        <dl>
+            <dt>filename</dt>
+            <dd>The filename part of the profile picture URI.</dd>
+            <dt>token</dt>
+            <dd>An arbitrary string used for authentication.</dd>
+            <dt>domain</dt>
+            <dd>The domain of the avatar provider.</dd>
+        </dl>
+<pre>
+    "info":{
+        "filename":"picture",
+        "token":"fa37JncCHryDsbzayy4cBWDxS22JjzhMaiRrV41mtzxlYvKWrO72tK0LK0e1zLOZ",
+        "domain":"example.com"
+    }
+</pre>
+    </p>
+    <h3>Provider model</h3>
+    <p>
+        The API doesn't define a provider model.
+    </p>
+
+    <h2>API messages</h2>
+    <p>
+        All messages are JSON objects that have a mandatory attribute "mt" that specifies the message type.
+    </p>
+    <h3>Requests</h3>
+    <p>
+        The API doesn't define any request messages.
+    </p>
+    <h3>Responses</h3>
+    <p>
+        The API doesn't define any response messages.
+    </p>
+    
+</body>
+</html>

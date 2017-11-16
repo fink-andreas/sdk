@@ -1,0 +1,1012 @@
+Building innovaphone App SDK sample 13r1/apps/sdk 130756
+on INNO-BUILDER at 11/16/17 00:31:17
+as requested by TEhrhardt@innovaphone.com
+
+cd sdk; export PATH=$PATH_GCC_ARM_BIN:c:/Windows/system32; make -j5 -f sdk.mak arm
+sdk/sdk-lib.mak:13: warning: overriding recipe for target 'sdk-cleanup'
+sdk/sdk-lib.mak:13: warning: ignoring old recipe for target 'sdk-cleanup'
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/sdk-main.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/sdk-main.o sdk-main.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/asn1.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/asn1.o sdk/common/ilib-cpp/asn1.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/asn1_ber.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/asn1_ber.o sdk/common/ilib-cpp/asn1_ber.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/asn1_per.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/asn1_per.o sdk/common/ilib-cpp/asn1_per.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/base64.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/base64.o sdk/common/ilib-cpp/base64.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/btree.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/btree.o sdk/common/ilib-cpp/btree.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/json.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/json.o sdk/common/ilib-cpp/json.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/str.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/str.o sdk/common/ilib-cpp/str.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/xml.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/xml.o sdk/common/ilib-cpp/xml.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/uri.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/uri.o sdk/common/ilib-cpp/uri.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/hash.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/hash.o sdk/common/ilib-cpp/hash.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/cipher.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/cipher.o sdk/common/ilib-cpp/cipher.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/crc.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/crc.o sdk/common/ilib-cpp/crc.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/http_query_args.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/http_query_args.o sdk/common/ilib-cpp/http_query_args.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/debug.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/debug.o sdk/common/linux/os-cpp/debug.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/iomux.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/iomux.o sdk/common/linux/os-cpp/iomux.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/random.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/random.o sdk/common/service/random/random.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_internal.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_internal.o sdk/common/service/webserver_shared/webserver_internal.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_message.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_message.o sdk/common/service/webserver_shared/webserver_message.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_plugin.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_plugin.o sdk/common/service/webserverplugin/webserver_plugin.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_message_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_message_handler.o sdk/common/service/webserverplugin/webserver_message_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_get_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_get_handler.o sdk/common/service/webserverplugin/webserver_get_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_post_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_post_handler.o sdk/common/service/webserverplugin/webserver_post_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_put_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_put_handler.o sdk/common/service/webserverplugin/webserver_put_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_passthrough_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_passthrough_handler.o sdk/common/service/webserverplugin/webserver_passthrough_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_propfind_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_propfind_handler.o sdk/common/service/webserverplugin/webserver_propfind_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_move_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_move_handler.o sdk/common/service/webserverplugin/webserver_move_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_mkcol_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_mkcol_handler.o sdk/common/service/webserverplugin/webserver_mkcol_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_copy_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_copy_handler.o sdk/common/service/webserverplugin/webserver_copy_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_delete_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_delete_handler.o sdk/common/service/webserverplugin/webserver_delete_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_lock_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_lock_handler.o sdk/common/service/webserverplugin/webserver_lock_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_unlock_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_unlock_handler.o sdk/common/service/webserverplugin/webserver_unlock_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_proppatch_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_proppatch_handler.o sdk/common/service/webserverplugin/webserver_proppatch_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_static_file.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_static_file.o sdk/common/service/webserverplugin/webserver_static_file.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_websocket_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_websocket_handler.o sdk/common/service/webserverplugin/webserver_websocket_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_options_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_options_handler.o sdk/common/service/webserverplugin/webserver_options_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webserver_set_certificate_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webserver_set_certificate_handler.o sdk/common/service/webserverplugin/webserver_set_certificate_handler.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/httpfile.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/httpfile.o sdk/common/service/webserverplugin/httpfile.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/websocketclient.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/websocketclient.o sdk/common/service/websocket/websocketclient.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/websocketframe.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/websocketframe.o sdk/common/service/websocket/websocketframe.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/http_client.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/http_client.o sdk/common/service/http_client/http_client.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/ntlm.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/ntlm.o sdk/common/service/http_client/ntlm.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/dbfiles_service.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/dbfiles_service.o sdk/common/service/dbfiles/dbfiles_service.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/replicator.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/replicator.o sdk/common/service/replicator/replicator.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/publisher.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/publisher.o sdk/common/service/publisher/publisher.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/pbx.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/pbx.o sdk/common/service/pbx/pbx.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/smtp_service.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/smtp_service.o sdk/common/service/smtp/smtp_service.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/tlssocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/tlssocket.o sdk/common/service/tls/tlssocket.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/ssl.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/ssl.o sdk/common/service/openssl_shared/ssl.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/applicationservice.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/applicationservice.o sdk/common/lib-cpp/appservice.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/httplib.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/httplib.o sdk/common/lib-cpp/httplib.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/appwebsocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/appwebsocket.o sdk/common/lib-cpp/appwebsocket.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/tasks_postgresql.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/tasks_postgresql.o sdk/common/lib-cpp/tasks_postgresql.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/tasks_file.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/tasks_file.o sdk/common/lib-cpp/tasks_file.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/database_switch.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/database_switch.o sdk/common/lib-cpp/database_switch.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/webdavservice.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/webdavservice.o sdk/common/lib-cpp/webdavservice.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/config.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/config.o sdk/common/lib-cpp/config.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/app_updates.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/app_updates.o sdk/common/lib-cpp/app_updates.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/time.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/time.o sdk/common/linux/time/time.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/guuid.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/guuid.o sdk/common/linux/guuid/guuid.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/tcpsocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/tcpsocket.o sdk/common/linux/tcp/tcpsocket.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/udsocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/udsocket.o sdk/common/linux/uds/udsocket.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/dns.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/dns.o sdk/common/linux/dns/dns.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/process.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/process.o sdk/common/linux/process/process.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/system.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/system.o sdk/common/linux/system/system.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/psql_prepared_statement.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/psql_prepared_statement.o sdk/common/linux/postgresql/psql_prepared_statement.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/psql_database.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/psql_database.o sdk/common/linux/postgresql/psql_database.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/psql_dataset.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/psql_dataset.o sdk/common/linux/postgresql/psql_dataset.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/mysql_prepared_statement.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/mysql_prepared_statement.o sdk/common/linux/mysql/mysql_prepared_statement.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/mysql_database.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/mysql_database.o sdk/common/linux/mysql/mysql_database.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/mysql_dataset.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/mysql_dataset.o sdk/common/linux/mysql/mysql_dataset.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/file.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/file.o sdk/common/linux/file/file.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/files.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/files.o sdk/common/linux/files/files.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/ethernet.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/ethernet.o sdk/common/linux/ethernet/ethernet.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/users.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/users.o sdk/common/linux/users/users.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/worker.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/worker.o sdk/common/linux/worker/worker.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/command.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/command.o sdk/common/linux/command/command.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/valgrind.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/valgrind.o sdk/common/linux/valgrind/valgrind.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/timezone.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/timezone.o sdk/common/linux/timezone/timezone.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/haru_pdf.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/haru_pdf.o sdk/common/linux/haru_pdf/haru_pdf.cpp
+arm-linux-gnueabi-g++.exe -MMD -MF arm/dep/stask_threads.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/arm-7.1.0-linux-gnu/arm-linux-gnueabi/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/armel/usr/include  -o arm/obj/stask_threads.o sdk/common/linux/stask/stask_threads.cpp
+arm-linux-gnueabi-ar.exe -rcs sdk-out/sdk/lib/arm/libsdk.a -o arm/obj/asn1.o arm/obj/asn1_ber.o arm/obj/asn1_per.o arm/obj/base64.o arm/obj/btree.o arm/obj/json.o arm/obj/str.o arm/obj/xml.o arm/obj/uri.o arm/obj/hash.o arm/obj/cipher.o arm/obj/crc.o arm/obj/http_query_args.o arm/obj/debug.o arm/obj/iomux.o arm/obj/asn1.o arm/obj/asn1_ber.o arm/obj/asn1_per.o arm/obj/base64.o arm/obj/btree.o arm/obj/json.o arm/obj/str.o arm/obj/xml.o arm/obj/uri.o arm/obj/hash.o arm/obj/cipher.o arm/obj/crc.o arm/obj/http_query_args.o arm/obj/debug.o arm/obj/iomux.o arm/obj/random.o arm/obj/webserver_internal.o arm/obj/webserver_message.o arm/obj/webserver_plugin.o arm/obj/webserver_message_handler.o arm/obj/webserver_get_handler.o arm/obj/webserver_post_handler.o arm/obj/webserver_put_handler.o arm/obj/webserver_passthrough_handler.o arm/obj/webserver_propfind_handler.o arm/obj/webserver_move_handler.o arm/obj/webserver_mkcol_handler.o arm/obj/webserver_copy_handler.o arm/obj/webserver_delete_handler.o arm/obj/webserver_lock_handler.o arm/obj/webserver_unlock_handler.o arm/obj/webserver_proppatch_handler.o arm/obj/webserver_static_file.o arm/obj/webserver_websocket_handler.o arm/obj/webserver_options_handler.o arm/obj/webserver_set_certificate_handler.o arm/obj/httpfile.o arm/obj/websocketclient.o arm/obj/websocketframe.o arm/obj/http_client.o arm/obj/ntlm.o arm/obj/dbfiles_service.o arm/obj/replicator.o arm/obj/publisher.o arm/obj/pbx.o arm/obj/smtp_service.o arm/obj/tlssocket.o arm/obj/ssl.o arm/obj/applicationservice.o arm/obj/httplib.o arm/obj/appwebsocket.o arm/obj/tasks_postgresql.o arm/obj/tasks_file.o arm/obj/database_switch.o arm/obj/webdavservice.o arm/obj/config.o arm/obj/app_updates.o arm/obj/time.o arm/obj/guuid.o arm/obj/tcpsocket.o arm/obj/udsocket.o arm/obj/dns.o arm/obj/process.o arm/obj/system.o arm/obj/psql_prepared_statement.o arm/obj/psql_database.o arm/obj/psql_dataset.o arm/obj/mysql_prepared_statement.o arm/obj/mysql_database.o arm/obj/mysql_dataset.o arm/obj/file.o arm/obj/files.o arm/obj/ethernet.o arm/obj/users.o arm/obj/worker.o arm/obj/process.o arm/obj/command.o arm/obj/valgrind.o arm/obj/timezone.o arm/obj/haru_pdf.o arm/obj/stask_threads.o arm/obj/random.o arm/obj/webserver_internal.o arm/obj/webserver_message.o arm/obj/webserver_plugin.o arm/obj/webserver_message_handler.o arm/obj/webserver_get_handler.o arm/obj/webserver_post_handler.o arm/obj/webserver_put_handler.o arm/obj/webserver_passthrough_handler.o arm/obj/webserver_propfind_handler.o arm/obj/webserver_move_handler.o arm/obj/webserver_mkcol_handler.o arm/obj/webserver_copy_handler.o arm/obj/webserver_delete_handler.o arm/obj/webserver_lock_handler.o arm/obj/webserver_unlock_handler.o arm/obj/webserver_proppatch_handler.o arm/obj/webserver_static_file.o arm/obj/webserver_websocket_handler.o arm/obj/webserver_options_handler.o arm/obj/webserver_set_certificate_handler.o arm/obj/httpfile.o arm/obj/websocketclient.o arm/obj/websocketframe.o arm/obj/http_client.o arm/obj/ntlm.o arm/obj/dbfiles_service.o arm/obj/replicator.o arm/obj/publisher.o arm/obj/pbx.o arm/obj/smtp_service.o arm/obj/tlssocket.o arm/obj/ssl.o arm/obj/applicationservice.o arm/obj/httplib.o arm/obj/appwebsocket.o arm/obj/tasks_postgresql.o arm/obj/tasks_file.o arm/obj/database_switch.o arm/obj/webdavservice.o arm/obj/config.o arm/obj/app_updates.o arm/obj/time.o arm/obj/guuid.o arm/obj/tcpsocket.o arm/obj/udsocket.o arm/obj/dns.o arm/obj/process.o arm/obj/system.o arm/obj/psql_prepared_statement.o arm/obj/psql_database.o arm/obj/psql_dataset.o arm/obj/mysql_prepared_statement.o arm/obj/mysql_database.o arm/obj/mysql_dataset.o arm/obj/file.o arm/obj/files.o arm/obj/ethernet.o arm/obj/users.o arm/obj/worker.o arm/obj/process.o arm/obj/command.o arm/obj/valgrind.o arm/obj/timezone.o arm/obj/haru_pdf.o arm/obj/stask_threads.o 
+arm-linux-gnueabi-g++.exe --sysroot=c:/sources/builder/tools/app-platform-libs/10003/armel -Wl,-rpath,c:/sources/builder/tools/app-platform-libs/10003/armel/usr/lib -Wl,-rpath,c:/sources/builder/tools/app-platform-libs/10003/armel/lib -Wl,--warn-common -o sdk-out/sdk/lib/arm/sdk/sdk  arm/obj/sdk-main.o -lpthread -luuid  -lcrypto -lssl -lcap -lpq -lmysqlclient -ldl -lz -lpam -lhpdf -lpng -L sdk-out/sdk/lib/arm -lsdk
+arm-linux-gnueabi-objcopy.exe --only-keep-debug sdk-out/sdk/lib/arm/sdk/sdk sdk-out/sdk/lib/arm/sdk/sdk.debug
+arm-linux-gnueabi-objcopy.exe --strip-debug sdk-out/sdk/lib/arm/sdk/sdk
+arm-linux-gnueabi-objcopy.exe --add-gnu-debuglink sdk-out/sdk/lib/arm/sdk/sdk.debug sdk-out/sdk/lib/arm/sdk/sdk
+xcopy "sdk-out\*.*" "..\sdksample\*.*" /s /y
+sdk-out\sdk\debugging.htm
+sdk-out\sdk\sdk-defs.mak
+sdk-out\sdk\sdk.htm
+sdk-out\sdk\sdk.mak
+sdk-out\sdk\common\common.htm
+sdk-out\sdk\common\common.mak
+sdk-out\sdk\common\build\buildnum.bat
+sdk-out\sdk\common\build\release.h
+sdk-out\sdk\common\ilib\asn1.h
+sdk-out\sdk\common\ilib\asn1.htm
+sdk-out\sdk\common\ilib\asn1_ber.h
+sdk-out\sdk\common\ilib\asn1_ber.htm
+sdk-out\sdk\common\ilib\asn1_per.h
+sdk-out\sdk\common\ilib\asn1_per.htm
+sdk-out\sdk\common\ilib\base64.h
+sdk-out\sdk\common\ilib\base64.htm
+sdk-out\sdk\common\ilib\btree.h
+sdk-out\sdk\common\ilib\btree.htm
+sdk-out\sdk\common\ilib\cipher.h
+sdk-out\sdk\common\ilib\cipher.htm
+sdk-out\sdk\common\ilib\crc.h
+sdk-out\sdk\common\ilib\crc.htm
+sdk-out\sdk\common\ilib\hash.h
+sdk-out\sdk\common\ilib\hash.htm
+sdk-out\sdk\common\ilib\http_query_args.h
+sdk-out\sdk\common\ilib\http_query_args.htm
+sdk-out\sdk\common\ilib\ilib.htm
+sdk-out\sdk\common\ilib\ilist.h
+sdk-out\sdk\common\ilib\ilist.htm
+sdk-out\sdk\common\ilib\json.h
+sdk-out\sdk\common\ilib\json.htm
+sdk-out\sdk\common\ilib\str.h
+sdk-out\sdk\common\ilib\str.htm
+sdk-out\sdk\common\ilib\uri.h
+sdk-out\sdk\common\ilib\uri.htm
+sdk-out\sdk\common\ilib\xml.h
+sdk-out\sdk\common\ilib\xml.htm
+sdk-out\sdk\common\interface\audio.h
+sdk-out\sdk\common\interface\canvas.h
+sdk-out\sdk\common\interface\certificates.h
+sdk-out\sdk\common\interface\certificates.htm
+sdk-out\sdk\common\interface\command.h
+sdk-out\sdk\common\interface\command.htm
+sdk-out\sdk\common\interface\compression.h
+sdk-out\sdk\common\interface\database.h
+sdk-out\sdk\common\interface\database.htm
+sdk-out\sdk\common\interface\dbfiles.h
+sdk-out\sdk\common\interface\dbfiles.htm
+sdk-out\sdk\common\interface\dns.h
+sdk-out\sdk\common\interface\dns.htm
+sdk-out\sdk\common\interface\ethernet.h
+sdk-out\sdk\common\interface\ethernet.htm
+sdk-out\sdk\common\interface\file.h
+sdk-out\sdk\common\interface\file.htm
+sdk-out\sdk\common\interface\files.h
+sdk-out\sdk\common\interface\files.htm
+sdk-out\sdk\common\interface\frame_buffer.h
+sdk-out\sdk\common\interface\frame_buffer.htm
+sdk-out\sdk\common\interface\guuid.h
+sdk-out\sdk\common\interface\guuid.htm
+sdk-out\sdk\common\interface\httpfile.h
+sdk-out\sdk\common\interface\httpfile.htm
+sdk-out\sdk\common\interface\http_client.h
+sdk-out\sdk\common\interface\http_client.htm
+sdk-out\sdk\common\interface\interface.htm
+sdk-out\sdk\common\interface\json_api.h
+sdk-out\sdk\common\interface\json_api.htm
+sdk-out\sdk\common\interface\media.h
+sdk-out\sdk\common\interface\network.h
+sdk-out\sdk\common\interface\pbx.h
+sdk-out\sdk\common\interface\pbx.htm
+sdk-out\sdk\common\interface\pbx_admin.h
+sdk-out\sdk\common\interface\pbx_admin.htm
+sdk-out\sdk\common\interface\pdf.h
+sdk-out\sdk\common\interface\pdf.htm
+sdk-out\sdk\common\interface\process.h
+sdk-out\sdk\common\interface\process.htm
+sdk-out\sdk\common\interface\random.h
+sdk-out\sdk\common\interface\random.htm
+sdk-out\sdk\common\interface\replication.h
+sdk-out\sdk\common\interface\replication.htm
+sdk-out\sdk\common\interface\ringer.h
+sdk-out\sdk\common\interface\smtp.h
+sdk-out\sdk\common\interface\smtp.htm
+sdk-out\sdk\common\interface\socket.h
+sdk-out\sdk\common\interface\socket.htm
+sdk-out\sdk\common\interface\sql.h
+sdk-out\sdk\common\interface\stask.h
+sdk-out\sdk\common\interface\system.h
+sdk-out\sdk\common\interface\system.htm
+sdk-out\sdk\common\interface\task.h
+sdk-out\sdk\common\interface\task.htm
+sdk-out\sdk\common\interface\tempfiles.htm
+sdk-out\sdk\common\interface\time.h
+sdk-out\sdk\common\interface\time.htm
+sdk-out\sdk\common\interface\timezone.h
+sdk-out\sdk\common\interface\timezone.htm
+sdk-out\sdk\common\interface\users.h
+sdk-out\sdk\common\interface\users.htm
+sdk-out\sdk\common\interface\valgrind.h
+sdk-out\sdk\common\interface\valgrind.htm
+sdk-out\sdk\common\interface\webserver_plugin.h
+sdk-out\sdk\common\interface\webserver_plugin.htm
+sdk-out\sdk\common\interface\websocket_client.h
+sdk-out\sdk\common\interface\websocket_client.htm
+sdk-out\sdk\common\interface\worker.h
+sdk-out\sdk\common\interface\worker.htm
+sdk-out\sdk\common\lib\appservice.h
+sdk-out\sdk\common\lib\appservice.htm
+sdk-out\sdk\common\lib\appwebsocket.h
+sdk-out\sdk\common\lib\appwebsocket.htm
+sdk-out\sdk\common\lib\app_updates.h
+sdk-out\sdk\common\lib\app_updates.htm
+sdk-out\sdk\common\lib\config.h
+sdk-out\sdk\common\lib\config.htm
+sdk-out\sdk\common\lib\database_switch.h
+sdk-out\sdk\common\lib\database_switch.htm
+sdk-out\sdk\common\lib\httplib.h
+sdk-out\sdk\common\lib\httplib.htm
+sdk-out\sdk\common\lib\lib.htm
+sdk-out\sdk\common\lib\pbx_admin_api.htm
+sdk-out\sdk\common\lib\pbx_apis.htm
+sdk-out\sdk\common\lib\tasks_file.h
+sdk-out\sdk\common\lib\tasks_postgresql.h
+sdk-out\sdk\common\lib\tasks_postgresql.htm
+sdk-out\sdk\common\lib\webdavservice.h
+sdk-out\sdk\common\lib\webdavservice.htm
+sdk-out\sdk\common\lib\websocket_json.htm
+sdk-out\sdk\common\os\debug.h
+sdk-out\sdk\common\os\debug.htm
+sdk-out\sdk\common\os\iomux.h
+sdk-out\sdk\common\os\iomux.htm
+sdk-out\sdk\exe\httpfiles.exe
+sdk-out\sdk\lib\arm\libsdk.a
+sdk-out\sdk\lib\arm\sdk\sdk
+sdk-out\sdk\lib\arm\sdk\sdk.debug
+sdk-out\sdk\platform\platform.h
+sdk-out\sdk\web\tsconfig.json
+sdk-out\sdk\web\web.htm
+sdk-out\sdk\web\web.mak
+sdk-out\sdk\web\applicationSharing\applicationsharing.htm
+sdk-out\sdk\web\applicationSharing\applicationsharing.mak
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.jpeg.js
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.main.js
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.png.js
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.zlib.js
+sdk-out\sdk\web\appwebsocket\appwebsocket.htm
+sdk-out\sdk\web\appwebsocket\appwebsocket.mak
+sdk-out\sdk\web\appwebsocket\innovaphone.appwebsocket.Connection.js
+sdk-out\sdk\web\audio\audio.htm
+sdk-out\sdk\web\audio\audio.mak
+sdk-out\sdk\web\audio\ringtone00.mp3
+sdk-out\sdk\web\audio\tonepair00.mp3
+sdk-out\sdk\web\audio\tonepair01.mp3
+sdk-out\sdk\web\audio\tonepair02.mp3
+sdk-out\sdk\web\audio\tonepair03.mp3
+sdk-out\sdk\web\audio\tonepair04.mp3
+sdk-out\sdk\web\audio\tonepair05.mp3
+sdk-out\sdk\web\audio\tonepair06.mp3
+sdk-out\sdk\web\audio\tonepair07.mp3
+sdk-out\sdk\web\audio\tonepair08.mp3
+sdk-out\sdk\web\audio\tonepair09.mp3
+sdk-out\sdk\web\audio\tonepair10.mp3
+sdk-out\sdk\web\audio\tonepair11.mp3
+sdk-out\sdk\web\audio\tonepair12.mp3
+sdk-out\sdk\web\com.innovaphone.avatar\com.innovaphone.avatar.js
+sdk-out\sdk\web\com.innovaphone.avatar\com.innovaphone.avatar.mak
+sdk-out\sdk\web\com.innovaphone.avatar\lib1_api_avatar.htm
+sdk-out\sdk\web\com.innovaphone.phone\lib1_api_phone.htm
+sdk-out\sdk\web\com.innovaphone.search\lib1_api_search.htm
+sdk-out\sdk\web\common\common.htm
+sdk-out\sdk\web\common\common.mak
+sdk-out\sdk\web\common\innovaphone.common.crypto.js
+sdk-out\sdk\web\fonts\fonts.htm
+sdk-out\sdk\web\fonts\fonts.mak
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.eot
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.svg
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.ttf
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.woff
+sdk-out\sdk\web\fonts\titilliumweb-regular.ttf
+sdk-out\sdk\web\lib\innovaphone.doc.css
+sdk-out\sdk\web\lib\innovaphone.lib.css
+sdk-out\sdk\web\lib\innovaphone.lib.js
+sdk-out\sdk\web\lib\lib.htm
+sdk-out\sdk\web\lib\lib.mak
+sdk-out\sdk\web\lib1\innovaphone.doc.css
+sdk-out\sdk\web\lib1\innovaphone.lib1.css
+sdk-out\sdk\web\lib1\innovaphone.lib1.js
+sdk-out\sdk\web\lib1\lib1.htm
+sdk-out\sdk\web\lib1\lib1.mak
+sdk-out\sdk\web\lib1\lib1_api_client.htm
+sdk-out\sdk\web\lib1\lib1_api_searchregister.htm
+sdk-out\sdk\web\mypbx\innovaphone.mypbx.ui.apps.js
+sdk-out\sdk\web\mypbx\mypbx.htm
+sdk-out\sdk\web\mypbx\mypbx.mak
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.Connection.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.OrtcEndpoint.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.OrtcPeerConnection.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.Preauthentication.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.ToneGenerator.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.WebRtcEndpoint.js
+sdk-out\sdk\web\pbxwebsocket\pbxwebsocket.htm
+sdk-out\sdk\web\pbxwebsocket\pbxwebsocket.mak
+sdk-out\sdk\web\phpsession\innovaphone.phpsession.js
+sdk-out\sdk\web\phpsession\phpsession.htm
+sdk-out\sdk\web\phpsession\phpsession.mak
+sdk-out\sdk\web\styles\innovaphone.styles.css
+sdk-out\sdk\web\styles\styles.Arrow.png
+sdk-out\sdk\web\styles\styles.ArrowActive.png
+sdk-out\sdk\web\styles\styles.Background.png
+sdk-out\sdk\web\styles\styles.Close.png
+sdk-out\sdk\web\styles\styles.Confirmation.png
+sdk-out\sdk\web\styles\styles.DropDown.png
+sdk-out\sdk\web\styles\styles.Error.png
+sdk-out\sdk\web\styles\styles.Fish.png
+sdk-out\sdk\web\styles\styles.GlowMiddleHover.png
+sdk-out\sdk\web\styles\styles.GlowUpsideDown2.png
+sdk-out\sdk\web\styles\styles.Hide.png
+sdk-out\sdk\web\styles\styles.htm
+sdk-out\sdk\web\styles\styles.Loader.gif
+sdk-out\sdk\web\styles\styles.mak
+sdk-out\sdk\web\styles\styles.SeparatorMiddle.png
+sdk-out\sdk\web\ui.accordion\innovaphone.ui.accordion.js
+sdk-out\sdk\web\ui.accordion\ui.accordion.htm
+sdk-out\sdk\web\ui.accordion\ui.accordion.mak
+sdk-out\sdk\web\ui.anchor\innovaphone.ui.Anchor.js
+sdk-out\sdk\web\ui.anchor\ui.anchor.htm
+sdk-out\sdk\web\ui.anchor\ui.anchor.mak
+sdk-out\sdk\web\ui.apptabs\innovaphone.ui.AppTabs.js
+sdk-out\sdk\web\ui.apptabs\ui.apptabs.htm
+sdk-out\sdk\web\ui.apptabs\ui.apptabs.mak
+sdk-out\sdk\web\ui.autocompleteinput\innovaphone.ui.autocompleteinput.js
+sdk-out\sdk\web\ui.autocompleteinput\ui.autocompleteinput.htm
+sdk-out\sdk\web\ui.autocompleteinput\ui.autocompleteinput.mak
+sdk-out\sdk\web\ui.bubblecontainer\innovaphone.ui.BubbleContainer.js
+sdk-out\sdk\web\ui.bubblecontainer\ui.bubblecontainer.htm
+sdk-out\sdk\web\ui.bubblecontainer\ui.bubblecontainer.mak
+sdk-out\sdk\web\ui.button\innovaphone.ui.Button.js
+sdk-out\sdk\web\ui.button\ui.button.htm
+sdk-out\sdk\web\ui.button\ui.button.mak
+sdk-out\sdk\web\ui.calendar\cal_icons.png
+sdk-out\sdk\web\ui.calendar\innovaphone.ui.Calendar.js
+sdk-out\sdk\web\ui.calendar\innovaphone.ui.CalendarDayItemIndicator.js
+sdk-out\sdk\web\ui.calendar\innovaphone.ui.FlatButton.js
+sdk-out\sdk\web\ui.calendar\ui.calendar.htm
+sdk-out\sdk\web\ui.calendar\ui.calendar.mak
+sdk-out\sdk\web\ui.clipboard\innovaphone.ui.ClipBoard.js
+sdk-out\sdk\web\ui.clipboard\ui.clipboard.htm
+sdk-out\sdk\web\ui.clipboard\ui.clipboard.mak
+sdk-out\sdk\web\ui.confirmationpopup\innovaphone.ui.ConfirmationPopup.js
+sdk-out\sdk\web\ui.confirmationpopup\ui.confirmationpopup.htm
+sdk-out\sdk\web\ui.confirmationpopup\ui.confirmationpopup.mak
+sdk-out\sdk\web\ui.container\innovaphone.ui.Container.js
+sdk-out\sdk\web\ui.container\ui.container.htm
+sdk-out\sdk\web\ui.container\ui.container.mak
+sdk-out\sdk\web\ui.contentheader\innovaphone.ui.ContentHeader.js
+sdk-out\sdk\web\ui.contentheader\ui.contentheader.htm
+sdk-out\sdk\web\ui.contentheader\ui.contentheader.mak
+sdk-out\sdk\web\ui.dateselector\innovaphone.ui.DateSelector.js
+sdk-out\sdk\web\ui.dateselector\ui.dateselector.htm
+sdk-out\sdk\web\ui.dateselector\ui.dateselector.mak
+sdk-out\sdk\web\ui.drag\innovaphone.ui.Drag.js
+sdk-out\sdk\web\ui.drag\ui.drag.htm
+sdk-out\sdk\web\ui.drag\ui.drag.mak
+sdk-out\sdk\web\ui.dragList\innovaphone.ui.dragList.js
+sdk-out\sdk\web\ui.dragList\ui.dragList.htm
+sdk-out\sdk\web\ui.dragList\ui.dragList.mak
+sdk-out\sdk\web\ui.dropdown\innovaphone.ui.DropDown.js
+sdk-out\sdk\web\ui.dropdown\ui.dropdown.htm
+sdk-out\sdk\web\ui.dropdown\ui.dropdown.mak
+sdk-out\sdk\web\ui.editor\innovaphone.ui.Editor.js
+sdk-out\sdk\web\ui.editor\ui.editor.htm
+sdk-out\sdk\web\ui.editor\ui.editor.mak
+sdk-out\sdk\web\ui.editpopup\innovaphone.ui.EditPopup.js
+sdk-out\sdk\web\ui.editpopup\ui.editpopup.htm
+sdk-out\sdk\web\ui.editpopup\ui.editpopup.mak
+sdk-out\sdk\web\ui.elementscontainer\innovaphone.ui.ElementsContainer.js
+sdk-out\sdk\web\ui.elementscontainer\ui.elementscontainer.htm
+sdk-out\sdk\web\ui.elementscontainer\ui.elementscontainer.mak
+sdk-out\sdk\web\ui.error\innovaphone.ui.Error.js
+sdk-out\sdk\web\ui.error\ui.error.htm
+sdk-out\sdk\web\ui.error\ui.error.mak
+sdk-out\sdk\web\ui.grid\innovaphone.ui.Grid.js
+sdk-out\sdk\web\ui.grid\ui.grid.htm
+sdk-out\sdk\web\ui.grid\ui.grid.mak
+sdk-out\sdk\web\ui.hider\innovaphone.ui.Hider.js
+sdk-out\sdk\web\ui.hider\ui.hider.htm
+sdk-out\sdk\web\ui.hider\ui.hider.mak
+sdk-out\sdk\web\ui.icon\innovaphone.ui.Icon.js
+sdk-out\sdk\web\ui.icon\ui.icon.htm
+sdk-out\sdk\web\ui.icon\ui.icon.mak
+sdk-out\sdk\web\ui.iframe\innovaphone.ui.IFrame.js
+sdk-out\sdk\web\ui.iframe\ui.iframe.htm
+sdk-out\sdk\web\ui.iframe\ui.iframe.mak
+sdk-out\sdk\web\ui.input\innovaphone.ui.Input.js
+sdk-out\sdk\web\ui.input\ui.input.htm
+sdk-out\sdk\web\ui.input\ui.input.mak
+sdk-out\sdk\web\ui.inputfieldcollection\innovaphone.ui.InputFieldCollection.js
+sdk-out\sdk\web\ui.inputfieldcollection\ui.inputfieldcollection.htm
+sdk-out\sdk\web\ui.inputfieldcollection\ui.inputfieldcollection.mak
+sdk-out\sdk\web\ui.label\innovaphone.ui.Label.js
+sdk-out\sdk\web\ui.label\ui.label.htm
+sdk-out\sdk\web\ui.label\ui.label.mak
+sdk-out\sdk\web\ui.lang\innovaphone.ui.Lang.js
+sdk-out\sdk\web\ui.lang\ui.lang.htm
+sdk-out\sdk\web\ui.lang\ui.lang.mak
+sdk-out\sdk\web\ui.listview\innovaphone.ui.ListView.js
+sdk-out\sdk\web\ui.listview\ui.listview.htm
+sdk-out\sdk\web\ui.listview\ui.listview.mak
+sdk-out\sdk\web\ui.popup\innovaphone.ui.Popup.js
+sdk-out\sdk\web\ui.popup\ui.popup.htm
+sdk-out\sdk\web\ui.popup\ui.popup.mak
+sdk-out\sdk\web\ui.progressbar\innovaphone.ui.ProgressBar.js
+sdk-out\sdk\web\ui.progressbar\ui.progressbar.htm
+sdk-out\sdk\web\ui.progressbar\ui.progressbar.mak
+sdk-out\sdk\web\ui.radioButton\innovaphone.ui.radioButton.js
+sdk-out\sdk\web\ui.radioButton\innovaphone.ui.radioButton.ts
+sdk-out\sdk\web\ui.radioButton\ui.radioButton.htm
+sdk-out\sdk\web\ui.radioButton\ui.radioButton.mak
+sdk-out\sdk\web\ui.ribbon\innovaphone.ui.Ribbon.js
+sdk-out\sdk\web\ui.ribbon\ui.ribbon.example.png
+sdk-out\sdk\web\ui.ribbon\ui.ribbon.htm
+sdk-out\sdk\web\ui.ribbon\ui.ribbon.mak
+sdk-out\sdk\web\ui.scrollbar\innovaphone.ui.ScrollBar.js
+sdk-out\sdk\web\ui.scrollbar\ui.scrollbar.htm
+sdk-out\sdk\web\ui.scrollbar\ui.scrollbar.mak
+sdk-out\sdk\web\ui.splitpanel\innovaphone.ui.SplitPanel.js
+sdk-out\sdk\web\ui.splitpanel\ui.splitpanel.htm
+sdk-out\sdk\web\ui.splitpanel\ui.splitpanel.mak
+sdk-out\sdk\web\ui.splitpanelvertical\innovaphone.ui.SplitPanelVertical.js
+sdk-out\sdk\web\ui.splitpanelvertical\ui.splitpanelvertical.htm
+sdk-out\sdk\web\ui.splitpanelvertical\ui.splitpanelvertical.mak
+sdk-out\sdk\web\ui.text\innovaphone.ui.Text.js
+sdk-out\sdk\web\ui.text\ui.text.htm
+sdk-out\sdk\web\ui.text\ui.text.mak
+sdk-out\sdk\web\ui.textarea\innovaphone.ui.TextArea.js
+sdk-out\sdk\web\ui.textarea\ui.textarea.htm
+sdk-out\sdk\web\ui.textarea\ui.textarea.mak
+sdk-out\sdk\web\ui.tilelist\innovaphone.ui.tilelist.js
+sdk-out\sdk\web\ui.tilelist\ui.tilelist.htm
+sdk-out\sdk\web\ui.tilelist\ui.tilelist.mak
+sdk-out\sdk\web\ui.timefield\innovaphone.ui.TimeField.js
+sdk-out\sdk\web\ui.timefield\ui.timefield.htm
+sdk-out\sdk\web\ui.timefield\ui.timefield.mak
+sdk-out\sdk\web\ui.treeview\innovaphone.ui.TreeView.js
+sdk-out\sdk\web\ui.treeview\ui.treeview.htm
+sdk-out\sdk\web\ui.treeview\ui.treeview.mak
+sdk-out\sdk\web\ui.visibilityobserver\innovaphone.ui.VisibilityObserver.js
+sdk-out\sdk\web\ui.visibilityobserver\ui.visibilityobserver.htm
+sdk-out\sdk\web\ui.visibilityobserver\ui.visibilityobserver.mak
+sdk-out\sdk\web\ui.wizard\innovaphone.ui.Wizard.js
+sdk-out\sdk\web\ui.wizard\ui.wizard.htm
+sdk-out\sdk\web\ui.wizard\ui.wizard.mak
+sdk-out\sdk\web\ui1.accordion\innovaphone.ui1.accordion.js
+sdk-out\sdk\web\ui1.accordion\ui1.accordion.htm
+sdk-out\sdk\web\ui1.accordion\ui1.accordion.mak
+sdk-out\sdk\web\ui1.autocompleteinput\innovaphone.ui1.autocompleteinput.js
+sdk-out\sdk\web\ui1.autocompleteinput\ui1.autocompleteinput.htm
+sdk-out\sdk\web\ui1.autocompleteinput\ui1.autocompleteinput.mak
+sdk-out\sdk\web\ui1.draglist\innovaphone.ui1.draglist.js
+sdk-out\sdk\web\ui1.draglist\ui1.draglist.htm
+sdk-out\sdk\web\ui1.editor\innovaphone.ui1.editor.js
+sdk-out\sdk\web\ui1.editor\ui1.editor.htm
+sdk-out\sdk\web\ui1.editor\ui1.editor.mak
+sdk-out\sdk\web\ui1.editor\ui1.editor.png
+sdk-out\sdk\web\ui1.file\innovaphone.ui1.file.js
+sdk-out\sdk\web\ui1.file\ui1.file.htm
+sdk-out\sdk\web\ui1.file\ui1.file.mak
+sdk-out\sdk\web\ui1.lib\innovaphone.ui1.lib.js
+sdk-out\sdk\web\ui1.lib\test.htm
+sdk-out\sdk\web\ui1.lib\ui1.lib.htm
+sdk-out\sdk\web\ui1.lib\ui1.lib.mak
+sdk-out\sdk\web\ui1.listview\arrow.png
+sdk-out\sdk\web\ui1.listview\innovaphone.ui1.listview.js
+sdk-out\sdk\web\ui1.listview\ui1.listview.htm
+sdk-out\sdk\web\ui1.listview\ui1.listview.mak
+sdk-out\sdk\web\ui1.player\innovaphone.ui1.player.js
+sdk-out\sdk\web\ui1.player\ui1.player.mak
+sdk-out\sdk\web\ui1.popup\innovaphone.ui1.popup.js
+sdk-out\sdk\web\ui1.popup\ui1.popup.htm
+sdk-out\sdk\web\ui1.popup\ui1.popup.mak
+sdk-out\sdk\web\ui1.radiobutton\innovaphone.ui1.radiobutton.js
+sdk-out\sdk\web\ui1.radiobutton\ui1.radiobutton.htm
+sdk-out\sdk\web\ui1.radiobutton\ui1.radiobutton.mak
+sdk-out\sdk\web\ui1.scrolling\innovaphone.ui1.scrolling.js
+sdk-out\sdk\web\ui1.scrolling\test.htm
+sdk-out\sdk\web\ui1.scrolling\ui1.scrolling.htm
+sdk-out\sdk\web\ui1.scrolling\ui1.scrolling.mak
+sdk-out\sdk\web\ui1.svg\innovaphone.ui1.svg.js
+sdk-out\sdk\web\ui1.svg\test.svg
+sdk-out\sdk\web\ui1.svg\ui1.svg.htm
+sdk-out\sdk\web\ui1.svg\ui1.svg.mak
+sdk-out\sdk\web\ui1.tilelist\innovaphone.ui1.tilelist.js
+sdk-out\sdk\web\ui1.tilelist\ui1.tilelist.htm
+sdk-out\sdk\web\widget\innovaphone.widget.arrow.svg
+sdk-out\sdk\web\widget\innovaphone.widget.BusinessCards.css
+sdk-out\sdk\web\widget\innovaphone.widget.BusinessCards.js
+sdk-out\sdk\web\widget\innovaphone.widget.Conference.js
+sdk-out\sdk\web\widget\innovaphone.widget.general.css
+sdk-out\sdk\web\widget\innovaphone.widget.keypad.svg
+sdk-out\sdk\web\widget\innovaphone.widget.mail.svg
+sdk-out\sdk\web\widget\innovaphone.widget.mute.svg
+sdk-out\sdk\web\widget\innovaphone.widget.phone.svg
+sdk-out\sdk\web\widget\innovaphone.widget.SideBar.css
+sdk-out\sdk\web\widget\innovaphone.widget.SideBar.js
+sdk-out\sdk\web\widget\innovaphone.widget.video.svg
+sdk-out\sdk\web\widget\widget.htm
+sdk-out\sdk\web\widget\widget.mak
+408 Datei(en) kopiert
+cd sdk; export PATH=$PATH_GCC_I386_BIN:c:/Windows/system32; make -j5 -f sdk.mak i386
+sdk/sdk-lib.mak:13: warning: overriding recipe for target 'sdk-cleanup'
+sdk/sdk-lib.mak:13: warning: ignoring old recipe for target 'sdk-cleanup'
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/sdk-main.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/sdk-main.o sdk-main.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/asn1.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/asn1.o sdk/common/ilib-cpp/asn1.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/asn1_ber.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/asn1_ber.o sdk/common/ilib-cpp/asn1_ber.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/asn1_per.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/asn1_per.o sdk/common/ilib-cpp/asn1_per.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/base64.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/base64.o sdk/common/ilib-cpp/base64.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/btree.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/btree.o sdk/common/ilib-cpp/btree.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/json.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/json.o sdk/common/ilib-cpp/json.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/str.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/str.o sdk/common/ilib-cpp/str.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/xml.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/xml.o sdk/common/ilib-cpp/xml.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/uri.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/uri.o sdk/common/ilib-cpp/uri.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/hash.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/hash.o sdk/common/ilib-cpp/hash.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/cipher.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/cipher.o sdk/common/ilib-cpp/cipher.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/crc.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/crc.o sdk/common/ilib-cpp/crc.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/http_query_args.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/http_query_args.o sdk/common/ilib-cpp/http_query_args.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/debug.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/debug.o sdk/common/linux/os-cpp/debug.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/iomux.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/iomux.o sdk/common/linux/os-cpp/iomux.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/random.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/random.o sdk/common/service/random/random.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_internal.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_internal.o sdk/common/service/webserver_shared/webserver_internal.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_message.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_message.o sdk/common/service/webserver_shared/webserver_message.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_plugin.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_plugin.o sdk/common/service/webserverplugin/webserver_plugin.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_message_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_message_handler.o sdk/common/service/webserverplugin/webserver_message_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_get_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_get_handler.o sdk/common/service/webserverplugin/webserver_get_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_post_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_post_handler.o sdk/common/service/webserverplugin/webserver_post_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_put_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_put_handler.o sdk/common/service/webserverplugin/webserver_put_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_passthrough_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_passthrough_handler.o sdk/common/service/webserverplugin/webserver_passthrough_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_propfind_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_propfind_handler.o sdk/common/service/webserverplugin/webserver_propfind_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_move_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_move_handler.o sdk/common/service/webserverplugin/webserver_move_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_mkcol_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_mkcol_handler.o sdk/common/service/webserverplugin/webserver_mkcol_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_copy_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_copy_handler.o sdk/common/service/webserverplugin/webserver_copy_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_delete_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_delete_handler.o sdk/common/service/webserverplugin/webserver_delete_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_lock_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_lock_handler.o sdk/common/service/webserverplugin/webserver_lock_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_unlock_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_unlock_handler.o sdk/common/service/webserverplugin/webserver_unlock_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_proppatch_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_proppatch_handler.o sdk/common/service/webserverplugin/webserver_proppatch_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_static_file.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_static_file.o sdk/common/service/webserverplugin/webserver_static_file.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_websocket_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_websocket_handler.o sdk/common/service/webserverplugin/webserver_websocket_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_options_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_options_handler.o sdk/common/service/webserverplugin/webserver_options_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webserver_set_certificate_handler.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webserver_set_certificate_handler.o sdk/common/service/webserverplugin/webserver_set_certificate_handler.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/httpfile.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/httpfile.o sdk/common/service/webserverplugin/httpfile.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/websocketclient.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/websocketclient.o sdk/common/service/websocket/websocketclient.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/websocketframe.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/websocketframe.o sdk/common/service/websocket/websocketframe.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/http_client.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/http_client.o sdk/common/service/http_client/http_client.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/ntlm.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/ntlm.o sdk/common/service/http_client/ntlm.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/dbfiles_service.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/dbfiles_service.o sdk/common/service/dbfiles/dbfiles_service.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/replicator.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/replicator.o sdk/common/service/replicator/replicator.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/publisher.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/publisher.o sdk/common/service/publisher/publisher.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/pbx.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/pbx.o sdk/common/service/pbx/pbx.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/smtp_service.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/smtp_service.o sdk/common/service/smtp/smtp_service.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/tlssocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/tlssocket.o sdk/common/service/tls/tlssocket.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/ssl.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/ssl.o sdk/common/service/openssl_shared/ssl.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/applicationservice.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/applicationservice.o sdk/common/lib-cpp/appservice.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/httplib.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/httplib.o sdk/common/lib-cpp/httplib.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/appwebsocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/appwebsocket.o sdk/common/lib-cpp/appwebsocket.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/tasks_postgresql.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/tasks_postgresql.o sdk/common/lib-cpp/tasks_postgresql.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/tasks_file.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/tasks_file.o sdk/common/lib-cpp/tasks_file.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/database_switch.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/database_switch.o sdk/common/lib-cpp/database_switch.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/webdavservice.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/webdavservice.o sdk/common/lib-cpp/webdavservice.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/config.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/config.o sdk/common/lib-cpp/config.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/app_updates.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/app_updates.o sdk/common/lib-cpp/app_updates.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/time.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/time.o sdk/common/linux/time/time.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/guuid.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/guuid.o sdk/common/linux/guuid/guuid.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/tcpsocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/tcpsocket.o sdk/common/linux/tcp/tcpsocket.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/udsocket.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/udsocket.o sdk/common/linux/uds/udsocket.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/dns.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/dns.o sdk/common/linux/dns/dns.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/process.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/process.o sdk/common/linux/process/process.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/system.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/system.o sdk/common/linux/system/system.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/psql_prepared_statement.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/psql_prepared_statement.o sdk/common/linux/postgresql/psql_prepared_statement.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/psql_database.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/psql_database.o sdk/common/linux/postgresql/psql_database.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/psql_dataset.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/psql_dataset.o sdk/common/linux/postgresql/psql_dataset.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/mysql_prepared_statement.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/mysql_prepared_statement.o sdk/common/linux/mysql/mysql_prepared_statement.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/mysql_database.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/mysql_database.o sdk/common/linux/mysql/mysql_database.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/mysql_dataset.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/mysql_dataset.o sdk/common/linux/mysql/mysql_dataset.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/file.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/file.o sdk/common/linux/file/file.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/files.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/files.o sdk/common/linux/files/files.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/ethernet.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/ethernet.o sdk/common/linux/ethernet/ethernet.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/users.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/users.o sdk/common/linux/users/users.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/worker.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/worker.o sdk/common/linux/worker/worker.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/command.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/command.o sdk/common/linux/command/command.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/valgrind.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/valgrind.o sdk/common/linux/valgrind/valgrind.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/timezone.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/timezone.o sdk/common/linux/timezone/timezone.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/haru_pdf.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/haru_pdf.o sdk/common/linux/haru_pdf/haru_pdf.cpp
+i486-linux-gnu-g++.exe -MMD -MF i386/dep/stask_threads.dep -I sdk -Wall -Werror -fno-delete-null-pointer-checks -c -D NO_LEGACY -D BUILD=130756  -g -O3 -isystem c:/sources/builder/tools/i486-7.1.0-linux-gnu/i486-linux-gnu/include/c++/7.1.0 -isystem c:/sources/builder/tools/app-platform-libs/10003/i386/usr/include  -o i386/obj/stask_threads.o sdk/common/linux/stask/stask_threads.cpp
+i486-linux-gnu-ar.exe -rcs sdk-out/sdk/lib/i386/libsdk.a -o i386/obj/asn1.o i386/obj/asn1_ber.o i386/obj/asn1_per.o i386/obj/base64.o i386/obj/btree.o i386/obj/json.o i386/obj/str.o i386/obj/xml.o i386/obj/uri.o i386/obj/hash.o i386/obj/cipher.o i386/obj/crc.o i386/obj/http_query_args.o i386/obj/debug.o i386/obj/iomux.o i386/obj/asn1.o i386/obj/asn1_ber.o i386/obj/asn1_per.o i386/obj/base64.o i386/obj/btree.o i386/obj/json.o i386/obj/str.o i386/obj/xml.o i386/obj/uri.o i386/obj/hash.o i386/obj/cipher.o i386/obj/crc.o i386/obj/http_query_args.o i386/obj/debug.o i386/obj/iomux.o i386/obj/random.o i386/obj/webserver_internal.o i386/obj/webserver_message.o i386/obj/webserver_plugin.o i386/obj/webserver_message_handler.o i386/obj/webserver_get_handler.o i386/obj/webserver_post_handler.o i386/obj/webserver_put_handler.o i386/obj/webserver_passthrough_handler.o i386/obj/webserver_propfind_handler.o i386/obj/webserver_move_handler.o i386/obj/webserver_mkcol_handler.o i386/obj/webserver_copy_handler.o i386/obj/webserver_delete_handler.o i386/obj/webserver_lock_handler.o i386/obj/webserver_unlock_handler.o i386/obj/webserver_proppatch_handler.o i386/obj/webserver_static_file.o i386/obj/webserver_websocket_handler.o i386/obj/webserver_options_handler.o i386/obj/webserver_set_certificate_handler.o i386/obj/httpfile.o i386/obj/websocketclient.o i386/obj/websocketframe.o i386/obj/http_client.o i386/obj/ntlm.o i386/obj/dbfiles_service.o i386/obj/replicator.o i386/obj/publisher.o i386/obj/pbx.o i386/obj/smtp_service.o i386/obj/tlssocket.o i386/obj/ssl.o i386/obj/applicationservice.o i386/obj/httplib.o i386/obj/appwebsocket.o i386/obj/tasks_postgresql.o i386/obj/tasks_file.o i386/obj/database_switch.o i386/obj/webdavservice.o i386/obj/config.o i386/obj/app_updates.o i386/obj/time.o i386/obj/guuid.o i386/obj/tcpsocket.o i386/obj/udsocket.o i386/obj/dns.o i386/obj/process.o i386/obj/system.o i386/obj/psql_prepared_statement.o i386/obj/psql_database.o i386/obj/psql_dataset.o i386/obj/mysql_prepared_statement.o i386/obj/mysql_database.o i386/obj/mysql_dataset.o i386/obj/file.o i386/obj/files.o i386/obj/ethernet.o i386/obj/users.o i386/obj/worker.o i386/obj/process.o i386/obj/command.o i386/obj/valgrind.o i386/obj/timezone.o i386/obj/haru_pdf.o i386/obj/stask_threads.o i386/obj/random.o i386/obj/webserver_internal.o i386/obj/webserver_message.o i386/obj/webserver_plugin.o i386/obj/webserver_message_handler.o i386/obj/webserver_get_handler.o i386/obj/webserver_post_handler.o i386/obj/webserver_put_handler.o i386/obj/webserver_passthrough_handler.o i386/obj/webserver_propfind_handler.o i386/obj/webserver_move_handler.o i386/obj/webserver_mkcol_handler.o i386/obj/webserver_copy_handler.o i386/obj/webserver_delete_handler.o i386/obj/webserver_lock_handler.o i386/obj/webserver_unlock_handler.o i386/obj/webserver_proppatch_handler.o i386/obj/webserver_static_file.o i386/obj/webserver_websocket_handler.o i386/obj/webserver_options_handler.o i386/obj/webserver_set_certificate_handler.o i386/obj/httpfile.o i386/obj/websocketclient.o i386/obj/websocketframe.o i386/obj/http_client.o i386/obj/ntlm.o i386/obj/dbfiles_service.o i386/obj/replicator.o i386/obj/publisher.o i386/obj/pbx.o i386/obj/smtp_service.o i386/obj/tlssocket.o i386/obj/ssl.o i386/obj/applicationservice.o i386/obj/httplib.o i386/obj/appwebsocket.o i386/obj/tasks_postgresql.o i386/obj/tasks_file.o i386/obj/database_switch.o i386/obj/webdavservice.o i386/obj/config.o i386/obj/app_updates.o i386/obj/time.o i386/obj/guuid.o i386/obj/tcpsocket.o i386/obj/udsocket.o i386/obj/dns.o i386/obj/process.o i386/obj/system.o i386/obj/psql_prepared_statement.o i386/obj/psql_database.o i386/obj/psql_dataset.o i386/obj/mysql_prepared_statement.o i386/obj/mysql_database.o i386/obj/mysql_dataset.o i386/obj/file.o i386/obj/files.o i386/obj/ethernet.o i386/obj/users.o i386/obj/worker.o i386/obj/process.o i386/obj/command.o i386/obj/valgrind.o i386/obj/timezone.o i386/obj/haru_pdf.o i386/obj/stask_threads.o 
+i486-linux-gnu-g++.exe --sysroot=c:/sources/builder/tools/app-platform-libs/10003/i386 -Wl,-rpath,c:/sources/builder/tools/app-platform-libs/10003/i386/usr/lib -Wl,-rpath,c:/sources/builder/tools/app-platform-libs/10003/i386/lib -Wl,--warn-common -o sdk-out/sdk/lib/i386/sdk/sdk  i386/obj/sdk-main.o -lpthread -luuid  -lcrypto -lssl -lcap -lpq -lmysqlclient -ldl -lz -lpam -lhpdf -lpng -L sdk-out/sdk/lib/i386 -lsdk
+i486-linux-gnu-objcopy.exe --only-keep-debug sdk-out/sdk/lib/i386/sdk/sdk sdk-out/sdk/lib/i386/sdk/sdk.debug
+i486-linux-gnu-objcopy.exe --strip-debug sdk-out/sdk/lib/i386/sdk/sdk
+i486-linux-gnu-objcopy.exe --add-gnu-debuglink sdk-out/sdk/lib/i386/sdk/sdk.debug sdk-out/sdk/lib/i386/sdk/sdk
+xcopy "sdk-out\*.*" "..\sdksample\*.*" /s /y
+sdk-out\sdk\debugging.htm
+sdk-out\sdk\sdk-defs.mak
+sdk-out\sdk\sdk.htm
+sdk-out\sdk\sdk.mak
+sdk-out\sdk\common\common.htm
+sdk-out\sdk\common\common.mak
+sdk-out\sdk\common\build\buildnum.bat
+sdk-out\sdk\common\build\release.h
+sdk-out\sdk\common\ilib\asn1.h
+sdk-out\sdk\common\ilib\asn1.htm
+sdk-out\sdk\common\ilib\asn1_ber.h
+sdk-out\sdk\common\ilib\asn1_ber.htm
+sdk-out\sdk\common\ilib\asn1_per.h
+sdk-out\sdk\common\ilib\asn1_per.htm
+sdk-out\sdk\common\ilib\base64.h
+sdk-out\sdk\common\ilib\base64.htm
+sdk-out\sdk\common\ilib\btree.h
+sdk-out\sdk\common\ilib\btree.htm
+sdk-out\sdk\common\ilib\cipher.h
+sdk-out\sdk\common\ilib\cipher.htm
+sdk-out\sdk\common\ilib\crc.h
+sdk-out\sdk\common\ilib\crc.htm
+sdk-out\sdk\common\ilib\hash.h
+sdk-out\sdk\common\ilib\hash.htm
+sdk-out\sdk\common\ilib\http_query_args.h
+sdk-out\sdk\common\ilib\http_query_args.htm
+sdk-out\sdk\common\ilib\ilib.htm
+sdk-out\sdk\common\ilib\ilist.h
+sdk-out\sdk\common\ilib\ilist.htm
+sdk-out\sdk\common\ilib\json.h
+sdk-out\sdk\common\ilib\json.htm
+sdk-out\sdk\common\ilib\str.h
+sdk-out\sdk\common\ilib\str.htm
+sdk-out\sdk\common\ilib\uri.h
+sdk-out\sdk\common\ilib\uri.htm
+sdk-out\sdk\common\ilib\xml.h
+sdk-out\sdk\common\ilib\xml.htm
+sdk-out\sdk\common\interface\audio.h
+sdk-out\sdk\common\interface\canvas.h
+sdk-out\sdk\common\interface\certificates.h
+sdk-out\sdk\common\interface\certificates.htm
+sdk-out\sdk\common\interface\command.h
+sdk-out\sdk\common\interface\command.htm
+sdk-out\sdk\common\interface\compression.h
+sdk-out\sdk\common\interface\database.h
+sdk-out\sdk\common\interface\database.htm
+sdk-out\sdk\common\interface\dbfiles.h
+sdk-out\sdk\common\interface\dbfiles.htm
+sdk-out\sdk\common\interface\dns.h
+sdk-out\sdk\common\interface\dns.htm
+sdk-out\sdk\common\interface\ethernet.h
+sdk-out\sdk\common\interface\ethernet.htm
+sdk-out\sdk\common\interface\file.h
+sdk-out\sdk\common\interface\file.htm
+sdk-out\sdk\common\interface\files.h
+sdk-out\sdk\common\interface\files.htm
+sdk-out\sdk\common\interface\frame_buffer.h
+sdk-out\sdk\common\interface\frame_buffer.htm
+sdk-out\sdk\common\interface\guuid.h
+sdk-out\sdk\common\interface\guuid.htm
+sdk-out\sdk\common\interface\httpfile.h
+sdk-out\sdk\common\interface\httpfile.htm
+sdk-out\sdk\common\interface\http_client.h
+sdk-out\sdk\common\interface\http_client.htm
+sdk-out\sdk\common\interface\interface.htm
+sdk-out\sdk\common\interface\json_api.h
+sdk-out\sdk\common\interface\json_api.htm
+sdk-out\sdk\common\interface\media.h
+sdk-out\sdk\common\interface\network.h
+sdk-out\sdk\common\interface\pbx.h
+sdk-out\sdk\common\interface\pbx.htm
+sdk-out\sdk\common\interface\pbx_admin.h
+sdk-out\sdk\common\interface\pbx_admin.htm
+sdk-out\sdk\common\interface\pdf.h
+sdk-out\sdk\common\interface\pdf.htm
+sdk-out\sdk\common\interface\process.h
+sdk-out\sdk\common\interface\process.htm
+sdk-out\sdk\common\interface\random.h
+sdk-out\sdk\common\interface\random.htm
+sdk-out\sdk\common\interface\replication.h
+sdk-out\sdk\common\interface\replication.htm
+sdk-out\sdk\common\interface\ringer.h
+sdk-out\sdk\common\interface\smtp.h
+sdk-out\sdk\common\interface\smtp.htm
+sdk-out\sdk\common\interface\socket.h
+sdk-out\sdk\common\interface\socket.htm
+sdk-out\sdk\common\interface\sql.h
+sdk-out\sdk\common\interface\stask.h
+sdk-out\sdk\common\interface\system.h
+sdk-out\sdk\common\interface\system.htm
+sdk-out\sdk\common\interface\task.h
+sdk-out\sdk\common\interface\task.htm
+sdk-out\sdk\common\interface\tempfiles.htm
+sdk-out\sdk\common\interface\time.h
+sdk-out\sdk\common\interface\time.htm
+sdk-out\sdk\common\interface\timezone.h
+sdk-out\sdk\common\interface\timezone.htm
+sdk-out\sdk\common\interface\users.h
+sdk-out\sdk\common\interface\users.htm
+sdk-out\sdk\common\interface\valgrind.h
+sdk-out\sdk\common\interface\valgrind.htm
+sdk-out\sdk\common\interface\webserver_plugin.h
+sdk-out\sdk\common\interface\webserver_plugin.htm
+sdk-out\sdk\common\interface\websocket_client.h
+sdk-out\sdk\common\interface\websocket_client.htm
+sdk-out\sdk\common\interface\worker.h
+sdk-out\sdk\common\interface\worker.htm
+sdk-out\sdk\common\lib\appservice.h
+sdk-out\sdk\common\lib\appservice.htm
+sdk-out\sdk\common\lib\appwebsocket.h
+sdk-out\sdk\common\lib\appwebsocket.htm
+sdk-out\sdk\common\lib\app_updates.h
+sdk-out\sdk\common\lib\app_updates.htm
+sdk-out\sdk\common\lib\config.h
+sdk-out\sdk\common\lib\config.htm
+sdk-out\sdk\common\lib\database_switch.h
+sdk-out\sdk\common\lib\database_switch.htm
+sdk-out\sdk\common\lib\httplib.h
+sdk-out\sdk\common\lib\httplib.htm
+sdk-out\sdk\common\lib\lib.htm
+sdk-out\sdk\common\lib\pbx_admin_api.htm
+sdk-out\sdk\common\lib\pbx_apis.htm
+sdk-out\sdk\common\lib\tasks_file.h
+sdk-out\sdk\common\lib\tasks_postgresql.h
+sdk-out\sdk\common\lib\tasks_postgresql.htm
+sdk-out\sdk\common\lib\webdavservice.h
+sdk-out\sdk\common\lib\webdavservice.htm
+sdk-out\sdk\common\lib\websocket_json.htm
+sdk-out\sdk\common\os\debug.h
+sdk-out\sdk\common\os\debug.htm
+sdk-out\sdk\common\os\iomux.h
+sdk-out\sdk\common\os\iomux.htm
+sdk-out\sdk\exe\httpfiles.exe
+sdk-out\sdk\lib\arm\libsdk.a
+sdk-out\sdk\lib\arm\sdk\sdk
+sdk-out\sdk\lib\arm\sdk\sdk.debug
+sdk-out\sdk\lib\i386\libsdk.a
+sdk-out\sdk\lib\i386\sdk\sdk
+sdk-out\sdk\lib\i386\sdk\sdk.debug
+sdk-out\sdk\platform\platform.h
+sdk-out\sdk\web\tsconfig.json
+sdk-out\sdk\web\web.htm
+sdk-out\sdk\web\web.mak
+sdk-out\sdk\web\applicationSharing\applicationsharing.htm
+sdk-out\sdk\web\applicationSharing\applicationsharing.mak
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.jpeg.js
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.main.js
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.png.js
+sdk-out\sdk\web\applicationSharing\innovaphone.applicationSharing.zlib.js
+sdk-out\sdk\web\appwebsocket\appwebsocket.htm
+sdk-out\sdk\web\appwebsocket\appwebsocket.mak
+sdk-out\sdk\web\appwebsocket\innovaphone.appwebsocket.Connection.js
+sdk-out\sdk\web\audio\audio.htm
+sdk-out\sdk\web\audio\audio.mak
+sdk-out\sdk\web\audio\ringtone00.mp3
+sdk-out\sdk\web\audio\tonepair00.mp3
+sdk-out\sdk\web\audio\tonepair01.mp3
+sdk-out\sdk\web\audio\tonepair02.mp3
+sdk-out\sdk\web\audio\tonepair03.mp3
+sdk-out\sdk\web\audio\tonepair04.mp3
+sdk-out\sdk\web\audio\tonepair05.mp3
+sdk-out\sdk\web\audio\tonepair06.mp3
+sdk-out\sdk\web\audio\tonepair07.mp3
+sdk-out\sdk\web\audio\tonepair08.mp3
+sdk-out\sdk\web\audio\tonepair09.mp3
+sdk-out\sdk\web\audio\tonepair10.mp3
+sdk-out\sdk\web\audio\tonepair11.mp3
+sdk-out\sdk\web\audio\tonepair12.mp3
+sdk-out\sdk\web\com.innovaphone.avatar\com.innovaphone.avatar.js
+sdk-out\sdk\web\com.innovaphone.avatar\com.innovaphone.avatar.mak
+sdk-out\sdk\web\com.innovaphone.avatar\lib1_api_avatar.htm
+sdk-out\sdk\web\com.innovaphone.phone\lib1_api_phone.htm
+sdk-out\sdk\web\com.innovaphone.search\lib1_api_search.htm
+sdk-out\sdk\web\common\common.htm
+sdk-out\sdk\web\common\common.mak
+sdk-out\sdk\web\common\innovaphone.common.crypto.js
+sdk-out\sdk\web\fonts\fonts.htm
+sdk-out\sdk\web\fonts\fonts.mak
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.eot
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.svg
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.ttf
+sdk-out\sdk\web\fonts\titilliumtext25l003Webfont.woff
+sdk-out\sdk\web\fonts\titilliumweb-regular.ttf
+sdk-out\sdk\web\lib\innovaphone.doc.css
+sdk-out\sdk\web\lib\innovaphone.lib.css
+sdk-out\sdk\web\lib\innovaphone.lib.js
+sdk-out\sdk\web\lib\lib.htm
+sdk-out\sdk\web\lib\lib.mak
+sdk-out\sdk\web\lib1\innovaphone.doc.css
+sdk-out\sdk\web\lib1\innovaphone.lib1.css
+sdk-out\sdk\web\lib1\innovaphone.lib1.js
+sdk-out\sdk\web\lib1\lib1.htm
+sdk-out\sdk\web\lib1\lib1.mak
+sdk-out\sdk\web\lib1\lib1_api_client.htm
+sdk-out\sdk\web\lib1\lib1_api_searchregister.htm
+sdk-out\sdk\web\mypbx\innovaphone.mypbx.ui.apps.js
+sdk-out\sdk\web\mypbx\mypbx.htm
+sdk-out\sdk\web\mypbx\mypbx.mak
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.Connection.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.OrtcEndpoint.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.OrtcPeerConnection.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.Preauthentication.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.ToneGenerator.js
+sdk-out\sdk\web\pbxwebsocket\innovaphone.pbxwebsocket.WebRtcEndpoint.js
+sdk-out\sdk\web\pbxwebsocket\pbxwebsocket.htm
+sdk-out\sdk\web\pbxwebsocket\pbxwebsocket.mak
+sdk-out\sdk\web\phpsession\innovaphone.phpsession.js
+sdk-out\sdk\web\phpsession\phpsession.htm
+sdk-out\sdk\web\phpsession\phpsession.mak
+sdk-out\sdk\web\styles\innovaphone.styles.css
+sdk-out\sdk\web\styles\styles.Arrow.png
+sdk-out\sdk\web\styles\styles.ArrowActive.png
+sdk-out\sdk\web\styles\styles.Background.png
+sdk-out\sdk\web\styles\styles.Close.png
+sdk-out\sdk\web\styles\styles.Confirmation.png
+sdk-out\sdk\web\styles\styles.DropDown.png
+sdk-out\sdk\web\styles\styles.Error.png
+sdk-out\sdk\web\styles\styles.Fish.png
+sdk-out\sdk\web\styles\styles.GlowMiddleHover.png
+sdk-out\sdk\web\styles\styles.GlowUpsideDown2.png
+sdk-out\sdk\web\styles\styles.Hide.png
+sdk-out\sdk\web\styles\styles.htm
+sdk-out\sdk\web\styles\styles.Loader.gif
+sdk-out\sdk\web\styles\styles.mak
+sdk-out\sdk\web\styles\styles.SeparatorMiddle.png
+sdk-out\sdk\web\ui.accordion\innovaphone.ui.accordion.js
+sdk-out\sdk\web\ui.accordion\ui.accordion.htm
+sdk-out\sdk\web\ui.accordion\ui.accordion.mak
+sdk-out\sdk\web\ui.anchor\innovaphone.ui.Anchor.js
+sdk-out\sdk\web\ui.anchor\ui.anchor.htm
+sdk-out\sdk\web\ui.anchor\ui.anchor.mak
+sdk-out\sdk\web\ui.apptabs\innovaphone.ui.AppTabs.js
+sdk-out\sdk\web\ui.apptabs\ui.apptabs.htm
+sdk-out\sdk\web\ui.apptabs\ui.apptabs.mak
+sdk-out\sdk\web\ui.autocompleteinput\innovaphone.ui.autocompleteinput.js
+sdk-out\sdk\web\ui.autocompleteinput\ui.autocompleteinput.htm
+sdk-out\sdk\web\ui.autocompleteinput\ui.autocompleteinput.mak
+sdk-out\sdk\web\ui.bubblecontainer\innovaphone.ui.BubbleContainer.js
+sdk-out\sdk\web\ui.bubblecontainer\ui.bubblecontainer.htm
+sdk-out\sdk\web\ui.bubblecontainer\ui.bubblecontainer.mak
+sdk-out\sdk\web\ui.button\innovaphone.ui.Button.js
+sdk-out\sdk\web\ui.button\ui.button.htm
+sdk-out\sdk\web\ui.button\ui.button.mak
+sdk-out\sdk\web\ui.calendar\cal_icons.png
+sdk-out\sdk\web\ui.calendar\innovaphone.ui.Calendar.js
+sdk-out\sdk\web\ui.calendar\innovaphone.ui.CalendarDayItemIndicator.js
+sdk-out\sdk\web\ui.calendar\innovaphone.ui.FlatButton.js
+sdk-out\sdk\web\ui.calendar\ui.calendar.htm
+sdk-out\sdk\web\ui.calendar\ui.calendar.mak
+sdk-out\sdk\web\ui.clipboard\innovaphone.ui.ClipBoard.js
+sdk-out\sdk\web\ui.clipboard\ui.clipboard.htm
+sdk-out\sdk\web\ui.clipboard\ui.clipboard.mak
+sdk-out\sdk\web\ui.confirmationpopup\innovaphone.ui.ConfirmationPopup.js
+sdk-out\sdk\web\ui.confirmationpopup\ui.confirmationpopup.htm
+sdk-out\sdk\web\ui.confirmationpopup\ui.confirmationpopup.mak
+sdk-out\sdk\web\ui.container\innovaphone.ui.Container.js
+sdk-out\sdk\web\ui.container\ui.container.htm
+sdk-out\sdk\web\ui.container\ui.container.mak
+sdk-out\sdk\web\ui.contentheader\innovaphone.ui.ContentHeader.js
+sdk-out\sdk\web\ui.contentheader\ui.contentheader.htm
+sdk-out\sdk\web\ui.contentheader\ui.contentheader.mak
+sdk-out\sdk\web\ui.dateselector\innovaphone.ui.DateSelector.js
+sdk-out\sdk\web\ui.dateselector\ui.dateselector.htm
+sdk-out\sdk\web\ui.dateselector\ui.dateselector.mak
+sdk-out\sdk\web\ui.drag\innovaphone.ui.Drag.js
+sdk-out\sdk\web\ui.drag\ui.drag.htm
+sdk-out\sdk\web\ui.drag\ui.drag.mak
+sdk-out\sdk\web\ui.dragList\innovaphone.ui.dragList.js
+sdk-out\sdk\web\ui.dragList\ui.dragList.htm
+sdk-out\sdk\web\ui.dragList\ui.dragList.mak
+sdk-out\sdk\web\ui.dropdown\innovaphone.ui.DropDown.js
+sdk-out\sdk\web\ui.dropdown\ui.dropdown.htm
+sdk-out\sdk\web\ui.dropdown\ui.dropdown.mak
+sdk-out\sdk\web\ui.editor\innovaphone.ui.Editor.js
+sdk-out\sdk\web\ui.editor\ui.editor.htm
+sdk-out\sdk\web\ui.editor\ui.editor.mak
+sdk-out\sdk\web\ui.editpopup\innovaphone.ui.EditPopup.js
+sdk-out\sdk\web\ui.editpopup\ui.editpopup.htm
+sdk-out\sdk\web\ui.editpopup\ui.editpopup.mak
+sdk-out\sdk\web\ui.elementscontainer\innovaphone.ui.ElementsContainer.js
+sdk-out\sdk\web\ui.elementscontainer\ui.elementscontainer.htm
+sdk-out\sdk\web\ui.elementscontainer\ui.elementscontainer.mak
+sdk-out\sdk\web\ui.error\innovaphone.ui.Error.js
+sdk-out\sdk\web\ui.error\ui.error.htm
+sdk-out\sdk\web\ui.error\ui.error.mak
+sdk-out\sdk\web\ui.grid\innovaphone.ui.Grid.js
+sdk-out\sdk\web\ui.grid\ui.grid.htm
+sdk-out\sdk\web\ui.grid\ui.grid.mak
+sdk-out\sdk\web\ui.hider\innovaphone.ui.Hider.js
+sdk-out\sdk\web\ui.hider\ui.hider.htm
+sdk-out\sdk\web\ui.hider\ui.hider.mak
+sdk-out\sdk\web\ui.icon\innovaphone.ui.Icon.js
+sdk-out\sdk\web\ui.icon\ui.icon.htm
+sdk-out\sdk\web\ui.icon\ui.icon.mak
+sdk-out\sdk\web\ui.iframe\innovaphone.ui.IFrame.js
+sdk-out\sdk\web\ui.iframe\ui.iframe.htm
+sdk-out\sdk\web\ui.iframe\ui.iframe.mak
+sdk-out\sdk\web\ui.input\innovaphone.ui.Input.js
+sdk-out\sdk\web\ui.input\ui.input.htm
+sdk-out\sdk\web\ui.input\ui.input.mak
+sdk-out\sdk\web\ui.inputfieldcollection\innovaphone.ui.InputFieldCollection.js
+sdk-out\sdk\web\ui.inputfieldcollection\ui.inputfieldcollection.htm
+sdk-out\sdk\web\ui.inputfieldcollection\ui.inputfieldcollection.mak
+sdk-out\sdk\web\ui.label\innovaphone.ui.Label.js
+sdk-out\sdk\web\ui.label\ui.label.htm
+sdk-out\sdk\web\ui.label\ui.label.mak
+sdk-out\sdk\web\ui.lang\innovaphone.ui.Lang.js
+sdk-out\sdk\web\ui.lang\ui.lang.htm
+sdk-out\sdk\web\ui.lang\ui.lang.mak
+sdk-out\sdk\web\ui.listview\innovaphone.ui.ListView.js
+sdk-out\sdk\web\ui.listview\ui.listview.htm
+sdk-out\sdk\web\ui.listview\ui.listview.mak
+sdk-out\sdk\web\ui.popup\innovaphone.ui.Popup.js
+sdk-out\sdk\web\ui.popup\ui.popup.htm
+sdk-out\sdk\web\ui.popup\ui.popup.mak
+sdk-out\sdk\web\ui.progressbar\innovaphone.ui.ProgressBar.js
+sdk-out\sdk\web\ui.progressbar\ui.progressbar.htm
+sdk-out\sdk\web\ui.progressbar\ui.progressbar.mak
+sdk-out\sdk\web\ui.radioButton\innovaphone.ui.radioButton.js
+sdk-out\sdk\web\ui.radioButton\innovaphone.ui.radioButton.ts
+sdk-out\sdk\web\ui.radioButton\ui.radioButton.htm
+sdk-out\sdk\web\ui.radioButton\ui.radioButton.mak
+sdk-out\sdk\web\ui.ribbon\innovaphone.ui.Ribbon.js
+sdk-out\sdk\web\ui.ribbon\ui.ribbon.example.png
+sdk-out\sdk\web\ui.ribbon\ui.ribbon.htm
+sdk-out\sdk\web\ui.ribbon\ui.ribbon.mak
+sdk-out\sdk\web\ui.scrollbar\innovaphone.ui.ScrollBar.js
+sdk-out\sdk\web\ui.scrollbar\ui.scrollbar.htm
+sdk-out\sdk\web\ui.scrollbar\ui.scrollbar.mak
+sdk-out\sdk\web\ui.splitpanel\innovaphone.ui.SplitPanel.js
+sdk-out\sdk\web\ui.splitpanel\ui.splitpanel.htm
+sdk-out\sdk\web\ui.splitpanel\ui.splitpanel.mak
+sdk-out\sdk\web\ui.splitpanelvertical\innovaphone.ui.SplitPanelVertical.js
+sdk-out\sdk\web\ui.splitpanelvertical\ui.splitpanelvertical.htm
+sdk-out\sdk\web\ui.splitpanelvertical\ui.splitpanelvertical.mak
+sdk-out\sdk\web\ui.text\innovaphone.ui.Text.js
+sdk-out\sdk\web\ui.text\ui.text.htm
+sdk-out\sdk\web\ui.text\ui.text.mak
+sdk-out\sdk\web\ui.textarea\innovaphone.ui.TextArea.js
+sdk-out\sdk\web\ui.textarea\ui.textarea.htm
+sdk-out\sdk\web\ui.textarea\ui.textarea.mak
+sdk-out\sdk\web\ui.tilelist\innovaphone.ui.tilelist.js
+sdk-out\sdk\web\ui.tilelist\ui.tilelist.htm
+sdk-out\sdk\web\ui.tilelist\ui.tilelist.mak
+sdk-out\sdk\web\ui.timefield\innovaphone.ui.TimeField.js
+sdk-out\sdk\web\ui.timefield\ui.timefield.htm
+sdk-out\sdk\web\ui.timefield\ui.timefield.mak
+sdk-out\sdk\web\ui.treeview\innovaphone.ui.TreeView.js
+sdk-out\sdk\web\ui.treeview\ui.treeview.htm
+sdk-out\sdk\web\ui.treeview\ui.treeview.mak
+sdk-out\sdk\web\ui.visibilityobserver\innovaphone.ui.VisibilityObserver.js
+sdk-out\sdk\web\ui.visibilityobserver\ui.visibilityobserver.htm
+sdk-out\sdk\web\ui.visibilityobserver\ui.visibilityobserver.mak
+sdk-out\sdk\web\ui.wizard\innovaphone.ui.Wizard.js
+sdk-out\sdk\web\ui.wizard\ui.wizard.htm
+sdk-out\sdk\web\ui.wizard\ui.wizard.mak
+sdk-out\sdk\web\ui1.accordion\innovaphone.ui1.accordion.js
+sdk-out\sdk\web\ui1.accordion\ui1.accordion.htm
+sdk-out\sdk\web\ui1.accordion\ui1.accordion.mak
+sdk-out\sdk\web\ui1.autocompleteinput\innovaphone.ui1.autocompleteinput.js
+sdk-out\sdk\web\ui1.autocompleteinput\ui1.autocompleteinput.htm
+sdk-out\sdk\web\ui1.autocompleteinput\ui1.autocompleteinput.mak
+sdk-out\sdk\web\ui1.draglist\innovaphone.ui1.draglist.js
+sdk-out\sdk\web\ui1.draglist\ui1.draglist.htm
+sdk-out\sdk\web\ui1.editor\innovaphone.ui1.editor.js
+sdk-out\sdk\web\ui1.editor\ui1.editor.htm
+sdk-out\sdk\web\ui1.editor\ui1.editor.mak
+sdk-out\sdk\web\ui1.editor\ui1.editor.png
+sdk-out\sdk\web\ui1.file\innovaphone.ui1.file.js
+sdk-out\sdk\web\ui1.file\ui1.file.htm
+sdk-out\sdk\web\ui1.file\ui1.file.mak
+sdk-out\sdk\web\ui1.lib\innovaphone.ui1.lib.js
+sdk-out\sdk\web\ui1.lib\test.htm
+sdk-out\sdk\web\ui1.lib\ui1.lib.htm
+sdk-out\sdk\web\ui1.lib\ui1.lib.mak
+sdk-out\sdk\web\ui1.listview\arrow.png
+sdk-out\sdk\web\ui1.listview\innovaphone.ui1.listview.js
+sdk-out\sdk\web\ui1.listview\ui1.listview.htm
+sdk-out\sdk\web\ui1.listview\ui1.listview.mak
+sdk-out\sdk\web\ui1.player\innovaphone.ui1.player.js
+sdk-out\sdk\web\ui1.player\ui1.player.mak
+sdk-out\sdk\web\ui1.popup\innovaphone.ui1.popup.js
+sdk-out\sdk\web\ui1.popup\ui1.popup.htm
+sdk-out\sdk\web\ui1.popup\ui1.popup.mak
+sdk-out\sdk\web\ui1.radiobutton\innovaphone.ui1.radiobutton.js
+sdk-out\sdk\web\ui1.radiobutton\ui1.radiobutton.htm
+sdk-out\sdk\web\ui1.radiobutton\ui1.radiobutton.mak
+sdk-out\sdk\web\ui1.scrolling\innovaphone.ui1.scrolling.js
+sdk-out\sdk\web\ui1.scrolling\test.htm
+sdk-out\sdk\web\ui1.scrolling\ui1.scrolling.htm
+sdk-out\sdk\web\ui1.scrolling\ui1.scrolling.mak
+sdk-out\sdk\web\ui1.svg\innovaphone.ui1.svg.js
+sdk-out\sdk\web\ui1.svg\test.svg
+sdk-out\sdk\web\ui1.svg\ui1.svg.htm
+sdk-out\sdk\web\ui1.svg\ui1.svg.mak
+sdk-out\sdk\web\ui1.tilelist\innovaphone.ui1.tilelist.js
+sdk-out\sdk\web\ui1.tilelist\ui1.tilelist.htm
+sdk-out\sdk\web\widget\innovaphone.widget.arrow.svg
+sdk-out\sdk\web\widget\innovaphone.widget.BusinessCards.css
+sdk-out\sdk\web\widget\innovaphone.widget.BusinessCards.js
+sdk-out\sdk\web\widget\innovaphone.widget.Conference.js
+sdk-out\sdk\web\widget\innovaphone.widget.general.css
+sdk-out\sdk\web\widget\innovaphone.widget.keypad.svg
+sdk-out\sdk\web\widget\innovaphone.widget.mail.svg
+sdk-out\sdk\web\widget\innovaphone.widget.mute.svg
+sdk-out\sdk\web\widget\innovaphone.widget.phone.svg
+sdk-out\sdk\web\widget\innovaphone.widget.SideBar.css
+sdk-out\sdk\web\widget\innovaphone.widget.SideBar.js
+sdk-out\sdk\web\widget\innovaphone.widget.video.svg
+sdk-out\sdk\web\widget\widget.htm
+sdk-out\sdk\web\widget\widget.mak
+411 Datei(en) kopiert
+cd sdksample; mksxcopy "*";
+c:/sources/builder/tools/buildtls/mksxcopy.ksh: 1 args: *
+c:/sources/builder/tools/buildtls/mksxcopy.ksh: processing arg '*'
+c:/sources/builder/tools/buildtls/mksxcopy.ksh: copy to '\\innovaphone.sifi\dfs\build\13r1\apps\sdk\130756'
+	XCOPY * //INNOVAPHONE.SIFI/DFS/BUILD/13R1/APPS/SDK/130756...
+	updating web shadow @ //innovaphone.sifi/dfs/webbuild with *.bin,test.exe,phoneandroid-debug.apk,mypbx.apk,client.apk,release/*.exe,release/*.dll,*.tar.gz,*.img,*.msi,*.zip,arm/apidemo/*!,i386/apidemo/*!,arm/statistics/*!,i386/statistics/*!,arm/builder/*!,i386/builder/*!,arm/calendar/*!,i386/calendar/*!,arm/contacts/*!,i386/contacts/*!,arm/essential/*!,i386/essential/*!,arm/fax/*!,i386/fax/*!,arm/files/*!,i386/files/*!,arm/messages/*!,i386/messages/*!,arm/my/*!,i386/my/*!,arm/push/*!,i386/push/*!,arm/recording/*!,i386/recording/*!,arm/register/*!,i386/register/*!,arm/reporting/*!,i386/reporting/*!,arm/taskmanager/*!,i386/taskmanager/*!,arm/voicemail_cz/*!,i386/voicemail_cz/*!,arm/voicemail_de/*!,i386/voicemail_de/*!,arm/voicemail_dk/*!,i386/voicemail_dk/*!,arm/voicemail_en/*!,i386/voicemail_en/*!,arm/voicemail_es/*!,i386/voicemail_es/*!,arm/voicemail_fi/*!,i386/voicemail_fi/*!,arm/voicemail_fr/*!,i386/voicemail_fr/*!,arm/voicemail_it/*!,i386/voicemail_it/*!,arm/voicemail_nl/*!,i386/voicemail_nl/*!,arm/voicemail_no/*!,i386/voicemail_no/*!,arm/voicemail_pl/*!,i386/voicemail_pl/*!,arm/voicemail_pt/*!,i386/voicemail_pt/*!,arm/voicemail_se/*!,i386/voicemail_se/*!,arm/webserver/*!,i386/webserver/*!,arm/devices/*!,i386/devices/*!,arm/barcamp/*!,i386/barcamp/*!,arm/ascom_wh2/*!,i386/ascom_wh2/*! files...
+		config_firmware.xml exists
